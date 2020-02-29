@@ -1,14 +1,13 @@
-package com.woniu.springboot.myspringboot00;
+package com.woniu.team2project;
 
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class Myspringboot00ApplicationTests {
+public class Team2projectApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		
 	}
 
 }
