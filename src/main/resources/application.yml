@@ -1,4 +1,5 @@
-
+mybatis:
+  type-aliases-package: com.woniu.team2project.entity
 
 spring:
   datasource:
