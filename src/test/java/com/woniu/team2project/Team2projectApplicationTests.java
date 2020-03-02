@@ -2,6 +2,8 @@ package com.woniu.team2project;
 
 import java.util.Date;
 
+import javax.sql.DataSource;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,15 @@ public class Team2projectApplicationTests {
 	
 	@Autowired
 	SxMapper sxMapper;
+	
+	@Autowired
+	DataSource dataSource;
+	
+	//测试连接池
+	@Test
+	public void testDruid() {
+		System.out.println(dataSource.getClass().getName());
+	}
 	
 	//测试添加事项Dao
 	@Test
