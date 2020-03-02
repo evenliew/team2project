@@ -66,7 +66,7 @@ public class Team2projectApplicationTests {
 		sxMapper.updateSx(sx);
 	}
 	
-	//测试事项状态
+	//测试更新事项的状态
 	@Test
 	public void testUpdateSxStatusDao() {
 		sxMapper.updateSxStatus("1122", 3);
