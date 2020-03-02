@@ -1,6 +1,7 @@
 package com.woniu.team2project;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -41,9 +42,24 @@ public class Team2projectApplicationTests {
 	//测试添加事项Dao
 	@Test
 	public void testInsertSxDao() {
-		Sx sx=new Sx("1122", "测试事项", new Sx_type(1, "类型一"),new Sx_status(1, "状态一") , new Date(), new User("1122", "1","1", "1", "1", new User_status(1,
+		Sx sx=new Sx("222", "Abby的测试事项", new Sx_type(1, "类型一"),new Sx_status(1, "状态一") , new Date(), new User("1122", "1","1", "1", "1", new User_status(1,
 				"1"), new Area(1, "1"), new Office(1,"1", new User())), "我的内容", "我的备注", new Urgency(1, "1"), new County(1, "1", new Area(1,"1")), new Industry(1,"1"), new Date(), new Office(1, "1", new User()));
 		sxMapper.insertSx(sx);
+	}
+	
+	//测试条件查询事项Dao
+	@Test
+	public void testSelectSxByConditionPage() {
+		//这里在测事项status为4，即按期进行的
+		//你们可以多试试其他条件（前提是sql where里面有的）
+		Sx mysx= new Sx();
+		Sx_status sx_status = new Sx_status();
+		sx_status.setSx_status_id(4);
+		mysx.setSx_status(sx_status);
+		List<Sx> sxlist = sxMapper.selectSxByConditionPage(mysx);
+		for(Sx sx:sxlist) {
+			System.out.println(sx);
+		}
 	}
 
 }

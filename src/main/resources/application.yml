@@ -7,7 +7,7 @@ spring:
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
-#   \u6570\u636E\u6E90\u5176\u4ED6\u914D\u7F6E
+#   数据源
     initialSize: 5
     minIdle: 5
     maxActive: 20

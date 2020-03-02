@@ -18,31 +18,6 @@ public class Sx {
 	//后来加的
 	private Date sx_end_time;//事项结束时间
 	private Office office;//单位
-	
-	
-	
-	public Sx() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public Sx(String sx_id, String sx_name, Sx_type sx_type, Sx_status sx_status, Date sx_time, User founder,
-			String sx_content, String sx_remark, Urgency urgency, County county, Industry industry, Date sx_end_time,
-			Office office) {
-		super();
-		this.sx_id = sx_id;
-		this.sx_name = sx_name;
-		this.sx_type = sx_type;
-		this.sx_status = sx_status;
-		this.sx_time = sx_time;
-		this.founder = founder;
-		this.sx_content = sx_content;
-		this.sx_remark = sx_remark;
-		this.urgency = urgency;
-		this.county = county;
-		this.industry = industry;
-		this.sx_end_time = sx_end_time;
-		this.office = office;
-	}
 	public String getSx_id() {
 		return sx_id;
 	}
@@ -121,6 +96,28 @@ public class Sx {
 	public void setOffice(Office office) {
 		this.office = office;
 	}
+	public Sx(String sx_id, String sx_name, Sx_type sx_type, Sx_status sx_status, Date sx_time, User founder,
+			String sx_content, String sx_remark, Urgency urgency, County county, Industry industry, Date sx_end_time,
+			Office office) {
+		super();
+		this.sx_id = sx_id;
+		this.sx_name = sx_name;
+		this.sx_type = sx_type;
+		this.sx_status = sx_status;
+		this.sx_time = sx_time;
+		this.founder = founder;
+		this.sx_content = sx_content;
+		this.sx_remark = sx_remark;
+		this.urgency = urgency;
+		this.county = county;
+		this.industry = industry;
+		this.sx_end_time = sx_end_time;
+		this.office = office;
+	}
+	public Sx() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	@Override
 	public String toString() {
 		return "Sx [sx_id=" + sx_id + ", sx_name=" + sx_name + ", sx_type=" + sx_type + ", sx_status=" + sx_status
@@ -128,7 +125,6 @@ public class Sx {
 				+ sx_remark + ", urgency=" + urgency + ", county=" + county + ", industry=" + industry
 				+ ", sx_end_time=" + sx_end_time + ", office=" + office + "]";
 	}
-	
 	
 	
 	
