@@ -14,8 +14,6 @@ public interface SxMapper {
 	//条件查询事项
 	List<Sx> selectSxByConditionPage(Sx sx);
 	
-	//新建事项
-	void insertSx(Sx sx);
 	
 	//删除事项
 	void deleteSx(String sx_id);
