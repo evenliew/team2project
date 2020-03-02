@@ -86,7 +86,13 @@
 			<if test="sx_status != null and sx_status.sx_status_id != null and sx_status.sx_status_id !=''">
 				and sx_status_id = #{sx_status.sx_status_id}
 			</if>
-			<!-- 时间区间查询 还没写 -->
+			<!-- 时间区间查询:就用前端的事项开始和结束时间来当做：事项开始时间的查询区间-->
+			<if test="sx_time != null">
+				and sx_time &gt;= #{sx_time}
+			</if> 
+			<if test="sx_end_time != null">
+				and sx_time &lt;= #{sx_end_time}
+			</if>
 			<if test="urgency != null and urgency.urgency_id != null and urgency.urgency_id !=''">
 				and sx_urgency_id = #{urgency.urgency_id}
 			</if>
@@ -103,7 +109,4 @@
 		</where>
 	</sql>
 	
-	
-
-
 </mapper>

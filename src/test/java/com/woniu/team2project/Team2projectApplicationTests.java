@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.github.pagehelper.PageHelper;
 import com.woniu.team2project.entity.Area;
 import com.woniu.team2project.entity.County;
 import com.woniu.team2project.entity.Industry;
@@ -50,15 +51,15 @@ public class Team2projectApplicationTests {
 		sxMapper.insertSx(sx);
 	}
 	
-	//测试条件查询事项Dao
+	//测试条件查询事项Dao+分页
 	@Test
 	public void testSelectSxByConditionPage() {
-		//这里在测事项status为4，即按期进行的
-		//你们可以多试试其他条件（前提是sql where里面有的）
+		
+		//分页插件pageHelper:页索引，页大小
+		PageHelper.startPage(1, 3);
 		Sx mysx= new Sx();
-		Sx_status sx_status = new Sx_status();
-		sx_status.setSx_status_id(4);
-		mysx.setSx_status(sx_status);
+//		mysx.setSx_status(new Sx_status(4,"")); //测试事项状态为4的
+//		mysx.setSx_end_time(new Date()); //测试今天以前创建的
 		List<Sx> sxlist = sxMapper.selectSxByConditionPage(mysx);
 		for(Sx sx:sxlist) {
 			System.out.println(sx);
