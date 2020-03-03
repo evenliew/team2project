@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.Zb_stateMapper">
+	<!-- 添加的映射文件 -->
+	<insert id="insertZb_state">
+		insert into tb_zb_state values (#{zb_state_id},#{zb_state_name});
+	</insert>
+	<!-- 主键查询的映射文件 -->
+	<select id="selectZb_stateByZb_state_id" resultType="Zb_state">
+		select * from tb_zb_state where zb_state_id=#{zb_state_id};
+	</select> 
+	<!-- 修改专报的状态 -->
+	<update id="updateZb_state">
+		update tb_zb_state set zb_state_name=#{zb_state_name}
+			 where zb_state_id=#{zb_state_id};
+	</update>
+	<!-- 查询所有专报 -->
+	<select id="selectAllZb_state_id" resultType="Zb_state">
+		select * from tb_zb_state
+	</select>
+</mapper>

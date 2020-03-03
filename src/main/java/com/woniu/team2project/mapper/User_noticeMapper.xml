@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.User_noticeMapper">
+	<!-- 添加的映射文件 -->
+	<insert id="insertUser_notice">
+		insert into tb_user_notice values (#{user_nt_id},#{user_nt_title},
+			#{user_nt_founder_id},#{user_nt_recender_id},#{user_nt_content},
+			#{user_nt_time},#{user_nt_sx_id});
+	</insert>
+	<!-- 主键查询的映射文件 -->
+	<select id="selectUser_noticeByUser_notice_id" resultType="User_notice">
+		select * from tb_user_notice where user_nt_id=#{user_nt_id};
+	</select> 
+	<!-- 查询所有专报 -->
+	<select id="selectAllUser_notice" resultType="User_notice">
+		select * from tb_user_notice
+	</select>
+</mapper>

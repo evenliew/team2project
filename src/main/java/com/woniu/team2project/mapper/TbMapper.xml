@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.TbMapper">
+	<!-- 添加的映射文件 -->
+	<insert id="insertTb">
+		insert into tb_tb values (#{tb_id},#{tb_time},
+			#{tb_office_id},#{tb_author_id},
+			#{tb_sx_id},#{tb_content});
+	</insert>
+	<!-- 主键查询的映射文件 -->
+	<select id="selectTbByTb_id" resultType="Tb">
+		select * from tb_tb where tb_id=#{tb_id};
+	</select> 
+</mapper>
