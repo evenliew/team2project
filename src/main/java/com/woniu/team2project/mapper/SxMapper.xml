@@ -9,7 +9,7 @@
 		insert into tb_sx values
 			(#{sx_id},#{sx_name},#{sx_type.sx_type_id},#{sx_status.sx_status_id},
 			#{sx_time},#{founder.user_id},#{sx_content},#{sx_remark},#{urgency.urgency_id},
-			#{county.county_id},#{industry.industry_id},#{sx_end_time},#{office.office_id});
+			#{county.county_id},#{industry.industry_id},#{sx_end_time},#{office.office_id},#{area.area_id});
 	</insert>
 	
 	<!-- 根据主键删除事项 -->
@@ -22,7 +22,8 @@
 		update tb_sx set 
 			sx_name= #{sx_name},sx_type_id= #{sx_type.sx_type_id},sx_status_id=#{sx_status.sx_status_id},sx_time=#{sx_time},
 			sx_founder_id=#{founder.user_id},sx_content=#{sx_content},sx_remark=#{sx_remark},sx_urgency_id=#{urgency.urgency_id},
-			county_id=#{county.county_id},industry_id=#{industry.industry_id},sx_end_time=#{sx_end_time},office_id=#{office.office_id}
+			county_id=#{county.county_id},industry_id=#{industry.industry_id},sx_end_time=#{sx_end_time},office_id=#{office.office_id},
+			area_id = #{area.area_id}
 		where sx_id= #{sx_id}
 	</update>
 	
@@ -51,6 +52,7 @@
 		<association property="county" javaType="County" select="selectCountyByCounty_id" column="county_id"/>
 		<association property="industry" javaType="Industry" select="selectIndustryByIndustry_id" column="industry_id"/>
 		<association property="office" javaType="Office" select="selectOfficeByOffice_id" column="office_id"/>
+		<association property="area" javaType="Area" select="selectAreaByarea_id" column="area_id"/>
 	</resultMap>
 	<select id="selectSx_typeBySx_type_id" resultType="Sx_type">
 		select * from tb_sx_type where sx_type_id=#{sx_type_id}
@@ -73,6 +75,10 @@
 	<select id="selectOfficeByOffice_id" resultType="Office">
 		select * from tb_office where office_id=#{office_id}
 	</select>
+	<select id="selectAreaByarea_id" resultType="Area">
+		select * from tb_area where area_id=#{area_id}
+	</select>
+	
 	<!-- 二级层没有装配 -->
 	<!-- 3. SQL条件 -->
 	<sql id="sqlcondition">
@@ -104,6 +110,9 @@
 			</if>
 			<if test="office != null and office.office_id != null and office.office_id !=''">
 				and office_id = #{office.office_id}
+			</if>
+			<if test="area != null">
+				and area_id = #{area.area_id}
 			</if>
 			and sx_status_id != 8
 		</where>

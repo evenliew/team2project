@@ -6,13 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.woniu.team2project.mapper.SxMapper;
 
-@Service
-public class SxServiceImpl {
-
-	@Autowired
-	SxMapper sxMapper;
-	
-	//@Transactional
-	//@Override
-	//方法写这里
-}
+//@Service
+//public class SxServiceImpl {
+//
+//	@Autowired
+//	SxMapper sxMapper;
+//	
+//	//@Transactional
+//	//@Override
+//	//方法写这里
+//}

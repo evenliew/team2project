@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.woniu.team2project.entity.Notice_assign;
 
 /*
- * 对于个人通知分派表表的增删改查：CURD，
+ * 对于个人通知分派表表的CURD，
  * 用户不能修改也不能删除，只能查询，新增操作交给了领导新建通告时指定人物的时候生成。
  */
 @Mapper

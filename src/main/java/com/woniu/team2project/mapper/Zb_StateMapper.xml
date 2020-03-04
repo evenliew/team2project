@@ -5,7 +5,11 @@
 <mapper namespace="com.woniu.team2project.mapper.Zb_stateMapper">
 	<!-- 添加的映射文件 -->
 	<insert id="insertZb_state">
-		insert into tb_zb_state values (#{zb_state_id},#{zb_state_name});
+		insert into 
+			tb_zb_state 
+		values (
+			#{zb_state_id},
+			#{zb_state_name});
 	</insert>
 	<!-- 主键查询的映射文件 -->
 	<select id="selectZb_stateByZb_state_id" resultType="Zb_state">

@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.woniu.team2project.entity.Zb;
 import com.woniu.team2project.entity.Zb_state;
 import com.woniu.team2project.mapper.Zb_stateMapper;
+import com.woniu.team2project.service.ZbService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -21,18 +23,18 @@ public class ZbMapperTest {
 	Zb_stateMapper zb_stateMapper;
 	
 	@Autowired
-	DataSource dataSource;
-	
-	//测试连接池
+	ZbService zbService;
 	@Test
-	public void testDruid() {
-		System.out.println(dataSource.getClass().getName());
+	public void testZbService(){
+		List<Zb> zbs = zbService.getAllZb();
+		for (Zb zb : zbs) {
+			System.out.println(zb);
+		}
 	}
-	
 	//测试添加状态Dao
 	@Test
 	public void testInsertZb_state() {
-		Zb_state zb_state=new Zb_state(3, "sda");
+		Zb_state zb_state=new Zb_state(3, "正在进行中");
 		zb_stateMapper.insertZb_state(zb_state);
 	}
 	//测试查询一个

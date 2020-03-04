@@ -12,6 +12,7 @@ import com.woniu.team2project.entity.User_notice;
  */
 @Mapper
 public interface User_noticeMapper {
+	
 	//作为新增个人通告的操作--可操作
 	void insertUser_notice(User_notice user_notice);
 	
