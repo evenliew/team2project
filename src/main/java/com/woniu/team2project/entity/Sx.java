@@ -13,11 +13,20 @@ public class Sx {
 	private String sx_content;//事项内容
 	private String sx_remark;//事项备注
 	private Urgency urgency;//紧急程度
+	//新加一个地区（地区>区县）
+	private Area area; //所属地区
 	private County county;//所属区县
 	private Industry industry;//所属行业
 	//后来加的
 	private Date sx_end_time;//事项结束时间
 	private Office office;//单位
+	
+	public Area getArea() {
+		return area;
+	}
+	public void setArea(Area area) {
+		this.area = area;
+	}
 	public String getSx_id() {
 		return sx_id;
 	}
@@ -96,9 +105,10 @@ public class Sx {
 	public void setOffice(Office office) {
 		this.office = office;
 	}
+	
 	public Sx(String sx_id, String sx_name, Sx_type sx_type, Sx_status sx_status, Date sx_time, User founder,
-			String sx_content, String sx_remark, Urgency urgency, County county, Industry industry, Date sx_end_time,
-			Office office) {
+			String sx_content, String sx_remark, Urgency urgency, Area area, County county, Industry industry,
+			Date sx_end_time, Office office) {
 		super();
 		this.sx_id = sx_id;
 		this.sx_name = sx_name;
@@ -109,6 +119,7 @@ public class Sx {
 		this.sx_content = sx_content;
 		this.sx_remark = sx_remark;
 		this.urgency = urgency;
+		this.area = area;
 		this.county = county;
 		this.industry = industry;
 		this.sx_end_time = sx_end_time;
@@ -122,9 +133,10 @@ public class Sx {
 	public String toString() {
 		return "Sx [sx_id=" + sx_id + ", sx_name=" + sx_name + ", sx_type=" + sx_type + ", sx_status=" + sx_status
 				+ ", sx_time=" + sx_time + ", founder=" + founder + ", sx_content=" + sx_content + ", sx_remark="
-				+ sx_remark + ", urgency=" + urgency + ", county=" + county + ", industry=" + industry
-				+ ", sx_end_time=" + sx_end_time + ", office=" + office + "]";
+				+ sx_remark + ", urgency=" + urgency + ", area=" + area + ", county=" + county + ", industry="
+				+ industry + ", sx_end_time=" + sx_end_time + ", office=" + office + "]";
 	}
+	
 	
 	
 	
