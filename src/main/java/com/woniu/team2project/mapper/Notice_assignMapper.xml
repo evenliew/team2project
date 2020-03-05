@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.Notice_assignMapper">
+	<!-- 添加的映射文件 -->
+	<insert id="insertNotice_assign">
+		insert into tb_notice_assign values (
+				#{notice_assign_id},#{recender_id},#{notice_id});
+	</insert>
+	<!-- 主键查询的映射文件 -->
+	<select id="selectNotice_assignByNotice_assign_id" resultType="Notice_assign">
+		select * from tb_notice_assign where notice_assign_id=#{notice_assign_id};
+	</select> 
+	
+	<!-- 查询所有专报 -->
+	<select id="selectNotice_assignByRecender_id" resultType="Notice_assign">
+		select * from tb_notice_assign where recender_id=#{recender_id}
+	</select>
+</mapper>

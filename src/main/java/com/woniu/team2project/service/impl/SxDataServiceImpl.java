@@ -10,9 +10,9 @@ import com.woniu.team2project.entity.Area;
 import com.woniu.team2project.entity.County;
 import com.woniu.team2project.entity.Industry;
 import com.woniu.team2project.entity.Office;
+import com.woniu.team2project.entity.Sx_status;
 import com.woniu.team2project.entity.Sx_type;
 import com.woniu.team2project.entity.Urgency;
-import com.woniu.team2project.entity.User;
 import com.woniu.team2project.mapper.SxDataMapper;
 import com.woniu.team2project.mapper.SxMapper;
 import com.woniu.team2project.service.SxDataService;
@@ -60,9 +60,10 @@ public class SxDataServiceImpl implements SxDataService{
 		List<Urgency> urgencys = sxDataMapper.selectUrgency();
 		return urgencys;
 	}
-	//查领导(根据单位id)
-	public User getLeaderByOffice_id(Integer office_id) {
-		User leader = sxDataMapper.selectLeaderByOffice_id(office_id);
-		return leader;
+	//查询所有进度
+	@Override
+	public List<Sx_status> getAllSx_status() {
+		List<Sx_status> statuses = sxDataMapper.selectSx_status();
+		return statuses;
 	}
 }

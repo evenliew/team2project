@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.NoticeMapper">
+	<!-- 添加公告 -->
+	<insert id="insertNotice">
+		insert into 
+			tb_notice 
+		values (#{notice_id},<!-- 公告id -->
+				#{notice_title},<!-- 公告标题 -->
+				#{notice_time},<!-- 公告发布时间 -->
+				#{notice_content},<!-- 内容 -->
+				#{notice_founder.user_id},<!-- 发布人 -->
+				#{module.module_id})<!-- 模块 -->
+	</insert>
+	<!-- 查询公告 -->
+	<select id="selectAllNotices" resultMap="NoticeMapper">
+		select * from tb_notice
+	</select> 
+	<resultMap type="Notice" id="NoticeMapper">
+		<association property="module" column="module_id" javaType="Module" select="selectModuleById"/>
+		<association property="notice_founder" column="notice_founder_id" javaType="User" select="selectFounderById"/>
+	</resultMap>
+	
+	<!-- 查询公告模块 -->
+	<select id="selectModuleById" resultType="Module">
+		select * from tb_module where module_id = #{module_id}
+	</select>
+	<!--查询公告发布人  -->
+	<select id="selectFounderById" resultType="User">
+		select * from tb_user where user_id = #{notice_founder_id}
+	</select>
+
+	<!-- 修改公告状态 -->
+	<update id="updateNotice">
+		update tb_notice set notice_title = 
+			#{notice.notice_title},
+			#{notice.notice_content}
+			#{notice.module.module_id}
+		where notice_id = #{notice.notice_id} 
+	</update>
+	
+</mapper>

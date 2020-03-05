@@ -1,63 +1,305 @@
 <!DOCTYPE html >
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
-<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
-<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../js/attendance.js"></script>
+<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" />
 <title>事项列表</title>
 </head>
+<script type="text/javascript" src="../../js/jquery-2.2.3.js"></script>
+<script type="text/javascript">
+
+//页面初始化函数 
+$(function(){
+
+	//初始化下拉列表选项 
+	initConditions();
+	
+	//初始化表格
+	initTable();
+	
+	
+	//条件查询点击事件 加载查询结果
+	$("#btnSearch").click(function(){
+		initTable();
+	});
+	
+	//重置查询 
+	$("#btnReset").click(function(){
+		$('#sxSearchForm')[0].reset();
+		initTable();
+		//window.location.reload();
+	});
+	
+	//点击批量删除事项
+	$("#deleteSxs").click(function(){
+		doDeleteSx();
+	});
+})
+
+
+//加载各种下拉列表选项
+function initConditions(){
+	//加载事项类型下拉
+		/* $.post(
+				"/allsx_type",
+				null,
+				function(data){
+					$.each(data,function(){
+						var html = "<option value='" + this.sx_type_id + "'>" + this.sx_type_name + "</option>";
+						$(html).appendTo($("#sx_types"));
+					})
+		});  */
+		//加载区下拉
+		$.post(
+				"/allarea",
+				null,
+				function(data){
+					$.each(data,function(){
+						var html = "<option value='" + this.area_id + "'>" + this.area_name + "</option>";
+						$(html).appendTo($("#areas"));
+					})
+		});
+		//县城下拉
+		$("#areas").change(function(){
+				$.post(
+						"/allcounty", 
+						{area_id:$("#areas").val()},
+						function(data){
+								//删子标签
+								$("#counties").children(":gt(0)").remove();
+								$.each(data,function(){
+									var html = "<option value='" + this.county_id + "'>" + this.county_name + "</option>";
+									$(html).appendTo($("#counties"));
+								})
+					})
+		})
+		//加载行业下拉
+		$.post(
+				"/allindustry",
+				null,
+				function(data){
+					$.each(data,function(){
+						var html = "<option value='" + this.industry_id + "'>" + this.industry_name + "</option>";
+						$(html).appendTo($("#industries"));
+					})
+		});
+		//进度类型下拉
+		$.post(
+				"/allstatus",
+				null,
+				function(data){
+					$.each(data,function(){
+						var html = "<option value='" + this.sx_status_id + "'>" + this.sx_status_name + "</option>";
+						$(html).appendTo($("#statuses"));
+					})
+		});
+		//加载单位下拉
+		$.post(
+				"/alloffice",
+				null,
+				function(data){
+					$.each(data,function(){
+						var html = "<option value='" + this.office_id + "'>" + this.office_name + "</option>";
+						$(html).appendTo($("#offices"));
+					})
+		});
+}
+ 
+function doDeleteSx(){
+    //判断是否至少选择一项
+    var checkedNum = $("input[name='sx_ids']:checked").length;
+    if(checkedNum==0){
+        alert("请至少选择一项");
+        return;
+    }
+    if(confirm("事项删除后不可恢复，您确定要删除么？")){
+        //这个数组存储要删除的数据的id
+        var checkedList = new Array();
+        //每一个被选中的name为ids的input标签
+        $("input[name='sx_ids']:checked").each(function(){
+            checkedList.push($(this).val());//将id存入数组
+        });
+        $.ajax({
+            type:"post",
+            dataType:"json",
+            url:"/deletesxbysx_id",//不同页面只用更改action即可
+            async:true,
+            //数组的toString里的id是用","分隔开的，例如数组{"1","2","3"},同String后为"1,2,3"
+            data:{"deleteList":checkedList.toString()},
+            success:function(data){
+                if(data==1){
+                    for(var i=0;i<checkedList.length;i++){
+                        $("#tr_"+checkedList[i]).remove();//ajax动态移除
+                    }
+                }else{
+                    alert("删除失败");
+                }
+            },
+            error:function(){
+                alert("error");
+            }
+         })
+     }	
+}
+
+             			
+//初始化加载表格
+function initTable(){
+	$.post(
+			"/sxbyconditionpage",
+			$("#sxSearchForm").serialize()+"&"+$.param({"sx_type_id":getQueryVariable("sx_type_id")}),
+			function(data){
+				$("#tbSx tr:gt(0)").remove();
+				showTable(data);
+				showPageInfo(data);
+				//showPager(data);	
+	});
+}
+
+//画表内容
+function showTable(data){
+	$.each(data.list,function(){
+		var html = "<tr class='success' id=tr_"+this.sx_id+">";
+		html += "<td align='center'><input type='checkbox' class='checkbox' name='sx_ids' value="+this.sx_id+"></td>";
+		html += "<td>"+this.sx_name+"</td>";
+		html += "<td>"+this.sx_type.sx_type_name+"</td>";
+		html += "<td>"+this.county.area.area_name+"</td>";
+		html += "<td>"+this.county.county_name+"</td>";
+		html += "<td>"+this.industry.industry_name+"</td>";
+		html += "<td>"+this.sx_status.sx_status_name+"</td>";
+		html += "<td>"+this.office.office_name+"</td>";
+		html += "<td>"+this.sx_time.substring(0,10)+"</td>";
+		html += "<td><button class='btn btn-primary btn-sm'>管理进度</button> <button class='btn btn-danger btn-sm'>分派任务</button></td>"
+		html += "</tr>";
+		$(html).appendTo("#tbSxbody");
+	})
+}
+
+//显示页数信息
+function showPageInfo(data){
+	var html = "共"+data.total+"条记录 共"+data.pages+"页 当前第"+data.pageNum+"页"
+	pageInfo.innerHTML=html
+}
+
+//获取请求参数
+function getQueryVariable(variable){
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return("");
+}
+	
+</script>
 <body>
-<div class="container" style="width: 100%;padding: 25px 15px;">
+<div class="container" style="width: 100%;padding: 25px 15px">
 	<div class="row clearfix">
 		<div class="col-md-12 column" style="padding: 20px;">
-			<h3>事项进度</h3>
-			<a href="newProject.html">新建事项</a><!-- 去newProject.html界面-->
-			<table class="table table-bordered" style="margin-top: 20px;">
+		
+			<!-- 导航栏 -->
+			<ul class="nav nav-pills">
+			    <li class="active"><a href="newProject.html">新建</a></li>
+			    <li id="deleteSxs"><a href="#">删除</a></li>
+			    <li class="dropdown">
+			      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			      	  导出 <span class="caret"></span>
+			      </a>
+			      <ul class="dropdown-menu">
+			        <li><a href="#">导出到word</a></li>
+			        <li><a href="#">导出到pdf</a></li>
+			        <li><a href="#">导出到QQ(默认word格式)</a></li>
+			        <li class="divider"></li>
+			        <li><a href="#">导出到桌面</a></li>
+			      </ul>
+			    </li>
+			  </ul>
+			  
+			<!-- 查询条件form -->
+			<form th:action="@{/sxbyconditionpage}" id="sxSearchForm" role="form" class="form-inline" style="float: left;margin-bottom: 10px">
+				<!-- 事项名字模糊查询 -->
+				<label style="margin-right: 10px;">项目名称</label>
+				<input type="text" class="form-control" id="realName" name="sx_name" placeholder="项目名称" style="width: 150px"/>
+				<!-- 事项类型下拉 -->
+				<!-- <label style="margin-right: 10px;">督办项目</label>
+				<select id="sx_types" name="sx_type.sx_type_id" class="form-control" style="width: 140px">
+					<option value="">所有</option>
+		  		</select> -->
+		  		<!-- 区 下拉 -->
+				<label style="margin-right: 10px;">所属区</label>
+					<select name="area.area_id" class="form-control" id="areas" style="width: 150px">
+						<option value="">所有</option>
+		  			</select>
+		  		<!-- 县下拉 -->	
+		  		<label style="margin-right: 10px;">所属县</label>
+				<select name="county.county_id" class="form-control" id="counties" style="width: 150px">
+					<option value="">所有</option>
+				</select>
+				<!-- 行业下拉 -->
+				<label style="margin-right: 10px;">行业</label>
+				<select name="industry.industry_id" class="form-control" id="industries" style="width: 150px">
+					<option value="">所有</option>
+		  		</select>
+		  		<!-- 进度类型下拉 -->
+		  		<label style="margin-right: 10px;">进度</label>
+		  		<select name="sx_status.sx_status_id" class="form-control" id="statuses" style="width: 150px">
+					<option value="">所有</option>
+		  		</select>
+		  		<!-- 责任单位下拉 -->
+		  		<label style="margin-right: 10px;">责任单位</label>
+		  		<select name="office.office_id" class="form-control" id="offices" style="width: 150px">
+					<option value="">所有</option>
+		  		</select>
+		  		<!-- 选择时段 -->
+		  		<label style="margin-right: 10px;">查询时段</label>
+		  		<input type="date" name="sx_time" class="form-control" style="width: 150px"/>
+		  		<label style="margin-right: 10px;">至 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+		  		<input type="date" name="sx_end_time" class="form-control" style="width: 150px"/>
+		  		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		  		<!-- 提交按钮 -->
+		  		<input type="button" id="btnSearch" class="btn btn-primary btn" value="查询"/>
+		  		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		  		<!-- 重置按钮 -->
+		  		<input type="button" id="btnReset" class="btn btn-primary btn" value="重置"/>
+			</form>
+			
+			<!-- 数据展示table -->
+			<table class="table table-bordered" style="margin-top: 20px" id="tbSx">
 				<thead>
 					<tr>
-						<th style="width: 150px;">项目名</th>
-						<th>时间</th>
-						<th>状态</th>
-						<th>类型</th>
+						<th style="width: 150px; text-align: center">选择</th>
+						<th>项目名称</th>
+						<th>督办项目</th>
+						<th>所属区</th>
+						<th>所属县</th>
+						<th>行业</th>
+						<th>进度类型</th>
+						<th>责任单位</th>
+						<th>立项日期</th>
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr class="success"> <!-- 这个要用真的list页面来传值 -->
-						<td><a href="/getSxBySx_id?sx_id=">项目1</a></td>
-						<td>2017-06-16 08:54:05</td>
-						<td>进度1</td>
-						<td>事项类型1</td>
-						<td><button class="btn btn-primary btn-sm">管理</button>
-							<button class="btn btn-danger btn-sm">删除</button>
-						</td>
-					</tr>
-					<tr>
-						<td>项目2</td>
-						<td>2017-06-16 08:54:05</td>
-						<td>进度2</td>
-						<td>事项类型2</td>
-						<td><button class="btn btn-primary btn-sm">管理</button>
-							<button class="btn btn-danger btn-sm">删除</button>
-						</td>
-					</tr>
-					<tr class="success">
-						<td>项目3</td>
-						<td>2017-06-16 08:54:05</td>
-						<td>进度3</td>
-						<td>事项类型3</td>
-						<td><button class="btn btn-primary btn-sm">管理</button>
-							<button class="btn btn-danger btn-sm">删除</button>
-						</td>
-					</tr>
+				<tbody id="tbSxbody">
 				</tbody>
 			</table>
-			<span>共1条记录 共1页 当前第1页</span>
+			
+			<!-- 页数详情 -->
+			<span id="pageInfo"></span>
+			
+			<!-- 翻页 -->
+            <ul class="pagination" style="float: right;margin: 0;">
+                <li id="firstPage"><a href="javascript:void(0)">首页</a></li>
+                <li><a href="javascript:void(0)">上一页</a></li>
+                <li class="disabled"><a href="javascript:void(0)">下一页</a></li>
+                <li><a href="javascript:void(0)">尾页</a></li>
+            </ul>
+            
 		</div>
 	</div>
 </div>
 </body>
-
+<script type="text/javascript" src="../../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/attendance.js"></script>
 </html>

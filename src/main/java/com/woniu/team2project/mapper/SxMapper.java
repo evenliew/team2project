@@ -2,6 +2,8 @@ package com.woniu.team2project.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.woniu.team2project.entity.Sx;
 
@@ -20,7 +22,5 @@ public interface SxMapper {
 	
 	//修改事项状态
 	void updateSxStatus(String sx_id,Integer sx_status_id);
-	
-
 
 }
