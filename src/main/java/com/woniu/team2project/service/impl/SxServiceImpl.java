@@ -31,7 +31,7 @@ public class SxServiceImpl implements SxService{
 	}
 	
 	//根据id删除事项
-	@Override
+	@Override 
 	public void removeSx(String sx_id) {
 		sxMapper.deleteSx(sx_id);
 		

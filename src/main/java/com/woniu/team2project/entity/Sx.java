@@ -2,7 +2,7 @@ package com.woniu.team2project.entity;
 
 import java.util.Date;
 
-//事项实体
+//事项实体 
 public class Sx {
 	private String sx_id;//事项id
 	private String sx_name;//事项名称

@@ -1,3 +1,10 @@
+
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countsql
+  
 mybatis:
   type-aliases-package: com.woniu.team2project.entity
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.User_noticeMapper">
+	<!-- 添加的映射文件 -->
+	<insert id="insertUser_notice">
+		insert into 
+			tb_user_notice
+		values(
+			#{user_nt_id},<!-- 通告id -->
+			#{user_nt_title},<!--通告标题-->
+			#{user_nt_founder.user_id},<!-- 发布通告者 -->
+			#{user_nt_recender.user_id},<!-- 接收通告者 -->
+			#{user_nt_content},<!-- 通告内容 -->
+			#{user_nt_time},<!-- 通告发送时间 -->
+			#{user_nt_sx.sx_id}) <!-- 通告的事项 -->
+	</insert>
+	<!--  -->
+	<select id="selectUser_noticeByUser_notice_id" resultMap="User_noticeMapper">
+		select * from 
+			tb_user_notice <!-- 查询的表 -->
+		where 
+			user_nt_id=#{user_nt_id};<!-- 条件 -->
+	</select> 
+	<resultMap type="User_notice" id="User_noticeMapper">
+		<!-- 发布个人通告者 -->
+		<association property="user_nt_founder" column="user_nt_founder_id"
+		 javaType="User" select="selectFounderByUserId"/>
+		<!-- 接受个人通告者 -->
+		<association property="user_nt_recender" column="user_nt_recender_id"
+		 javaType="User" select="selectRecenderByUserId"/>
+		<!-- 事项 -->
+		<association property="user_nt_sx" column="user_nt_sx_id"
+		 javaType="Sx" select="selectSxBySxId"/>
+	</resultMap>
+	<!-- 查询发送者 -->
+	<select id="selectFounderByUserId" resultType="User">
+		select * from tb_user where user_id = #{user_nt_founder_id}
+	</select>
+	<!-- 查询接收者 -->
+	<select id="selectRecenderByUserId" resultType="User">
+		select * from tb_user where user_id = #{user_nt_recender_id}
+	</select>
+	<!-- 查询事项 -->
+	<select id="selectSxBySxId" resultType="Sx">
+		select * from tb_sx where sx_id = #{user_nt_sx_id}
+	</select>
+	<!-- 查询所有专报 -->
+	<select id="selectAllUser_notice" resultMap="User_noticeMapper">
+		select * from tb_user_notice
+	</select>
+	
+	
+</mapper>

@@ -52,7 +52,7 @@ public class Team2projectApplicationTests {
 				new Date(), new Office(1, "1", new User()));
 		sxMapper.insertSx(sx);
 	}
-	
+	 
 	//测试条件查询事项Dao+分页
 	@Test
 	public void testSelectSxByConditionPage() {

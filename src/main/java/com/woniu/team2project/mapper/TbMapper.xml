@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.TbMapper">
+	<!-- 添加的映射文件 -->
+	<insert id="insertTb">
+		insert into
+				tb_tb
+		values (#{tb_id},<!-- 通报的id -->
+				#{tb_time},<!-- 通知发布的时间 -->
+				#{tb_office.office_id},<!-- 对应接受部门的外键 -->
+				#{tb_author.user_id},<!-- 发布人 -->
+				#{tb_sx.sx_id},<!-- 发布的事项 -->
+				#{tb_content});<!-- 内容 -->
+	</insert>
+	<!-- 主键查询的映射文件 -->
+	<select id="selectTbByTb_id" resultMap="tbMapper">
+		select * from tb_tb where tb_id=#{tb_id};
+	</select> 
+	<resultMap type="Tb" id="tbMapper">
+		<association property="tb_office" column="tb_office_id" javaType="Office" select="selectOfficeByOffice_id" />
+		<association property="tb_author" column="tb_author_id" javaType="User" select="selectUserByUser_id" />
+		<association property="tb_sx" column="tb_sx_id" javaType="Sx" select="selectSxBySx_id" />
+	</resultMap>
+	<select id="selectOfficeByOffice_id" resultType="Office">
+		select * from tb_office where office_id = #{tb_office_id}
+	</select>
+	<select id="selectUserByUser_id" resultType="User">
+		select * from tb_user where user_id = #{tb_author_id}	
+	</select>
+	<select id="selectSxBySx_id" resultType="Sx"> 
+		select * from tb_sx where sx_id = #{tb_sx_id}
+	</select>
+</mapper>
