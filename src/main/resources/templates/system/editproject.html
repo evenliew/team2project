@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="utf-8">
-		<title>新建事项</title>
+		<title>编辑事项</title>
 		<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
 		<link rel="stylesheet" href="../css/menu.css" />
 		<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
@@ -25,7 +25,6 @@
 				width: 200px;
 			}
 		</style>
-		
 		
 		<script type="text/javascript" >
 			$(function(){
@@ -94,21 +93,38 @@
 							});
 						}); 
 				  }); 
+			    //单位下拉列表改变时，触发事件，改变对应的领导
+				  $("#office").change(function(){
+					   $.post(
+						"/getLeaderByOffice_id",
+						{office_id:$("#office").val()},
+						function(d){
+							//:gt0  从0开始计数的索引值。
+							//$("#county").children(":gt(0)").remove();
+							//<input name="send_leader_id" type="text" id="send_leader" class="form-control" th:value="${sx.founder.office.office_leader.user_name}">
+							//var html="<option value='"+this.county_id+"'>"+this.county_name+"</option>";
+							$("#receive_leader").val(d.user_name);
+							//$(html).appendTo($("#county"));
+						});
+				}); 
+				
 			 });	
 		
 		</script>
 	</head>
 	<body>
-		<h4>新建事项</h4>
-		<form action="/newproject" method="post">
+		<h4>编辑事项</h4>
+		<form action="" method="post">
 			<div  id="newproject_table">
 				<table class="table table-bordered" style="margin-top: 20px;">
 					<tr>
 						<td width="200px">事项名称：</td>
 						<td>
+							<fieldset disabled>
 							<div>
-								<input  name="sx_name" class="form-control" type="text">
+								<input  name="sx_name" th:value="${sx.sx_name}" class="form-control" type="text">
 							</div>
+							</fieldset>
 						</td>
 					</tr>
 					<tr>
@@ -116,7 +132,7 @@
 						<td>
 							<!-- <select name="sx_type"> -->
 							<select id="sx_type" name="sx_type_id" class="form-control">
-								<option value="0">请选择项目类型</option>
+								<option value="${sx.sx_type.sx_type_id}">[[${sx.sx_type.sx_type_name}]]</option>
 							</select>
 						</td>
 					</tr>
@@ -125,10 +141,10 @@
 						<td>
 							<!-- <select name="county"> -->
 							 <select id="area" name="area_id" class="form-control" >
-								<option value="0">请选择区</option>
+								<option value="${sx.county.area.area_id}">[[${sx.county.area.area_name}]]</option>
 							</select>
 							<select id="county" name="county_id" class="form-control">
-								<option value="0">请选择县</option>
+								<option value="${sx.county.county_id}">[[${sx.county.county_name}]]</option>
 							</select>
 						</td>
 					</tr>
@@ -137,7 +153,7 @@
 						<td>
 							<!--<select name="industry"> -->
 							<select id="industry" name="industry_id" class="form-control">
-								<option value="0">请选择行业</option>
+								<option value="${sx.industry.industry_id}">[[${sx.industry.industry_name}]]</option>
 							</select>
 						</td>
 					</tr>
@@ -146,7 +162,7 @@
 						<td>
 							<fieldset disabled>
 								<div >
-									<input name="sx_founder_id" type="text" id="founder" class="form-control"  placeholder="禁止输入">
+									<input name="sx_founder_id" type="text" id="founder" class="form-control" th:value="${sx.founder.user_name}">
 								</div>
 							</fieldset>
 						</td>
@@ -156,7 +172,7 @@
 						<td>
 							<fieldset disabled>
 								<div >
-									<input name="send_leader_id" type="text" id="send_leader" class="form-control"  placeholder="禁止输入">
+									<input name="send_leader_id" type="text" id="send_leader" class="form-control" th:value="${sx.founder.office.office_leader.user_name}">
 								</div>
 							</fieldset>
 						</td>
@@ -165,7 +181,7 @@
 						<td>接收单位</td>
 						<td>
 							<select id="office" name="office_id" class="form-control">
-								<option value="0">请选择须接受单位</option>
+								<option value="${sx.office.office_id}">[[${sx.office.office_name}]]</option>
 							</select>
 						</td>
 					</tr>
@@ -174,24 +190,16 @@
 						<td>
 							<fieldset disabled>
 								<div >
-									<input name="receive_leader_id" type="text" id="receive_leader" class="form-control"  placeholder="禁止输入">
+									<input name="receive_leader_id" type="text" id="receive_leader" class="form-control" th:value="${sx.office.office_leader.user_name}">
 								</div>
 							</fieldset>
-						</td>
-					</tr>
-					<tr>
-						<td>事项结束时间：</td>
-						<td>
-							<div >
-								<input name="sx_end_time" type="text" id="sx_end_time" class="form-control" >
-							</div>
 						</td>
 					</tr>
 					<tr>
 						<td>紧急程度：</td>
 						<td>
 							<select id="urgency" name="urgency">
-							  <option value="0">请选择紧急程度</option>
+							  <option value="${sx.urgency.urgency_id}">[[${sx.urgency.urgency_name}]]</option>
 							</select>
 						</td>
 					</tr>
@@ -199,7 +207,7 @@
 						<td>内容：</td>
 						<td>
 							<div class="form-group">
-			                	<textarea name="sx_content" id="newproject_textarea" class="form-control" rows="3"></textarea>
+			                	<textarea name="sx_content" id="newproject_textarea" class="form-control" rows="3" th:text="${sx.sx_content}"></textarea>
 			           	 	</div>
 						</td>
 					</tr>
@@ -207,7 +215,7 @@
 						<td>备注：</td>
 						<td>
 							<div class="col-sm-10">
-								<input name="sx_remark" class="form-control" id="focusedInput" type="text">
+								<input name="sx_remark" class="form-control" id="focusedInput" type="text" th:value="${sx.sx_remark}">
 							</div>
 						</td>
 					</tr>

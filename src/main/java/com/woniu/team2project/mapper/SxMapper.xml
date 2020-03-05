@@ -25,7 +25,7 @@
 			county_id=#{county.county_id},industry_id=#{industry.industry_id},sx_end_time=#{sx_end_time},office_id=#{office.office_id}
 		where sx_id= #{sx_id}
 	</update>
-	
+	<!-- 更改事项状态 -->
 	<update id="updateSxStatus">
 		update tb_sx set sx_status_id=#{sx_status_id} where sx_id= #{sx_id}
 	</update>
@@ -48,6 +48,7 @@
 		<association property="sx_status" javaType="Sx_status" select="selectSx_statusBySx_status_id" column="sx_status_id"/>
 		<association property="founder" javaType="User" select="selectUserByUser_id" column="sx_founder_id"/>
 		<association property="urgency" javaType="Urgency" select="selectUrgencyByUrgency_id" column="sx_urgency_id"/>
+		<association property="area" javaType="Area" select="selectAreaByArea_id" column="area_id"/>
 		<association property="county" javaType="County" select="selectCountyByCounty_id" column="county_id"/>
 		<association property="industry" javaType="Industry" select="selectIndustryByIndustry_id" column="industry_id"/>
 		<association property="office" javaType="Office" select="selectOfficeByOffice_id" column="office_id"/>
@@ -58,25 +59,53 @@
 	<select id="selectSx_statusBySx_status_id" resultType="Sx_status">
 		select * from tb_sx_status where sx_status_id=#{sx_status_id}
 	</select>
-	<select id="selectUserByUser_id" resultType="User">
+	<select id="selectUserByUser_id" resultMap="UserMapper">
 		select * from tb_user where user_id=#{sx_founder_id}
 	</select>
+		<resultMap type="User" id="UserMapper">
+			<id column="user_id" property="user_id"/>
+			<result column="user_name" property="user_name"/>
+			<result column="user_pass" property="user_pass"/>
+			<result column="user_loginname" property="user_loginname"/>
+			<result column="user_phone" property="user_phone"/>
+			<!-- user_status先不管 -->
+			<association property="area" javaType="Area" select="selectAreaByArea_id" column="area_id"/>
+			<association property="office" javaType="Office" select="selectOfficeByOffice_id" column="office_id"/>
+		</resultMap>
 	<select id="selectUrgencyByUrgency_id" resultType="Urgency">
 		select * from tb_urgency where urgency_id=#{sx_urgency_id}
 	</select>
-	<select id="selectCountyByCounty_id" resultType="County">
+	<select id="selectAreaByArea_id" resultType="Area">
+		select * from tb_area where area_id=#{area_id}
+	</select>
+	<select id="selectCountyByCounty_id" resultMap="CountyMapper">
 		select * from tb_county where county_id=#{county_id}
 	</select>
+		<resultMap type="County" id="CountyMapper">
+			<id column="county_id" property="county_id"/>
+			<result column="county_name" property="county_name"/>
+			<association property="area" javaType="Area" select="selectAreaByArea_id" column="area_id"/>
+		</resultMap>
 	<select id="selectIndustryByIndustry_id" resultType="Industry">
 		select * from tb_industry where industry_id=#{industry_id}
 	</select>
-	<select id="selectOfficeByOffice_id" resultType="Office">
+	<select id="selectOfficeByOffice_id" resultMap="OfficeMapper">
 		select * from tb_office where office_id=#{office_id}
 	</select>
-	<!-- 二级层没有装配 -->
+		<resultMap type="Office" id="OfficeMapper">
+			<id column="office_id" property="office_id"/>
+			<result column="office_name" property="office_name"/>
+			<association property="office_leader" javaType="User" select="selectUserByUser_id_simple" column="office_leader_id"/>
+		</resultMap>
+		<select id="selectUserByUser_id_simple" resultType="User">
+			select * from tb_user where user_id=#{office_leader_id}
+		</select>
 	<!-- 3. SQL条件 -->
 	<sql id="sqlcondition">
 		<where>
+			<if test="sx_id != null and sx_id !=''">
+				and sx_id = #{sx_id}
+			</if>
 			<if test="sx_name != null and sx_name !=''">
 				and sx_name like '%' #{sx_name} '%'
 			</if>
@@ -95,6 +124,9 @@
 			</if>
 			<if test="urgency != null and urgency.urgency_id != null and urgency.urgency_id !=''">
 				and sx_urgency_id = #{urgency.urgency_id}
+			</if>
+			<if test="area != null and area.area_id != null and area.area_id !=''">
+				and area_id = #{area.area_id}
 			</if>
 			<if test="county != null and county.county_id != null and county.county_id !=''">
 				and county_id = #{county.county_id}
