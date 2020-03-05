@@ -1,4 +1,4 @@
-package com.woniu.team2project;
+package com.woniu.team2project.mapper;
 
 import java.util.List;
 

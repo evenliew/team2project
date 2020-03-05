@@ -1,6 +1,7 @@
 package com.woniu.team2project.service.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,12 @@ public class ZbServiceImp implements ZbService {
 
 	@Override
 	public void addZb(Zb zb) {
+		if(zb!=null ) {
+			String randomUUID = 
+					UUID.randomUUID().toString().replace("-", "").toLowerCase(); 
+			System.out.println(randomUUID);
+			zb.setZb_id(randomUUID);
+		}
 		zbMapper.insertZb(zb);
 	}
 
@@ -39,6 +46,11 @@ public class ZbServiceImp implements ZbService {
 		PageHelper.startPage(1, 5);
 		List<Zb> zbs = zbMapper.selectAllZb();
 		return zbs;
+	}
+
+	@Override
+	public void changeZb_state(String zb_id, Integer zb_state_id) {
+		zbMapper.updateZb_state(zb_id, zb_state_id);
 	}
 	
 	

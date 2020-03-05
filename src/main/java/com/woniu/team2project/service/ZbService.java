@@ -30,4 +30,9 @@ public interface ZbService {
 	 * @return
 	 */
 	List<Zb> getAllZb();
+	
+	/**
+	 * 修改专报的状态
+	 */
+	void changeZb_state(String zb_id,Integer zb_state_id);
 }

@@ -17,7 +17,7 @@ public interface ZbMapper {
 	//作为新增专报的操作--用户可操作
 	void insertZb(Zb zb);
 	
-	//作为查询专报的操作--用户可操作
+	//作为查询专报的操作--用户不可操作
 	Zb selectZbByZb_id(String zb_id);
 	
 	//修改专报的状态。具体几种状态 未定
@@ -26,4 +26,7 @@ public interface ZbMapper {
 	
 	//查询所有的专报
 	List<Zb> selectAllZb();
+	
+	//按条件查询专报
+	List<Zb> selectZbByCondition(Zb zb);
 }
