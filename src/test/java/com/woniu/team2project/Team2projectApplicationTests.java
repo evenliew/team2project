@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.woniu.team2project.entity.Area;
 import com.woniu.team2project.entity.County;
 import com.woniu.team2project.entity.Industry;
@@ -30,6 +31,7 @@ public class Team2projectApplicationTests {
 	
 	@Autowired
 	SxMapper sxMapper;
+
 	
 	@Autowired
 	DataSource dataSource;
@@ -43,8 +45,14 @@ public class Team2projectApplicationTests {
 	//测试添加事项Dao
 	@Test
 	public void testInsertSxDao() {
+		Sx sx=new Sx("1133", "测试事项", new Sx_type(1, "类型一"),new Sx_status(1, "状态一") ,
+				new Date(), new User("1122", "1","1", "1", "1", new User_status(1,
+				"1"), new Area(1, "1"), new Office(1,"1", new User())), "我的内容", "我的备注", 
+				new Urgency(1, "1"), new Area(2, "地区"), new County(1, "1", new Area(1,"1")), new Industry(1,"1"), 
+				new Date(), new Office(1, "1", new User()));
+		sxMapper.insertSx(sx);
 	}
-	
+	 
 	//测试条件查询事项Dao+分页
 	@Test
 	public void testSelectSxByConditionPage() {
@@ -54,10 +62,16 @@ public class Team2projectApplicationTests {
 		Sx mysx= new Sx();
 //		mysx.setSx_status(new Sx_status(4,"")); //测试事项状态为4的
 //		mysx.setSx_end_time(new Date()); //测试今天以前创建的
-		List<Sx> sxlist = sxMapper.selectSxByConditionPage(mysx);
-		for(Sx sx:sxlist) {
+		List<Sx> sxs = sxMapper.selectSxByConditionPage(mysx);
+		PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
+		System.out.println("页索引: " + sxsPage.getPageNum());
+		System.out.println("页大小: " + sxsPage.getPageSize());
+		System.out.println("总条数: " + sxsPage.getTotal());
+		System.out.println("总页数: " + sxsPage.getPages());
+		for(Sx sx: sxsPage.getList()) {
 			System.out.println(sx);
 		}
+		
 	}
 	
 	
@@ -71,6 +85,12 @@ public class Team2projectApplicationTests {
 	//测试更新事项
 	@Test
 	public void testUpdateSxDao() {
+		Sx sx=new Sx("1122", "测试更改事项", new Sx_type(1, "类型一"),new Sx_status(1, "状态一") , 
+				new Date(), new User("1122", "1","1", "1", "1", new User_status(1,"1"),
+				new Area(1, "1"), new Office(1,"1", new User())), "我的内容", "我的备注", 
+				new Urgency(1, "1"), new Area(1, "1"), new County(1, "1", new Area(1,"1")), new Industry(1,"1"), 
+				new Date(), new Office(1, "1", new User()));
+		sxMapper.updateSx(sx);
 	}
 	
 	//测试更改事项状态
@@ -78,6 +98,6 @@ public class Team2projectApplicationTests {
 	public void testUpdateSxStatusDao() {
 		sxMapper.updateSxStatus("1122", 3);
 	}
-	
+
 
 }

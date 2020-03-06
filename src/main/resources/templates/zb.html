@@ -6,9 +6,7 @@
 <script type="text/javascript" th:src="@{/js/jquery-2.2.3.js}"></script>
 <title>日程安排</title>
 <script type="text/javascript">
-	function operation(){
-	    alert("亲,该功能正在开发中");
-	    }
+	
 	$(function(){
 		//点击超链接提交表单
 		$(".change").click(function(){
@@ -61,8 +59,8 @@
                 </tbody>
             </table>
             <div style="float: left;">
-                 <a th:href="@{/zbadd}"><input type="button" class="btn btn-primary btn"  onclick="operation()" value="添加" /></a> 
-                 <a th:href="@{/zbmine}"><input type="button" class="btn btn-primary btn"  onclick="operation()" value="查询我的专报" /></a> 
+                 <a th:href="@{/zbadd}"><input type="button" class="btn btn-primary btn"   value="添加" /></a> 
+                 <a th:href="@{/zbmine}"><input type="button" class="btn btn-primary btn"   value="查询我的专报" /></a> 
             </div>
             <form id="changezb" method="post">
 				<input type="hidden" name="_method" value="put" />
