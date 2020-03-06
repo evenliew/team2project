@@ -27,14 +27,19 @@ public class SxController {
 	//分页条件查询事项
 	@RequestMapping("/sxbyconditionpage*")
 	@ResponseBody
-	public PageInfo<Sx> getSxByConditionPage(Sx sx, Integer sx_type_id) {
+	public PageInfo<Sx> getSxByConditionPage(Sx sx, Integer sx_type_id, Integer pageIndex) {
 		//左侧导航栏若传了事项类型，把事项类型赋给传过来的事项,判断非空
 		if(sx_type_id != null) {
 			Sx_type sx_type = new Sx_type(); 
 			sx_type.setSx_type_id(sx_type_id);
 			sx.setSx_type(sx_type);
 		}
-		PageHelper.startPage(1, 3);
+		System.out.println("页码"+pageIndex);
+		//判断页码
+		if(pageIndex == null || pageIndex < 1) {
+			pageIndex = 1;
+		}
+		PageHelper.startPage(pageIndex, 2);
 		List<Sx> sxs = sxService.getSxByConditionPage(sx);
 		PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
 		for(Sx mysx: sxsPage.getList()) {

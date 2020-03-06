@@ -104,7 +104,8 @@ function initConditions(){
 					})
 		});
 }
- 
+
+//删除事项 
 function doDeleteSx(){
     //判断是否至少选择一项
     var checkedNum = $("input[name='sx_ids']:checked").length;
@@ -139,20 +140,21 @@ function doDeleteSx(){
                 alert("error");
             }
          })
-     }	
+     }
+    initTable();
 }
 
              			
 //初始化加载表格
-function initTable(){
+function initTable(pageIndex=1){
 	$.post(
 			"/sxbyconditionpage",
-			$("#sxSearchForm").serialize()+"&"+$.param({"sx_type_id":getQueryVariable("sx_type_id")}),
+			$("#sxSearchForm").serialize()+"&"+$.param({"sx_type_id":getQueryVariable("sx_type_id"),"pageIndex":pageIndex}),
 			function(data){
 				$("#tbSx tr:gt(0)").remove();
 				showTable(data);
 				showPageInfo(data);
-				//showPager(data);	
+				showPager(data);	
 	});
 }
 
@@ -191,6 +193,14 @@ function getQueryVariable(variable){
        }
        return("");
 }
+//画出页导航
+function showPager(data){
+	$('#divPager').empty();
+	var html;
+	html = '<li id="firstPage"><a href="javascript:void(0)" onclick="initTable(1)">首页</a></li><li><a href="javascript:void(0)" onclick="initTable('+data.prePage+')">上一页</a></li><li><a href="javascript:void(0)" onclick="initTable('+data.nextPage+')">下一页</a></li><li><a href="javascript:void(0)" onclick="initTable('+data.lastPage+')">尾页</a></li>';
+	$(html).appendTo("#divPager");
+
+}
 	
 </script>
 <body>
@@ -198,7 +208,8 @@ function getQueryVariable(variable){
 	<div class="row clearfix">
 		<div class="col-md-12 column" style="padding: 20px;">
 		
-			<!-- 导航栏 -->
+			<!--功能 导航栏 -->
+			<div style="margin-bottom: 5px;">
 			<ul class="nav nav-pills">
 			    <li class="active"><a href="newProject.html">新建</a></li>
 			    <li id="deleteSxs"><a href="#">删除</a></li>
@@ -214,13 +225,17 @@ function getQueryVariable(variable){
 			        <li><a href="#">导出到桌面</a></li>
 			      </ul>
 			    </li>
+			    <li id="btnReset" class="active"><a href="#">重置</a></li>
+			    <li id="btnSearch" class="active"><a href="#">查询</a></li>
+			    
 			  </ul>
-			  
+			</div>  
+			
 			<!-- 查询条件form -->
 			<form th:action="@{/sxbyconditionpage}" id="sxSearchForm" role="form" class="form-inline" style="float: left;margin-bottom: 10px">
 				<!-- 事项名字模糊查询 -->
 				<label style="margin-right: 10px;">项目名称</label>
-				<input type="text" class="form-control" id="realName" name="sx_name" placeholder="项目名称" style="width: 150px"/>
+				<input type="text" class="form-control" id="realName" name="sx_name" placeholder="项目名称" style="width: 150px; margin-bottom: 3px;"/>
 				<!-- 事项类型下拉 -->
 				<!-- <label style="margin-right: 10px;">督办项目</label>
 				<select id="sx_types" name="sx_type.sx_type_id" class="form-control" style="width: 140px">
@@ -228,7 +243,7 @@ function getQueryVariable(variable){
 		  		</select> -->
 		  		<!-- 区 下拉 -->
 				<label style="margin-right: 10px;">所属区</label>
-					<select name="area.area_id" class="form-control" id="areas" style="width: 150px">
+					<select name="area.area_id" class="form-control" id="areas" style="width: 150px;margin-bottom: 3px;">
 						<option value="">所有</option>
 		  			</select>
 		  		<!-- 县下拉 -->	
@@ -256,28 +271,28 @@ function getQueryVariable(variable){
 		  		<input type="date" name="sx_time" class="form-control" style="width: 150px"/>
 		  		<label style="margin-right: 10px;">至 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 		  		<input type="date" name="sx_end_time" class="form-control" style="width: 150px"/>
-		  		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		  		<!-- 提交按钮 -->
-		  		<input type="button" id="btnSearch" class="btn btn-primary btn" value="查询"/>
-		  		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		  		<!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+		  		<!-- <!-- 提交按钮 -->
+		  		<!-- <input type="button" id="btnSearch" class="btn btn-primary btn" value="查询"/>
+		  		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
 		  		<!-- 重置按钮 -->
-		  		<input type="button" id="btnReset" class="btn btn-primary btn" value="重置"/>
+		  		<!-- <input type="button" id="btnReset" class="btn btn-primary btn" value="重置"/> -->
 			</form>
 			
 			<!-- 数据展示table -->
 			<table class="table table-bordered" style="margin-top: 20px" id="tbSx">
 				<thead>
 					<tr>
-						<th style="width: 150px; text-align: center">选择</th>
-						<th>项目名称</th>
-						<th>督办项目</th>
-						<th>所属区</th>
-						<th>所属县</th>
-						<th>行业</th>
-						<th>进度类型</th>
-						<th>责任单位</th>
-						<th>立项日期</th>
-						<th>操作</th>
+						<th style="width: 6%; text-align: center">选择</th>
+						<th style="width: 10%">项目名称</th>
+						<th style="width: 10%">督办项目</th>
+						<th style="width: 10%">所属区</th>
+						<th style="width: 10%">所属县</th>
+						<th style="width: 10%">行业</th>
+						<th style="width: 10%">进度类型</th>
+						<th style="width: 10%">责任单位</th>
+						<th style="width: 10%">立项日期</th>
+						<th style="width: 14%">操作</th>
 					</tr>
 				</thead>
 				<tbody id="tbSxbody">
@@ -288,11 +303,8 @@ function getQueryVariable(variable){
 			<span id="pageInfo"></span>
 			
 			<!-- 翻页 -->
-            <ul class="pagination" style="float: right;margin: 0;">
-                <li id="firstPage"><a href="javascript:void(0)">首页</a></li>
-                <li><a href="javascript:void(0)">上一页</a></li>
-                <li class="disabled"><a href="javascript:void(0)">下一页</a></li>
-                <li><a href="javascript:void(0)">尾页</a></li>
+            <ul class="pagination" id="divPager" style="float: right;margin: 0;">
+                
             </ul>
             
 		</div>
