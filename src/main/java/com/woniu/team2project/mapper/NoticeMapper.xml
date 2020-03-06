@@ -7,6 +7,7 @@
 	<insert id="insertNotice">
 		insert into 
 			tb_notice 
+<<<<<<< HEAD
 		values (#{notice_id},<!-- 公告id -->
 				#{notice_title},<!-- 公告标题 -->
 				#{notice_time},<!-- 公告发布时间 -->
@@ -41,4 +42,73 @@
 		where notice_id = #{notice.notice_id} 
 	</update>
 	
+=======
+		values (null,<!-- 公告id:int自增不需要赋值 -->
+				#{notice_title},<!-- 公告标题 -->
+				#{notice_time},<!-- 公告发布时间 -->
+				#{notice_content},<!-- 内容 -->
+				#{notice_founder.user_id},<!-- 发布人 -->
+				#{module.module_id})<!-- 模块 -->
+	</insert>
+	<!-- 查询公告 -->
+	<select id="selectAllNotices" resultMap="NoticeMapper">
+		select * from tb_notice
+	</select> 
+	<resultMap type="Notice" id="NoticeMapper">
+		<association property="module" column="module_id" javaType="Module" select="selectModuleById"/>
+		<association property="notice_founder" column="notice_founder_id" javaType="User" select="selectFounderById"/>
+	</resultMap>
+	<!-- 主键查询公告 -->
+	<select id="selectNoticeByNotice_Id" resultType="Notice">
+		select * from tb_notice where notice_id = #{notice_id}
+	</select>
+	<!-- 删除公告 -->
+	<delete id="deleteNotice">
+		delete from tb_notice where notice_id=#{notice_id}
+	</delete>
+	<!-- 查询公告模块 -->
+	<select id="selectModuleById" resultType="Module">
+		select * from tb_module where module_id = #{module_id}
+	</select>
+	<!--查询公告发布人  -->
+	<select id="selectFounderById" resultType="User">
+		select * from tb_user where user_id = #{notice_founder_id}
+	</select>
+
+	<!-- 修改公告 -->
+	<update id="updateNotice">
+		update tb_notice set notice_title = 
+			#{notice.notice_title},
+			#{notice.notice_content}
+			#{notice.module.module_id}
+		where notice_id = #{notice.notice_id} 
+	</update>
+	
+	<!-- 按条件查询公告 -->
+	<select id="selectNoticesByCondition" resultMap="NoticeMapper">
+		select * from tb_notice
+		<include refid="sqlcondition"/>
+	</select> 
+	<!--  SQL条件 -->
+	<sql id="sqlcondition">
+		<where>
+			<!-- 标题查询 -->
+			<if test="notice_title != null and notice_title !=''">
+				and notice_title like '%' #{notice_title} '%'
+			</if>
+			<!-- 内容查询 -->
+			<if test="notice_content != null and notice_content !=''">
+				and notice_content like '%' #{notice_content} '%'
+			</if>
+			<!-- 创建者查询 -->
+			<if test="notice_founder != null and notice_founder.user_id != null and notice_founder.user_id !=''">
+				and notice_founder_id = #{notice_founder.user_id}
+			</if>
+			<if test="module != null and module.module_id != null and module.module_id !=''">
+				and module_id = #{module.module_id}
+			</if>
+			
+		</where>
+	</sql>
+>>>>>>> branch 'master' of https://github.com/evenliew/team2project.git
 </mapper>

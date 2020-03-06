@@ -50,6 +50,54 @@
 	</update>
 	<!-- 查询所有专报 -->
 	<select id="selectAllZb" resultMap="Zb_Mapper">
+<<<<<<< HEAD
 		select * from tb_zb
 	</select>
+=======
+		select * from tb_zb where zb_state_id &gt; -1
+	</select>
+	<!--按条件查询专报  -->
+	<select id="selectZbByCondition" resultMap="Zb_Mapper">
+		select * from tb_zb 
+		<include refid="sqlcondition"/>
+	</select>
+	
+	<!-- 3. SQL条件 -->
+	<sql id="sqlcondition">
+		<where>
+			<!-- 内容查询 -->
+			<if test="zb_content != null and zb_content !=''">
+				and zb_content like '%' #{zb_content} '%'
+			</if>
+			<!-- 备注查询 -->
+			<if test="zb_remark != null and zb_remark !=''">
+				and zb_remark like '%' #{zb_remark} '%'
+			</if>
+			<!-- 状态查询-不能是-1 -->
+			<if test="zb_state != null and zb_state.zb_state_id != null and zb_state.zb_state_id !='' 
+					and zb_state.zb_state_id !='-1'">
+				and zb_state_id = #{zb_state.zb_state_id} 
+			</if>
+			<!-- 创建者查询 -->
+			<if test="zb_founder != null and zb_founder.user_id != null and zb_founder.user_id !=''">
+				and zb_founder_id = #{zb_founder.user_id}
+			</if>
+			<!-- 接收者查询 -->
+			<if test="zb_recender != null and zb_recender.user_id != null and zb_recender.user_id !=''">
+				and zb_recender_id = #{zb_recender.user_id}
+			</if>
+			<!-- 时间区间查询:就用前端的事项开始和结束时间来当做：事项开始时间的查询区间-->
+			<if test="zb_sb_time != null">
+				and zb_sb_time &gt;= #{zb_sb_time}
+			</if> 
+			<if test="zb_ps_time != null">
+				and zb_ps_time &lt;= #{zb_ps_time}
+			</if>
+			<if test="zb_sx != null and zb_sx.sx_id != null and zb_sx.sx_id !=''">
+				and zb_sx_id = #{zb_sx.sx_id}
+			</if>
+			and zb_state_id !=-1
+		</where>
+	</sql>
+>>>>>>> branch 'master' of https://github.com/evenliew/team2project.git
 </mapper>

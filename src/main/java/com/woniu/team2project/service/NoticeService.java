@@ -13,9 +13,13 @@ public interface NoticeService {
 	//添加通告
 	void addNotice(Notice notice);
 	//查看公告
-	List<Notice> getAllNotices();
+	List<Notice> getAllNotices(Integer pageNum,Integer pageSize);
+	//主键查询
+	Notice getNoticeByNotice_id( Integer notice_id);
 	//修改公告
 	void alterNotice(Notice notice);
 	//删除公告
-	void removeNotice(String notice_id);
+	void removeNotice(Integer notice_id);
+	//按条件查询公告
+	List<Notice> getNoticesByCondition(Notice notice,Integer pageNum,Integer pageSize);
 }

@@ -35,5 +35,4 @@ public interface SxDataService {
 	
 	//查询所有进度
 	List<Sx_status> getAllSx_status();
-
 }

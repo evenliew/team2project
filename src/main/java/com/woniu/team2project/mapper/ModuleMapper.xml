@@ -10,7 +10,11 @@
 		values (
 			#{module_id},
 			#{module_name},
+<<<<<<< HEAD
 			#{parent_id.module_id});
+=======
+			#{parent.module_id});
+>>>>>>> branch 'master' of https://github.com/evenliew/team2project.git
 	</insert>
 	<!-- 查询模块 -->
 	<select id="selectAllModules" resultType="Module">

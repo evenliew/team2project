@@ -26,5 +26,14 @@ public interface NoticeMapper {
 	/**
 	 * 删除公告
 	 */
-	void deleteNotice(String notice_id);
+	void deleteNotice(Integer notice_id);
+	
+	/**
+	 * 主键查询
+	 */
+	Notice selectNoticeByNotice_Id(Integer notice_id);
+	/**
+	 * 按条件查询
+	 */
+	List<Notice> selectNoticesByCondition(Notice notice);
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>菜单</title>
@@ -68,8 +68,13 @@
 						</a>
 						<ul id="systemSetting2" class="nav nav-list collapse secondmenu" style="height: 0px;">
 							<li>
-								<a href="../examine.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">审批管理</a>
+								<a href="/zball" onclick="menuCss(this)" target="content" style="padding-left:25px;">专报管理</a>
 							</li>
+							
+							<li>
+								<a href="/noticeall" onclick="menuCss(this)" target="content" style="padding-left:25px;">公告管理</a>
+							</li>
+							
 						</ul>
 					</li>
 					<li>

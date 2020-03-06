@@ -6,7 +6,6 @@ import com.woniu.team2project.entity.Sx;
 
 public interface SxService {
 
-
 	//新建事项
 	void addSx(Sx sx);
 		
