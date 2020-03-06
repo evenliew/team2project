@@ -4,18 +4,15 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.github.pagehelper.PageInfo;
 import com.woniu.team2project.entity.Sx;
@@ -43,7 +40,7 @@ public class ZbController {
 	public String getAllZbs(Model model) {
 		
 		//从数据库查询得到
-		List<Zb> zbs = zbService.getAllZb();
+		List<Zb> zbs = zbService.getAllZb(null,null);
 		
 		//转成pageinfo类型
 		PageInfo<Zb> zbPage = new PageInfo<Zb>(zbs);
@@ -51,10 +48,7 @@ public class ZbController {
 		//装入模型
 		model.addAttribute("zbPage",zbPage);
 		
-		//测试是否得到
-		for(Zb zb:zbPage.getList()) {
-			System.out.println(zb);
-		}
+		
 		
 		return "zb";
 	}
@@ -64,24 +58,36 @@ public class ZbController {
 		//需要得到user---目前尚未书写
 		//需要得到事项sx
 		
-		return "noticeAdd";
+		return "zbAdd";
 	}
 	
 	//新增一个专报
 	@PostMapping(value="/addonezb")
-	public String addOneZb(Zb zb,HttpServletRequest request) {
+	public String addOneZb(Zb zb,HttpSession session,Model model) {
 		//这里是从域中获取到用户信息，然后赋值
-	//	User user = (User) request.getSession().getAttribute("user");
+	//	User user = (User) session.getAttribute("user");
 	//	zb.setZb_founder(user);
-		
+		if(zb.getZb_content()==null ||zb.getZb_content()=="") {
+			 model.addAttribute("msg","内容不能为空");
+			 return "redirect:/zbadd";
+		}
+		if(zb.getZb_recender()==null ||
+				zb.getZb_recender().getUser_id()==null ||zb.getZb_recender().getUser_id()=="" ) {
+			model.addAttribute("msg","接收者不能为空");
+			 return "redirect:/zbadd";
+		}
+		if(zb.getZb_remark()==null ||zb.getZb_remark()=="") {
+			model.addAttribute("msg","备注不能为空");
+			 return "redirect:/zbadd";
+		}
 		//这里进行模拟
-		User user=new User();user.setUser_id("aaa");zb.setZb_founder(user);
+		User user=new User();user.setUser_id("aaaa");zb.setZb_founder(user);
 		
 		//正常使用
 		zb.setZb_sb_time(new Date());
 		
 		//模拟
-		zb.setZb_state(new Zb_state(1, null));
+		zb.setZb_state(new Zb_state(0, null));
 		
 		//模拟
 		User zb_recender=new User();zb_recender.setUser_id("bbbb");
@@ -92,7 +98,7 @@ public class ZbController {
 		Sx zb_sx=new Sx();zb_sx.setSx_id("aaaa");
 		zb.setZb_sx(zb_sx);
 		zbService.addZb(zb);
-		return "noticeMy";
+		return "redirect:/zbmine";
 	}
 	
 	//删除一个专报--就是修改状态为-1
@@ -100,29 +106,45 @@ public class ZbController {
 	public String updateOneZb(@PathVariable("zb_id") String zb_id) {
 		
 		zbService.changeZb_state(zb_id, -1);
-		System.out.println(zb_id);
+		
 		
 		return "redirect:/zball";
 	}
 	
 	//查询我的专报信息
 	@GetMapping(value="/zbmine" )
-	public String getMyZbs(Model model) {
+	public String getMyZbs(Model model,HttpServletRequest request) {
 		
-		//从数据库查询得到
-		List<Zb> zbs = zbService.getAllZb();
-		
+		//获取用户--暂时没有，进行模拟
+		User user=new User();user.setUser_id("bbbb");
+//		User user=(User) request.getSession().getAttribute("user");
+		//条件查询
+		Zb zb1=new Zb();
+		zb1.setZb_founder(user);
+		Integer pageNum=0;
+		Integer pageSize=0;
+		//从数据库查询得到发送者是用户的专报
+		List<Zb> zbs1 = zbService.getZbByCondition(zb1, pageNum, pageSize);
+		//接收者是user
+		Zb zb2=new Zb();zb2.setZb_recender(user);
+		List<Zb> zbs2 = zbService.getZbByCondition(zb2, pageNum, pageSize);
 		//转成pageinfo类型
-		PageInfo<Zb> zbPage = new PageInfo<Zb>(zbs);
-		
+		PageInfo<Zb> zbPage1 = new PageInfo<Zb>(zbs1);
+		PageInfo<Zb> zbPage2 = new PageInfo<Zb>(zbs2);
 		//装入模型
-		model.addAttribute("zbPage",zbPage);
+
+		model.addAttribute("zbPage1",zbPage1);
+		model.addAttribute("zbPage2",zbPage2);
+
 		
-		//测试是否得到
-		for(Zb zb:zbPage.getList()) {
-			System.out.println(zb);
-		}
+		return "zbMy";
+	}	
+	
+	//专报审批--状态更改
+	@PutMapping(value="/resultzb/{zb_id}/{resultid}" )
+	public String getMySp_Zbs(@PathVariable("zb_id") String zb_id,@PathVariable("resultid")Integer resultid) {
 		
-		return "zb";
+		zbService.changeZb_state(zb_id, resultid);
+		return "redirect:/zball";
 	}	
 }

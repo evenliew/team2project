@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}"
+	type="text/css"  />
+<title>添加通知公告</title>
+<style type="text/css">
+.inputText {
+	width: 830px !important;
+}
+
+.rowDiv {
+	margin-bottom: 15px;
+}
+
+.form-lavel {
+	width: 80px;
+	text-align: right;
+}
+</style>
+</head>
+<body>
+	<div class="container" style="width: 100%; padding: 25px 15px;">
+		<div class="row clearfix">
+			<div class="col-md-12 column"
+				style="padding: 20px; padding-top: 0px;">
+				<!-- 提交表单数据 -->
+				 <form action="/addOneNotice" method="post" id="noticeForm"
+					enctype="multipart/form-data" role="form" class="form-horizontal"
+					style="margin-bottom: 10px;">
+					 <div id="userInfoDiv" class="form" style="padding: 5px;">
+						<div class="row rowDiv">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="col-sm-1 control-label" for="content"
+										style="padding-top: 0px;">公告标题：<span style="color: red;">*</span></label>
+									<div class="col-sm-11">
+										<textarea class="form-control" id="content" name="notice_title"
+											rows="1" style="resize: none;">[[${notice.notice_title}]]</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row rowDiv">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="col-sm-1 control-label" for="content"
+										style="padding-top: 0px;">公告内容：<span style="color: red;">*</span></label>
+									<div class="col-sm-11">
+										<textarea class="form-control" id="content" name="notice_content"
+											rows="10" style="resize: none;">[[${notice.notice_content}]]</textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row rowDiv">
+							
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="col-sm-1 control-label" for="mobile"
+										style="padding-top: 0px;">选择相关模板：<span
+										style="color: red;">*</span></label>
+									<div class="col-sm-11">
+										<select name="module.module_id" style="width:300px">
+											<option th:each="module1:${modules}" th:value="${module1.module_id}" >
+											[[${module1.module_name}]]</option>
+										</select><br/>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="form-group" style="padding-left: 30px;">
+										<input type="submit" class="btn btn-primary btn" value="发布" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> 
+				</form> 
+			</div>
+		</div>
+	</div> 	
+</body>
+<script type="text/javascript" th:src="@{/js/jquery-2.2.3.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/notice.js}"></script>
+</html>

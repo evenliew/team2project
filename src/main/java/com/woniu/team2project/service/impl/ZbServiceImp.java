@@ -24,7 +24,8 @@ public class ZbServiceImp implements ZbService {
 	//注入一个mapper
 	@Autowired
 	ZbMapper zbMapper;
-
+	
+	//添加
 	@Override
 	public void addZb(Zb zb) {
 		if(zb!=null ) {
@@ -35,24 +36,40 @@ public class ZbServiceImp implements ZbService {
 		}
 		zbMapper.insertZb(zb);
 	}
-
+	//主键查询
 	@Override
 	public Zb getZbByZb_id(String zb_id) {
 		return zbMapper.selectZbByZb_id(zb_id);
 	}
-
+	//所有查
 	@Override
-	public List<Zb> getAllZb() {
-		PageHelper.startPage(1, 5);
+	public List<Zb> getAllZb(Integer pageNum,Integer pageSize) {
+		if(pageNum==null ||pageNum==0) {
+			pageNum=1;
+		}
+		if(pageSize==null ||pageSize==0) {
+			pageSize=5;
+		}
+		PageHelper.startPage(pageNum, pageSize);
 		List<Zb> zbs = zbMapper.selectAllZb();
 		return zbs;
 	}
-
+	//条件检查
+	@Override
+	public List<Zb> getZbByCondition(Zb zb,Integer pageNum,Integer pageSize) {
+		if(pageNum==null ||pageNum==0) {
+			pageNum=1;
+		}
+		if(pageSize==null ||pageSize==0) {
+			pageSize=5;
+		}
+		PageHelper.startPage(pageNum, pageSize);
+		List<Zb> zbs = zbMapper.selectZbByCondition(zb);
+		return zbs;
+	}
+	//该状态
 	@Override
 	public void changeZb_state(String zb_id, Integer zb_state_id) {
 		zbMapper.updateZb_state(zb_id, zb_state_id);
 	}
-	
-	
-
 }

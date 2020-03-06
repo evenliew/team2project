@@ -21,15 +21,16 @@
 <body>
 <div class="container" style= "width: 100%;padding: 25px 15px;" >
     <div class="row clearfix">
-        <div class="col-md-12 column" style="padding: 20px;">
-            <div style="float: left;">
-                 <a th:href="@{/zbadd}"><input type="button" class="btn btn-primary btn"  onclick="operation()" value="添加" /></a> 
-                 <a th:href="@{/zbmine}"><input type="button" class="btn btn-primary btn"  onclick="operation()" value="查询我的专报" /></a> 
-            </div>
+        <div class="col-md-12 column" style="padding: 20px; padding-top: 0px;">
+        	<ul id="noticeTab" class="nav nav-tabs">
+				<li class="active"><h2>专报信息</h2></li>
+			</ul>
+            
   			
             <table class="table table-bordered" style="margin-top: 20px;">
                 <thead>
                     <tr>
+                    	<th>序号</th>
                         <th style="width: 150px;">专报内容</th>
                         <th>专报备注</th>
                         <th>申请时间</th>
@@ -43,8 +44,9 @@
                 </thead>
                 <tbody>
                     <tr th:each="zb:${zbPage.list}">
-                        <td th:text="${zb.zb_remark}"></td>
-						<td th:text="${zb.zb_content}"></td>
+                    	<td th:text="${zbStat.index+1}"></td>
+                        <td th:text="${zb.zb_content}"></td>
+						<td th:text="${zb.zb_remark}"></td>
 						<td >[[${#dates.format(zb.zb_sb_time,"yyyy-MM-dd")} ]]</td>
 						<td >[[${#dates.format(zb.zb_ps_time,"yyyy-MM-dd")} ]]</td>
 								
@@ -58,6 +60,10 @@
                     </tr>
                 </tbody>
             </table>
+            <div style="float: left;">
+                 <a th:href="@{/zbadd}"><input type="button" class="btn btn-primary btn"  onclick="operation()" value="添加" /></a> 
+                 <a th:href="@{/zbmine}"><input type="button" class="btn btn-primary btn"  onclick="operation()" value="查询我的专报" /></a> 
+            </div>
             <form id="changezb" method="post">
 				<input type="hidden" name="_method" value="put" />
 			</form> 
@@ -65,6 +71,6 @@
     </div>
 </div>
 </body>
-<script type="text/javascript" src="@{/js/jquery-2.2.3.min.js}"></script>
-<script type="text/javascript" src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-2.2.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 </html>

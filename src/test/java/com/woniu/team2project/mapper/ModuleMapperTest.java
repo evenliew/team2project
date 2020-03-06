@@ -23,17 +23,14 @@ public class ModuleMapperTest {
 		Module module = new Module();
 		module.setModule_id(1);
 		module.setModule_name("模块一");
-		module.setParent_id(module);
+		module.setParent(module);
 		moduleMapper.insertModule(module );
 	}
-	//测试查询一个
-	@Test
-	public void testSelectZb_stateByZb_state_id() {
-		
-	}
+	
 	//测试查询所有
-		@Test
-		public void testSelectAllZbDao() {
-		}
+	@Test
+	public void testSelectAllModules() {
+		System.out.println(moduleMapper.selectAllModules());
+	}
 	
 }

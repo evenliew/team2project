@@ -20,7 +20,7 @@ public interface ZbMapper {
 	//作为查询专报的操作--用户不可操作
 	Zb selectZbByZb_id(String zb_id);
 	
-	//修改专报的状态。具体几种状态 未定
+	//修改专报的状态。具体几种状态 未定 -1：删除 0：待审批 1：通过 2： 驳回
 	void updateZb_state(@Param("zb_id") String zb_id,
 			@Param("zb_state_id") Integer zb_state_id);
 	
