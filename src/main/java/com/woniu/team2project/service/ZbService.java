@@ -29,5 +29,16 @@ public interface ZbService {
 	 * 分页显示
 	 * @return
 	 */
-	List<Zb> getAllZb();
+	List<Zb> getAllZb(Integer pageNum,Integer pageSize);
+	
+	/**
+	 * 按条件查询
+	 */
+	List<Zb> getZbByCondition(Zb zb,Integer pageNum,Integer pageSize);
+	
+	
+	/**
+	 * 修改专报的状态
+	 */
+	void changeZb_state(String zb_id,Integer zb_state_id);
 }

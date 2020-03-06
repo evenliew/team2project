@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+<script type="text/javascript" th:src="@{/js/jquery-2.2.3.js}"></script>
+<style type="text/css">
+	table td{text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+</style>
+<script type="text/javascript">
+$(function(){
+	//点击超链接提交表单
+	$(".resultbtn").click(function(){
+		$("#resultzb").attr("action",$(this).attr("puturi")).submit();
+	});
+}); 
+</script>
+<title>我的专报</title>
+</head>
+<body>
+	<div class="container" style="width: 100%;padding: 25px 15px;">
+		<div class="row clearfix">
+			<div class="col-md-12 column" style="padding: 20px;padding-top: 0px;">
+				<ul id="noticeTab" class="nav nav-tabs">
+						<li class="active"><a href="#publishNotice" data-toggle="tab">发布的专报</a></li>
+						<li ><a href="#receivePublish" data-toggle="tab">审批的专报</a></li>
+				</ul>
+				<div id="noticeTabContent" class="tab-content">
+						<div class="tab-pane fade in active" id="publishNotice">
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<thead>
+									<tr>
+									<th>序号</th>
+									<th style="width: 150px;">专报内容</th>
+			                        <th>专报备注</th>
+			                        <th>申请时间</th>
+			                        <th>审批时间</th>
+			                        <th>状态</th>
+			                        <th>接收者</th>
+			                        <th>事项</th>
+									</tr>
+								</thead>
+								<tbody id="publishTable">
+									<tr th:each="zb:${zbPage1.list}">
+										<td th:text="${zbStat.index+1}"></td>
+										 <td th:text="${zb.zb_remark}"></td>
+										<td th:text="${zb.zb_content}"></td>
+										<td >[[${#dates.format(zb.zb_sb_time,"yyyy-MM-dd")} ]]</td>
+										<td >[[${#dates.format(zb.zb_ps_time,"yyyy-MM-dd")} ]]</td>
+										<td th:text="${zb.zb_state.zb_state_name}"></td>
+										<td th:text="${zb.zb_recender.user_name}"></td>
+										<td th:text="${zb.zb_sx.sx_name}"></td>
+									
+									</tr>
+									
+								</tbody>
+							</table>
+							<div id="publishPage"></div>
+						</div>
+						<div class="tab-pane fade" id="receivePublish">
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<thead>
+									<tr>
+										<th>序号</th>
+										<th style="width: 150px;">专报内容</th>
+				                        <th>专报备注</th>
+				                        <th>申请时间</th>
+				                        <th>审批时间</th>
+				                        <th>状态</th>
+				                        <th>创建者</th>
+				                        <th>事项</th>
+				                        <th>操作/状态</th>
+									</tr>
+								</thead>
+								<tbody id="receiveTable">
+									<tr th:each="zb2:${zbPage2.list}">
+										<td th:text="${zb2Stat.index+1}"></td>
+										 <td th:text="${zb2.zb_remark}"></td>
+										<td th:text="${zb2.zb_content}"></td>
+										<td >[[${#dates.format(zb2.zb_sb_time,"yyyy-MM-dd")} ]]</td>
+										<td >[[${#dates.format(zb2.zb_ps_time,"yyyy-MM-dd")} ]]</td>
+										<td th:text="${zb2.zb_state.zb_state_name}"></td>
+										<td th:text="${zb2.zb_recender.user_name}"></td>
+										<td th:text="${zb2.zb_sx.sx_name}"></td>
+										<td th:if="${zb2.zb_state.zb_state_id} eq 0">
+											<a href="#" th:attr="puturi=@{/resultzb/}+${zb2.zb_id}+'/1'"  class="btn btn-primary  resultbtn">同意</a>
+											<a href="#" th:attr="puturi=@{/resultzb/}+${zb2.zb_id}+'/2'"  class="btn btn-primary  resultbtn">驳回</a> 
+										</td>
+										<td th:if="${zb2.zb_state.zb_state_id} ne 0">
+											已审核
+										</td>
+										 
+									</tr>
+								</tbody>
+							</table>
+							<form id="resultzb" method="post">
+								<input type="hidden" name="_method" value="put" />
+							</form> 
+							<div id="receivePage"></div>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" th:src="@{/js/jquery-2.2.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/notice.js}"></script>
+</html>

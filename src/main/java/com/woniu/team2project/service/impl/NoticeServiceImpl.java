@@ -21,8 +21,14 @@ public class NoticeServiceImpl implements NoticeService{
 	}
 
 	@Override
-	public List<Notice> getAllNotices() {
-		PageHelper.startPage(1, 5);
+	public List<Notice> getAllNotices(Integer pageNum,Integer pageSize) {
+		if(pageNum==null ||pageNum==0) {
+			pageNum=1;
+		}
+		if(pageSize==null ||pageSize==0) {
+			pageSize=5;
+		}
+		PageHelper.startPage(pageNum, pageSize);
 		return noticeMapper.selectAllNotices();
 	}
 
@@ -32,8 +38,26 @@ public class NoticeServiceImpl implements NoticeService{
 	}
 
 	@Override
-	public void removeNotice(String notice_id) {
+	public void removeNotice(Integer notice_id) {
 		noticeMapper.deleteNotice(notice_id);
+	}
+
+	@Override
+	public List<Notice> getNoticesByCondition(Notice notice,Integer pageNum,Integer pageSize) {
+		if(pageNum==null ||pageNum==0) {
+			pageNum=1;
+		}
+		if(pageSize==null ||pageSize==0) {
+			pageSize=5;
+		}
+		PageHelper.startPage(pageNum, pageSize);
+		return noticeMapper.selectNoticesByCondition(notice);
+	}
+
+	@Override
+	public Notice getNoticeByNotice_id(Integer notice_id) {
+		return noticeMapper.selectNoticeByNotice_Id(notice_id);
+		
 	}
 
 }
