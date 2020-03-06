@@ -1,6 +1,8 @@
+
 package com.woniu.team2project;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -36,12 +38,12 @@ public class TbMapperTest {
 	@Test
 	public void testInsertTbDao() {
 		Tb tb = new Tb();
-		tb.setTb_id("111");
+		tb.setTb_id("333");
 		User tb_author = new User();
-		tb_author.setUser_id("aaa");
+		tb_author.setUser_id("ccc");
 		tb.setTb_author(tb_author);
 		tb.setTb_time(new Date());
-		tb.setTb_content("是四十");
+		tb.setTb_content("是但需现场不规范的");
 		Office tb_office = new Office();
 		tb_office.setOffice_id(1);
 		tb.setTb_office(tb_office );
@@ -54,5 +56,17 @@ public class TbMapperTest {
 	public void testSelectTbDao() {
 		System.out.println(tbMapper.selectTbByTb_id("111"));
 	}
-	
+	@Test
+	public void testSelectTb() {
+		Date tb_time = new Date(1, 10, 21);
+	}
+	@Test
+	public void testSelect() {
+		Tb tb = new Tb();
+		tb.setTb_content("是");
+		List<Tb> tbs = tbMapper.selectByCondition(tb);
+		for (Tb tb2 : tbs) {
+			System.out.println(tb2);
+		}
+	}
 }

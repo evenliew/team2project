@@ -13,11 +13,13 @@ public class User_notice {
 	private User user_nt_founder;//发布者--查询得到---外键
 	private User user_nt_recender;//接受者---外键
 	private Sx user_nt_sx;//事项id--外键
+	private Notice_mb user_nt_mb;//通告模板
 	public User_notice() {
 		super();
 	}
+	
 	public User_notice(Integer user_nt_id, String user_nt_title, String user_nt_content, Date user_nt_time,
-			User user_nt_founder, User user_nt_recender, Sx user_nt_sx) {
+			User user_nt_founder, User user_nt_recender, Sx user_nt_sx, Notice_mb user_nt_mb) {
 		super();
 		this.user_nt_id = user_nt_id;
 		this.user_nt_title = user_nt_title;
@@ -26,7 +28,9 @@ public class User_notice {
 		this.user_nt_founder = user_nt_founder;
 		this.user_nt_recender = user_nt_recender;
 		this.user_nt_sx = user_nt_sx;
+		this.user_nt_mb = user_nt_mb;
 	}
+
 	public Integer getUser_nt_id() {
 		return user_nt_id;
 	}
@@ -69,11 +73,21 @@ public class User_notice {
 	public void setUser_nt_sx(Sx user_nt_sx) {
 		this.user_nt_sx = user_nt_sx;
 	}
+	
+	public Notice_mb getUser_nt_mb() {
+		return user_nt_mb;
+	}
+
+	public void setUser_nt_mb(Notice_mb user_nt_mb) {
+		this.user_nt_mb = user_nt_mb;
+	}
+
 	@Override
 	public String toString() {
 		return "User_notice [user_nt_id=" + user_nt_id + ", user_nt_title=" + user_nt_title + ", user_nt_content="
 				+ user_nt_content + ", user_nt_time=" + user_nt_time + ", user_nt_founder=" + user_nt_founder
-				+ ", user_nt_recender=" + user_nt_recender + ", user_nt_sx=" + user_nt_sx + "]";
+				+ ", user_nt_recender=" + user_nt_recender + ", user_nt_sx=" + user_nt_sx + ", user_nt_mb=" + user_nt_mb
+				+ "]";
 	}
 	
 }
