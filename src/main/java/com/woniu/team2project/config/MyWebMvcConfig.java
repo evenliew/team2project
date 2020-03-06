@@ -26,7 +26,7 @@ public class MyWebMvcConfig {
 				registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/*",
 						"/system/index/index.html", "/user/login", "/css/**");
 
-			}
+			} 
 		};
 	}
 }

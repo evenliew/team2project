@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/notice.js"></script>
+<title>添加通报</title>
+<style type="text/css">
+	.inputText{width: 700px !important;}
+	.rowDiv{margin-bottom: 15px;}
+	.form-lavel{width: 70px;text-align: right;}
+	#btn{
+		text-align: center;
+	}
+</style>
+<script type="text/javascript">
+	$(function(){
+		$("#commit").click(function(){
+			if(confirm("是否提交")){
+				$("#noticeForm").submit();
+			}
+		});
+	});
+</script>
+</head>
+<body>
+<div class="container" style="width: 100%;padding: 20px 5px;">
+		<div class="row clearfix">
+			<div class="col-md-12 column" style="padding: 20px;padding-top: 0px;">
+				<form th:action="@{/add/tb}" method="post" id="noticeForm" enctype="multipart/form-data" role="form" class="form-horizontal" style="margin-bottom: 10px;">
+					<div id="userInfoDiv" class="form" style="padding:5px;"></div>
+						<div class="row rowDiv">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="col-sm-1 control-label" for="account" style="padding-top: 0px;">通报事项</label>
+									<div class="col-sm-11">
+										<select name="tb_sx.sx_name">
+											<option th:each="tb_sx:${sxs}" th:value="${tb_sx}">[[${tb_sx}]]</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row rowDiv">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="col-sm-1 control-label" for="content" style="padding-top: 0px;">通报内容</label>
+									<div class="col-sm-11">
+										<textarea class="form-control" id="content" name="tb_content" rows="10" style="resize: none;"></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row rowDiv">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<label class="col-sm-1 control-label" for="mobile" style="padding-top: 0px;">接收单位</label>
+									<div class="col-sm-11">
+										<select name="dep">
+											<option th:each="dep:${deps}" th:value="${dep}">[[${dep}]]</option>
+										</select>
+									</div>
+								</div>
+						</div>
+						<div class="row rowDiv">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<div class="col-sm-11">
+										<input type="button" class="btn btn-primary btn" value="保存并发布" id="commit"/>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</body>
+
+</html>
