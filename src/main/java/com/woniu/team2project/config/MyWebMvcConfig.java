@@ -15,10 +15,9 @@ public class MyWebMvcConfig {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addViewControllers(ViewControllerRegistry registry) {
-				// 自定义映射路径
-//				registry.addViewController("/main").setViewName("index");
-//				registry.addViewController("/login").setViewName("login");
-
+//				 自定义映射路径
+//				registry.addViewController("/").setViewName("login");
+//				registry.addViewController("/index.html").setViewName("login");
 			}
 
 			@Override

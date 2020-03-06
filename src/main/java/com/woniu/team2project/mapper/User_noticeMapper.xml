@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.woniu.team2project.mapper.User_noticeMapper">
-	<!-- 添加的映射文件 -->
+	<!-- 添加个人通告 -->
 	<insert id="insertUser_notice">
 		insert into 
 			tb_user_notice
@@ -14,9 +14,22 @@
 			#{user_nt_recender.user_id},<!-- 接收通告者 -->
 			#{user_nt_content},<!-- 通告内容 -->
 			#{user_nt_time},<!-- 通告发送时间 -->
-			#{user_nt_sx.sx_id}) <!-- 通告的事项 -->
+			#{user_nt_sx.sx_id}, <!-- 通告的事项 -->
+			#{user_nt_mb.notice_mb_id})<!-- 通告模板 -->
 	</insert>
-	<!--  -->
+	<!-- 删除个人同告 -->
+	<delete id="deleteUser_notice">
+		delete from tb_user_notice where user_nt_id = #{user_nt_id}
+	</delete>
+	<!-- 查询当前登录用户的发布的个人通知表 -->
+	<select id="selectUser_noticeByUserFb" resultMap="User_noticeMapper">
+		select * from tb_user_notice where user_nt_founder_id = #{user_id}
+	</select>
+	<!-- 查询当前登录用户的接收的个人通知表 -->
+	<select id="selectUser_noticeByUserRe" resultMap="User_noticeMapper">
+		select * from tb_user_notice where user_nt_recender_id = #{user_id}
+	</select>
+	<!-- 查询个人通告表 -->
 	<select id="selectUser_noticeByUser_notice_id" resultMap="User_noticeMapper">
 		select * from 
 			tb_user_notice <!-- 查询的表 -->
@@ -33,6 +46,9 @@
 		<!-- 事项 -->
 		<association property="user_nt_sx" column="user_nt_sx_id"
 		 javaType="Sx" select="selectSxBySxId"/>
+		 <!-- 模板 -->
+		<association property="user_nt_mb" column="user_mb_id"
+		 javaType="Notice_mb" select="selectNotice_mbByMbId"/>
 	</resultMap>
 	<!-- 查询发送者 -->
 	<select id="selectFounderByUserId" resultType="User">
@@ -46,10 +62,40 @@
 	<select id="selectSxBySxId" resultType="Sx">
 		select * from tb_sx where sx_id = #{user_nt_sx_id}
 	</select>
-	<!-- 查询所有专报 -->
+	<!-- 查询所有个人通告 -->
 	<select id="selectAllUser_notice" resultMap="User_noticeMapper">
 		select * from tb_user_notice
 	</select>
+	<!-- 通报模板 -->
+	<select id="selectNotice_mbByMbId" resultType="Notice_mb">
+		select * from tb_notice_mb where notice_mb_id = #{user_mb_id}
+	</select>
 	
 	
+	<!-- 根据条件查询个人通告-->
+	<select id="selectUser_noticeByCondition" resultMap="User_noticeMapper">
+		select * from tb_user_notice 
+		<where>
+			<!-- 标题模糊查询 -->
+			<if test="user_nt_title != null and user_nt_title != ''">
+				and user_nt_title like '%' #{user_nt_title} '%'
+			</if>
+			<!-- 内容模糊查询 -->
+			<if test="user_nt_content != null and user_nt_content != ''">
+				and user_nt_content like '%' #{user_nt_content} '%'
+			</if>
+			<!-- 发布人查询 -->
+			<if test="user_nt_founder != null">
+				and user_nt_founder_id = #{user_nt_founder.user_id}
+			</if>
+			<!-- 接收人查询 -->
+			<if test="user_nt_recender != null">
+				and user_nt_recender_id = #{user_nt_recender.user_id}
+			</if>
+			<!-- 事项条件 -->
+			<if test="user_nt_sx != null">
+				and user_nt_sx_id = #{user_nt_sx.sx_id}
+			</if>
+		</where>
+	</select>
 </mapper>
