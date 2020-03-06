@@ -9,6 +9,7 @@ import com.woniu.team2project.entity.Office;
 import com.woniu.team2project.entity.Sx_status;
 import com.woniu.team2project.entity.Sx_type;
 import com.woniu.team2project.entity.Urgency;
+import com.woniu.team2project.entity.User;
 
 public interface SxDataService {
 	// 查询所有事项类型
@@ -28,7 +29,11 @@ public interface SxDataService {
 
 	// 查询所有紧急程度
 	List<Urgency> getAllUrgency();
+
+	//查领导(根据单位id)
+	User getLeaderByOffice_id(Integer office_id);
 	
 	//查询所有进度
 	List<Sx_status> getAllSx_status();
+
 }

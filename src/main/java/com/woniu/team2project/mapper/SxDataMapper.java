@@ -9,6 +9,7 @@ import com.woniu.team2project.entity.Office;
 import com.woniu.team2project.entity.Sx_status;
 import com.woniu.team2project.entity.Sx_type;
 import com.woniu.team2project.entity.Urgency;
+import com.woniu.team2project.entity.User;
 //这个mapper装新建事项界面要附带查的数据
 public interface SxDataMapper {
 	//查事项类型
@@ -28,6 +29,9 @@ public interface SxDataMapper {
 	
 	//查紧急程度
 	List<Urgency> selectUrgency();
+	
+	//查领导(根据单位id)
+	User selectLeaderByOffice_id(Integer office_id);
 	
 	//查进度
 	List<Sx_status> selectSx_status();

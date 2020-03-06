@@ -2,7 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/attendance.js"></script>
 <title>事项列表</title>
 </head>
 <script type="text/javascript" src="../../js/jquery-2.2.3.js"></script>
@@ -34,6 +37,7 @@ $(function(){
 	$("#deleteSxs").click(function(){
 		doDeleteSx();
 	});
+	
 })
 
 
@@ -141,8 +145,7 @@ function doDeleteSx(){
          })
      }	
 }
-
-             			
+           			
 //初始化加载表格
 function initTable(){
 	$.post(
@@ -161,7 +164,7 @@ function showTable(data){
 	$.each(data.list,function(){
 		var html = "<tr class='success' id=tr_"+this.sx_id+">";
 		html += "<td align='center'><input type='checkbox' class='checkbox' name='sx_ids' value="+this.sx_id+"></td>";
-		html += "<td>"+this.sx_name+"</td>";
+		html += "<td>"+"<a href='/getSxBySx_id?sx_id="+this.sx_id+"'>"+this.sx_name+"<a/></td>";
 		html += "<td>"+this.sx_type.sx_type_name+"</td>";
 		html += "<td>"+this.county.area.area_name+"</td>";
 		html += "<td>"+this.county.county_name+"</td>";
@@ -169,7 +172,8 @@ function showTable(data){
 		html += "<td>"+this.sx_status.sx_status_name+"</td>";
 		html += "<td>"+this.office.office_name+"</td>";
 		html += "<td>"+this.sx_time.substring(0,10)+"</td>";
-		html += "<td><button class='btn btn-primary btn-sm'>管理进度</button> <button class='btn btn-danger btn-sm'>分派任务</button></td>"
+		html += "<td><form action='/manageproject?sx_id="+this.sx_id+"'><button type='submit' class='btn btn-primary btn-sm'>管理进度</button><form/> "+
+						"<button class='btn btn-danger btn-sm'>分派任务</button></td>"
 		html += "</tr>";
 		$(html).appendTo("#tbSxbody");
 	})
@@ -191,7 +195,8 @@ function getQueryVariable(variable){
        }
        return("");
 }
-	
+
+
 </script>
 <body>
 <div class="container" style="width: 100%;padding: 25px 15px">
@@ -281,6 +286,7 @@ function getQueryVariable(variable){
 					</tr>
 				</thead>
 				<tbody id="tbSxbody">
+
 				</tbody>
 			</table>
 			
@@ -299,7 +305,5 @@ function getQueryVariable(variable){
 	</div>
 </div>
 </body>
-<script type="text/javascript" src="../../js/jquery-2.2.3.min.js"></script>
-<script type="text/javascript" src="../../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../../js/attendance.js"></script>
+
 </html>

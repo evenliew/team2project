@@ -25,9 +25,13 @@
 			county_id=#{county.county_id},industry_id=#{industry.industry_id},sx_end_time=#{sx_end_time},office_id=#{office.office_id}
 		where sx_id= #{sx_id}
 	</update>
-	
+	<!-- 更改事项状态 -->
 	<update id="updateSxStatus">
 		update tb_sx set sx_status_id=#{sx_status_id} where sx_id= #{sx_id}
+	</update>
+	<!-- 更改紧急程度 -->
+	<update id="updateSxUrgency">
+		update tb_sx set sx_urgency_id=#{urgency_id} where sx_id= #{sx_id}
 	</update>
 	
 	<!-- 分页条件查询“事项”1.查询 2.装配 3.SQL条件-->
