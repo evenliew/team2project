@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 //开启事务
 @EnableTransactionManagement
-//自动扫面mapper包下的接口生成实现类
+//自动扫描mapper包下的接口生成实现类
 @MapperScan("com.woniu.team2project.mapper")
 @SpringBootApplication
 public class Team2projectApplication {

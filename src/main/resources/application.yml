@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 pagehelper:
   helper-dialect: mysql
   reasonable: true
@@ -9,8 +7,7 @@ pagehelper:
 mybatis:
   type-aliases-package: com.woniu.team2project.entity
 
-=======
->>>>>>> branch 'master' of https://github.com/evenliew/team2project.git
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

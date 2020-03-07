@@ -26,7 +26,6 @@
 	<!-- 查紧急程度 -->
 	<select id="selectUrgency" resultType="Urgency">
 		select * from tb_urgency
-<<<<<<< HEAD
 	</select> 
 	<!-- 查进度 -->
 	<select id="selectSx_status" resultType="Sx_status">
@@ -37,12 +36,5 @@
 	<select id="selectLeaderByOffice_id" resultType="User">
 		select * from tb_user where user_id=(select office_leader_id from tb_office where office_id=#{office_id})
 	</select>
-=======
-	</select>
-	<!-- 查进度 -->
-	<select id="selectSx_status" resultType="Sx_status">
-		select * from tb_sx_status
-	</select>
 
->>>>>>> branch 'master' of https://github.com/evenliew/team2project.git
 </mapper>
