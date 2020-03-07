@@ -1,5 +1,9 @@
 package com.woniu.team2project.entity;
+
+import org.springframework.stereotype.Component;
+
 //区
+@Component
 public class Area {
 	private Integer area_id;
 	private String area_name;

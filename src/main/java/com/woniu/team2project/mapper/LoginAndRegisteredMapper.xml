@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.LoginAndRegisteredMapper">
+	
+	<!-- 以下几个是确认数据库里面的数据有无，判断注册 -->
+ 	<select id="selectAllUser" resultMap="userMapper">
+ 		 select * from tb_user where user_name=#{user_name}
+ 		<!-- select * from tb_user where user_name=#{user_name} -->
+  	</select>
+  	
+  	<select id="selectAllUserByLoginName" resultMap="userMapper">
+ 		 select * from tb_user where user_loginname=#{user_loginname}
+ 		<!-- select * from tb_user where user_name=#{user_name} -->
+  	</select>
+  	
+  	<select id="selectAllUserByPassWord" resultMap="userMapper">
+ 		 select * from tb_user where user_pass=#{user_pass}
+ 		<!-- select * from tb_user where user_name=#{user_name} -->
+  	</select>
+  
+  	<select id="selectAllUserByphone" resultMap="userMapper">
+ 		 select * from tb_user where user_phone=#{user_phone}
+ 		<!-- select * from tb_user where user_name=#{user_name} -->
+  	</select>
+   <resultMap type="User" id="userMapper">
+  	<id column="user_id" property="user_id"/>
+  	<result column="user_name" property="user_name"/>
+  	<result column="user_pass" property="user_pass"/>
+  	<result column="user_loginname" property="user_loginname"/>
+  	<result column="user_phone" property="user_phone"/>
+  	<association property="user_status" javaType="User_status"
+  		 select="selectStatus" column="user_status_id"/>
+  		 
+  	<association property="area" javaType="Area"
+  		select="selectArea" column="area_id"/>
+  		
+  	<association property="office" javaType="Office" 
+  		select="selectofficeByofficeId" column="office_id" />
+  </resultMap>
+  
+   <select id="selectStatus" resultType="User_status">
+  	select * from tb_user_status where user_status_id=#{user_status_id}
+  </select>
+  <select id="selectArea" resultType="Area">
+  	select * from tb_area where area_id=#{area_id}
+  	</select>
+  <select id="selectofficeByofficeId" resultMap="officeMapper">
+  	select * from tb_office where office_id=#{office_id}
+  </select>
+ 
+ 	<resultMap type="Office" id="officeMapper">
+ 		<id column="office_id" property="office_id"/>
+  		<result column="office_name" property="office_name"/>
+  		<result column="office_leader_id" property="office_leader_id"/>
+  		  <!-- <collection property="user" ofType="User" >
+ 			<id column="user_id" property="user_id"/>
+  			<result column="user_name" property="user_name"/> 	
+  		</collection> -->
+ 	</resultMap>
+ 	
+ 	<!-- 查询所有的office回显到注册页面 -->
+ 	<!-- resultMap="userMapper" -->
+ 	<select id="selectAllOffice" resultMap="officeMapper">
+ 		 select * from tb_office
+ 		<!-- select * from tb_user where user_name=#{user_name} -->
+  	</select>
+ 
+ <!-- 添加员工 -->
+ <insert id="insertUser">
+  		insert into tb_user 
+  		(user_id,user_name,user_pass,user_loginname,user_phone,user_status_id,area_id,office_id) 
+  			values
+  		(#{user_id},#{user_name},#{user_pass},#{user_loginname},
+  		#{user_phone},#{user_status.user_status_id},#{area.area_id},#{office.office_id})
+  	</insert> 
+ 	
+</mapper>
