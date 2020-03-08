@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>本单位所有子任务</title>
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/attendance.js"></script>
+<script type="text/javascript" src="../../js/jquery-2.2.3.js"></script>
+</head>
+<script type="text/javascript">
+	$(function(){
+		
+	});
+</script>
+<body>
+	<table class="table table-bordered" style="margin-top: 20px" id="tbSx">
+		<thead>
+			<tr>
+				<th style="width: 10%">子任务名称</th>
+				<th style="width: 10%">子任务日期</th>
+				<th style="width: 10%">指派人</th>
+				<th style="width: 46%">内容</th>
+				<th style="width: 14%">所属事项</th>
+				<th style="width: 10%">操作</th>
+			</tr>
+		</thead>
+		<tbody id="tbSxbody">
+			<tr th:each="task:${task}" class="success">
+				<td>[[${task.sx_task_name}]]</td>
+				<td>[[${task.sx_task_time}]]</td>
+				<td>[[${task.worker.user_name}]]</td>
+				<td>[[${task.sx_task_content}]]</td>
+				<td><a th:href="@{/getSxBySx_id(sx_id=${task.sx.sx_id})}">[[${task.sx.sx_name}]]</a></td>
+				<td><form  action="/tomodifytask" method="post"><input type="hidden" name="sx_task_id" th:value="${task.sx_task_id}"><button type="submit" class='btn btn-primary btn-sm'>修改</button></form>
+					<form  action="/deletetask" method="post"><input type="hidden" name="sx_task_id" th:value="${task.sx_task_id}"><button class='btn btn-danger btn-sm'>删除</button></form></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

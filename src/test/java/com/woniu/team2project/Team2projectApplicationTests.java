@@ -101,6 +101,6 @@ public class Team2projectApplicationTests {
 	public void testUpdateSxStatusDao() {
 		sxMapper.updateSxStatus("1122", 2);
 	}
-
+	
 
 }

@@ -1,11 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>菜单</title>
 <link rel="stylesheet" href="../../../bootstrap/css/bootstrap.css" />
 <link rel="stylesheet" href="../../../css/menu.css" />
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="../js/attendance.js"></script>
+<script type="text/javascript" src="../../../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../../../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../js/menu.js"></script>
+
 </head>
+<script type="text/javascript">
+	$(function(){
+		sessionStorage.setItem('user','2');
+		isLeader();
+		
+	});
+	function isLeader(){
+		var user=sessionStorage.getItem('user');
+		if(user==1){//隐藏本单位子任务  和  所有子任务   (单位员工登录)
+			document.getElementById("mytask").style.display="none";
+			document.getElementById("alltask").style.display="none";
+		}
+		if(user==2){//隐藏我的子任务  和  所有子任务   (单位领导登录)
+			document.getElementById("mytask").style.display="none";
+			document.getElementById("alltask").style.display="none";
+		}
+		if(user==3){//隐藏我的子任务  和  本单位子任务   (局员工或领导登录)
+			document.getElementById("mytask").style.display="none";
+			document.getElementById("officetask").style.display="none";
+		}
+		
+	}
+</script>
 <body>
 	<div class="container-fluid" style="padding: 0;">
 		<div class="row-fluid">
@@ -41,10 +70,25 @@
 										<a href="../projectlist.html?sx_type_id=5" onclick="menuCss(this)" target="content" style="padding-left:25px;">一带一路项目</a>
 									</li>
 								</ul>
-								<a href="../projectlist.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">督办项目</a>
 							</li>
 							<li>
-								<a href="../leave.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">子任务</a>
+								<a href="#systemSetting11" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+									<i class="glyphicon glyphicon-sort-by-attributes"></i>
+									<span style="display: inline-block;margin-left: 20px;">子任务</span>
+									<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+								</a>
+								<ul id="systemSetting11" class="nav nav-list collapse secondmenu" style="height: 0px;">
+									<li>
+										<a id="mytask" href="/tomytask" onclick="menuCss(this)" target="content" style="padding-left:25px;">我的子任务</a>
+									</li>
+									<li>
+										<a id="officetask" href="/officetask" onclick="menuCss(this)" target="content" style="padding-left:25px;">本单位的子任务</a>
+									</li>
+									<li>
+										<a id="alltask" href="/alltask" onclick="menuCss(this)" target="content" style="padding-left:25px;">所有子任务子任务</a>
+									</li>
+								</ul>
+								
 							</li>
 						</ul>
 					</li>
@@ -180,7 +224,5 @@
 		</div>
 	</div>
 </body>
-<script type="text/javascript" src="../../../js/jquery-2.2.3.min.js"></script>
-<script type="text/javascript" src="../../../bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../../../js/menu.js"></script>
+
 </html>

@@ -50,10 +50,6 @@
 	</update>
 	<!-- 查询所有专报 -->
 	<select id="selectAllZb" resultMap="Zb_Mapper">
-<<<<<<< HEAD
-		select * from tb_zb
-	</select>
-=======
 		select * from tb_zb where zb_state_id &gt; -1
 	</select>
 	<!--按条件查询专报  -->
@@ -99,5 +95,4 @@
 			and zb_state_id !=-1
 		</where>
 	</sql>
->>>>>>> branch 'master' of https://github.com/evenliew/team2project.git
 </mapper>
