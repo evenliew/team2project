@@ -36,4 +36,5 @@
 	<select id="selectLeaderByOffice_id" resultType="User">
 		select * from tb_user where user_id=(select office_leader_id from tb_office where office_id=#{office_id})
 	</select>
+
 </mapper>
