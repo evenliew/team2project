@@ -27,4 +27,22 @@ public interface SxService {
 	
 	//查询事项(根据事项id)
 	Sx getSxBySx_id(String sx_id);
+	
+	//查某局领导审批了的事项
+	List<Sx> getApprovedSxByLeader_id(String leader_id, Sx sx);
+	
+	//查某局领导待审批的事项
+	List<Sx> getUnapprovedSxByLeader_id(String leader_id, Sx sx);
+	
+	//查某局员工创造的事项
+	List<Sx> getSxByFounder_id(String founder_id, Sx sx);
+	
+	//查某单位领导接收了的事项
+	List<Sx> getAcceptedSxByLeader_id(String leader_id, Sx sx);
+	
+	//查某单位领导还未接收的事项
+	List<Sx> getUnacceptedSxByLeader_id(String leader_id, Sx sx);
+	
+	//查某单位员工相关的事项（其子任务的事项）
+	List<Sx> getSxByWorker_id(String worker_id, Sx sx);
 }

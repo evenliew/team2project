@@ -34,9 +34,62 @@
 		update tb_sx set sx_urgency_id=#{urgency_id} where sx_id= #{sx_id}
 	</update>
 	
+	<!-- 条件查某局领导审批的事项 -->
+	<select id="selectApprovedSxByLeader_id" resultMap="SxMapper">
+		select * from tb_sx where 
+		sx_status_id != 1 and sx_status_id != 8
+		and sx_founder_id in (select user_id from tb_user where office_id in (
+		select office_id from tb_office where office_leader_id = #{leader_id}
+		))
+		<include refid="sqlcondition_simple"/>
+	</select>
+	
+	<!-- 条件查某局领导待审批的事项 -->
+	<select id="selectUnapprovedSxByLeader_id" resultMap="SxMapper">
+		select * from tb_sx where
+		sx_status_id = 1 
+		and sx_founder_id in (
+		select user_id from tb_user where office_id in (
+		select office_id from tb_office where office_leader_id = #{leader_id}
+		))
+		<include refid="sqlcondition_simple"/>
+	</select>
+	
+	<!-- 查某局员工创造的事项 -->
+	<select id="selectSxByFounder_id" resultMap="SxMapper">
+		select * from tb_sx where sx_status_id != 8 
+		and sx_founder_id = #{founder_id}
+		<include refid="sqlcondition_simple"/>
+		
+
+	</select>
+	
+	<!-- 某单位领导已接受的事项 -->
+	<select id="selectAcceptedSxByLeader_id" resultMap="SxMapper">
+		select * from tb_sx where sx_status_id not in (8,9,1,2,3)
+		and office_id in (select office_id from tb_user where user_id = #{leader_id})
+		<include refid="sqlcondition_simple"/>
+	</select>
+	
+	<!-- 某单位领导还未接受的事项 -->
+	<select id="selectUnacceptedSxByLeader_id" resultMap="SxMapper">
+		select * from tb_sx where sx_status_id = 9
+		and office_id in (select office_id from tb_user where user_id = #{leader_id})
+		<include refid="sqlcondition_simple"/>
+	</select>
+	
+	<!-- 查某单位员工相关的事项（其子任务的事项） -->
+	<select id="selectSxByWorker_id" resultMap="SxMapper">
+		select * from tb_sx where sx_status_id != 8
+		and sx_id in (
+		select sx_id from tb_sx_task where sx_task_worker_id = #{worker_id})
+		<include refid="sqlcondition_simple"/>
+	</select>
+	
 	<!-- 分页条件查询“事项”1.查询 2.装配 3.SQL条件-->
 	<select id="selectSxByConditionPage" resultMap="SxMapper">
-		select * from tb_sx 
+		select * from tb_sx where 
+		sx_status_id != 8
 		<include refid="sqlcondition"/>
 	</select>
 	
@@ -106,17 +159,16 @@
 		</select>
 	<!-- 3. SQL条件 -->
 	<sql id="sqlcondition">
-		<where>
 			<if test="sx_id != null and sx_id !=''">
 				and sx_id = #{sx_id}
 			</if>
 			<if test="sx_name != null and sx_name !=''">
 				and sx_name like '%' #{sx_name} '%'
 			</if>
-			<if test="sx_type != null and sx_type.sx_type_id != null and sx_type.sx_type_id !=''">
+			<if test="sx_type != null and sx_type.sx_type_id != null and sx_type.sx_type_id != ''">
 				and sx_type_id = #{sx_type.sx_type_id}
 			</if>
-			<if test="sx_status != null and sx_status.sx_status_id != null and sx_status.sx_status_id !=''">
+			<if test="sx_status != null and sx_status.sx_status_id != null">
 				and sx_status_id = #{sx_status.sx_status_id}
 			</if>
 			<!-- 时间区间查询:就用前端的事项开始和结束时间来当做：事项开始时间的查询区间-->
@@ -126,23 +178,33 @@
 			<if test="sx_end_time != null">
 				and sx_time &lt;= #{sx_end_time}
 			</if>
-			<if test="urgency != null and urgency.urgency_id != null and urgency.urgency_id !=''">
+			<if test="urgency != null and urgency.urgency_id != null">
 				and sx_urgency_id = #{urgency.urgency_id}
 			</if>
-			<if test="area != null and area.area_id != null and area.area_id !=''">
+			<if test="area != null and area.area_id != null">
 				and area_id = #{area.area_id}
 			</if>
-			<if test="county != null and county.county_id != null and county.county_id !=''">
+			<if test="county != null and county.county_id != null">
 				and county_id = #{county.county_id}
 			</if>
-			<if test="industry != null and industry.industry_id != null and industry.industry_id !=''">
+			<if test="industry != null and industry.industry_id != null">
 				and industry_id = #{industry.industry_id}
 			</if>
-			<if test="office != null and office.office_id != null and office.office_id !=''">
+			<if test="office != null and office.office_id != null">
 				and office_id = #{office.office_id}
 			</if>
-			and sx_status_id != 8
-		</where>
+	</sql> 
+	
+	<sql id="sqlcondition_simple">
+			<if test="sx != null and sx.sx_name != null and sx.sx_name !=''">
+				and sx_name like '%' #{sx.sx_name} '%'
+			</if>
+			<if test="sx != null and sx.sx_status != null and sx.sx_status.sx_status_id != null and sx.sx_status.sx_status_id != ''">
+				and sx_status_id = #{sx.sx_status.sx_status_id}
+			</if>
+			<if test="sx != null and sx.office != null and sx.office.office_id != null and sx.office.office_id != ''">
+				and office_id = #{sx.office.office_id}
+			</if>
 	</sql> 
 	
 </mapper>

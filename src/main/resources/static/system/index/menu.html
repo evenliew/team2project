@@ -6,6 +6,31 @@
 <link rel="stylesheet" href="../../../bootstrap/css/bootstrap.css" />
 <link rel="stylesheet" href="../../../css/menu.css" />
 </head>
+<script type="text/javascript" src="../../js/jquery-2.2.3.js"></script>
+<script type="text/javascript">
+
+$(function(){
+	$.post(
+			"/manageProject",
+			null,
+			function(path){
+				alert(path);
+				$('#sxManagement').attr('href',path);
+	});
+})
+
+	
+	/* menuCss(this);
+	if(false){
+		alert("showing bereau leader page")
+		$('#sxManagement').attr('href','../sxBureauLeader.html')
+	}else if(true){
+		alert("showing bereau staff page")
+		$('#sxManagement').attr('href','../sxBureauStaff.html')
+	} */
+
+
+</script>
 <body>
 	<div class="container-fluid" style="padding: 0;">
 		<div class="row-fluid">
@@ -41,10 +66,12 @@
 										<a href="../projectlist.html?sx_type_id=5" onclick="menuCss(this)" target="content" style="padding-left:25px;">一带一路项目</a>
 									</li>
 								</ul>
-								<a href="../projectlist.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">督办项目</a>
 							</li>
 							<li>
-								<a href="../leave.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">子任务</a>
+								<a id="sxManagement" href="#" onclick="menuCss(this)" target="content" style="padding-left:25px;">项目管理</a>
+							</li>
+							<li>
+								<a href="../leave.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">任务管理</a>
 							</li>
 						</ul>
 					</li>

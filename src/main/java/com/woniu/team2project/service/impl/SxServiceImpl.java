@@ -57,5 +57,41 @@ public class SxServiceImpl implements SxService{
 	public void modifySxUrgency(String sx_id, Integer urgency_id) {
 		sxMapper.updateSxUrgency(sx_id, urgency_id);
 	}
+
+	//查某局领导审批了的事项
+	@Override
+	public List<Sx> getApprovedSxByLeader_id(String leader_id, Sx sx) {
+		return sxMapper.selectApprovedSxByLeader_id(leader_id, sx);
+	}
+	
+	//查某局领导待审批的事项
+	@Override
+	public List<Sx> getUnapprovedSxByLeader_id(String leader_id, Sx sx) {
+		return sxMapper.selectUnapprovedSxByLeader_id(leader_id, sx);
+	}
+
+	//查某局员工创造的事项
+	@Override
+	public List<Sx> getSxByFounder_id(String founder_id, Sx sx) {
+		return sxMapper.selectSxByFounder_id(founder_id, sx);
+	}
+
+	//查某单位领导接收了的事项
+	@Override
+	public List<Sx> getAcceptedSxByLeader_id(String leader_id, Sx sx) {
+		return sxMapper.selectAcceptedSxByLeader_id(leader_id, sx);
+	}
+
+	//查某单位领导还未接收的事项
+	@Override
+	public List<Sx> getUnacceptedSxByLeader_id(String leader_id, Sx sx) {
+		return sxMapper.selectUnacceptedSxByLeader_id(leader_id, sx);
+	}
+
+	//查某单位员工相关的事项（其子任务的事项）
+	@Override
+	public List<Sx> getSxByWorker_id(String worker_id, Sx sx) {
+		return sxMapper.selectSxByWorker_id(worker_id, sx);
+	}
 	
 }
