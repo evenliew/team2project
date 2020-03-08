@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.SxTaskMapper">
+	<insert id="insertTask">
+		insert into tb_sx_task values (#{sx_task_id},
+							#{sx_task_name},
+							#{sx_task_content},
+							#{worker.user_id},
+							#{sx_task_time},
+							#{sx_task_status_id},
+							#{sx.sx_id})
+	</insert>
+	
+	<update id="updateTask">
+		update tb_sx_task set 
+							sx_task_name=#{sx_task_name},
+							sx_task_content=#{sx_task_content},
+							sx_task_worker_id=#{worker.user_id},
+							sx_task_time=#{sx_task_time},
+							sx_task_status_id=#{sx_task_status_id},
+							sx_id=#{sx.sx_id} 
+		where sx_task_id=#{sx_task_id}
+	</update>
+	
+	<delete id="deleteTask">
+		update  tb_sx_task set  sx_task_status_id=0 where sx_task_id=#{sx_task_id}
+	</delete>
+	
+	<!-- 根据子任务id查询 -->
+	<select id="selectTaskByTask_id" resultMap="task">
+		select * from  tb_user u , tb_sx s ,tb_sx_task t WHERE t.sx_task_worker_id=u.user_id and t.sx_id=s.sx_id and sx_task_id=#{sx_task_id} and t.sx_task_status_id>0;
+	</select>
+	<resultMap type="Sx_task" id="task">
+		<id column="sx_task_id" property="sx_task_id"/>
+		<result column="sx_task_name" property="sx_task_name"/>
+		<result column="sx_task_content" property="sx_task_content"/>
+		<result column="sx_task_time" property="sx_task_time"/>
+		<result column="sx_task_status_id" property="sx_task_status_id"/>
+		<association property="sx" javaType="Sx">
+			<id column="sx_id" property="sx_id"/>
+			<result column="sx_name" property="sx_name"/>
+			<result column="sx_name" property="sx_name"/>
+			<!-- 还有没有设置进去 -->
+		</association>
+		<association property="worker" javaType="User">
+			<id column="user_id" property="user_id"/>
+			<result column="user_name" property="user_name"/>
+			<result column="user_pass" property="user_pass"/>
+			<result column="user_loginname" property="user_loginname"/>
+			<result column="user_phone" property="user_phone"/>
+			<!-- 还有没有设置进去 -->
+		</association>
+	</resultMap>
+	
+	
+	
+	
+	<!-- 事项id查询该事项子任务 --> 
+	<select id="selectTask" resultMap="task">
+		select * from  tb_user u , tb_sx s ,tb_sx_task t WHERE t.sx_task_worker_id=u.user_id and t.sx_id=s.sx_id where t.sx_id=#{sx.sx_id} and t.sx_task_status_id>0;
+	</select>
+	
+	<!-- 根据用户查事项子任务 -->
+	<select id="selectTaskByUser_id" resultMap="task">
+		select * from  tb_user u , tb_sx s ,tb_sx_task t WHERE t.sx_task_worker_id=u.user_id and t.sx_id=s.sx_id and u.user_id=#{user_id} and t.sx_task_status_id>0;
+	</select>
+	
+	<!-- 根据用户id查单位id -->
+	<select id="selectOffice_idByUser_id" resultType="Integer">
+		select office_id from tb_user where user_id=#{user_id}
+	</select>
+	
+	<!-- 查登录用户单位的所有事项 -->
+	<select id="selectTaskByOffice_id" resultMap="task">
+		select * from  tb_user u , tb_sx s ,tb_sx_task t WHERE t.sx_task_worker_id=u.user_id and t.sx_id=s.sx_id and u.office_id=#{office_id} and t.sx_task_status_id>0;
+	</select>
+	
+	<!-- 查所有子任务 -->
+	<select id="selectAllTask" resultMap="task">
+		select * from  tb_user u , tb_sx s ,tb_sx_task t WHERE t.sx_task_worker_id=u.user_id and t.sx_id=s.sx_id and sx_task_status_id>0;
+	</select>
+	
+	<select id="selectAllUserByOffice_id" resultType="User">
+		select * from tb_user where office_id=#{office_id}
+	</select>
+</mapper>

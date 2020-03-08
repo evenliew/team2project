@@ -231,7 +231,7 @@ public class SxController {
 //		return "redirect:/system/projectlist.html";
 //	}
 	
-	//事项详情界面使用(查对应的领导和单位负责人)
+	//事项详情界面使用(要查对应的领导和单位负责人)
 	@RequestMapping("/getSxBySx_id")
 	public ModelAndView getSxBySx_id(String sx_id) {
 		ModelAndView mv=new ModelAndView();
