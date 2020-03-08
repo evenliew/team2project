@@ -111,7 +111,7 @@ function showTable(data){
 	$.each(data.list,function(){
 		var html = "<tr class='success' id=tr_"+this.sx_id+">";
 		html += "<td align='center'><input type='checkbox' class='checkbox' name='sx_ids' value="+this.sx_id+"></td>";
-		html += "<td>"+this.sx_name+"</td>";
+		html += "<td><a href='/editproject?sx_id="+this.sx_id+"'>"+this.sx_name+"</a></td>";
 		html += "<td>"+this.sx_type.sx_type_name+"</td>";
 		html += "<td>"+this.county.area.area_name+"</td>";
 		html += "<td>"+this.county.county_name+"</td>";
@@ -120,7 +120,7 @@ function showTable(data){
 		html += "<td>"+this.office.office_name+"</td>";
 		html += "<td>"+this.sx_time.substring(0,10)+"</td>";
 		if($(tabLeft).attr('class')=="active"){
-			html += "<td align='center'><button class='btn btn-primary btn-sm'>管理进度</button></td>"
+			html += "<td align='center'><button class='btn btn-primary btn-sm' onclick='manageStatus("+this.sx_id+")'>管理进度</button></td>"
 		}else if($(tabLeft).attr('class')!="active"){
 			html += "<td align='center'><button class='btn btn-primary btn-sm'>批准事项</button> <button class='btn btn-danger btn-sm'>驳回事项</button></td>"
 		}
@@ -181,7 +181,11 @@ function doDeleteSx(){
      }
    initTable();
 }
+//管理进度
+function manageStatus(sx_id){
+	window.location.href="/manageproject?sx_id="+sx_id;
 	
+}
 </script>
 <body>
 <div class="container" style="width: 100%;padding: 25px 15px">

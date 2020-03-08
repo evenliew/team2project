@@ -232,7 +232,7 @@ public class SxController {
 //	}
 	
 	//事项详情界面使用(要查对应的领导和单位负责人)
-	@RequestMapping("/getSxBySx_id")
+	@RequestMapping("/getSxBySx_id*")
 	public ModelAndView getSxBySx_id(String sx_id) {
 		ModelAndView mv=new ModelAndView();
 		if(sx_id!=null) {
@@ -261,7 +261,7 @@ public class SxController {
 	 */
 	
 	//点击编辑事项 
-	@RequestMapping("/editproject")
+	@RequestMapping("/editproject*")
 	public ModelAndView modifySx(String sx_id) {
 		ModelAndView mv=new ModelAndView();
 		mv.addObject("sx_id", sx_id);
@@ -272,7 +272,7 @@ public class SxController {
 		return mv;
 	}
 	//管理事项进度 
-	@RequestMapping("/manageproject")
+	@RequestMapping("/manageproject*")
 	public ModelAndView manageSx(String sx_id) {
 		ModelAndView mv=new ModelAndView();
 		//根据id拿到事项传到编辑页面
