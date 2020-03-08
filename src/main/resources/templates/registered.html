@@ -104,6 +104,7 @@
                 <div class="form-group">
                   <label class="col-sm-4 control-label" for="officeHours">昵称:</label>
                     <div class="col-sm-7">
+                    	<span>[[${msg}]]</span>
                         <input type="text" id="account" class="form-control" name="user_name" 
                         placeholder="请输入注册昵称">
                         <span id="spans"></span>
@@ -112,6 +113,7 @@
                  <div class="form-group">
                     <label class="col-sm-4 control-label" for="startTime">账号:</label> 
                     <div class="col-sm-7">
+                    <span>[[${msg}]]</span>
                         <input type="text" id="loginname" class="form-control" name="user_loginname" 
                         	 placeholder="请输入注册账号">
                         	<span id="loname"></span>
@@ -128,6 +130,7 @@
                  <div class="form-group">
                     <label class="col-sm-4 control-label" for="closingTime">电话:</label> 
                     <div class="col-sm-7">
+                    <span>[[${msg}]]</span>
                         <input type="text" id="phone" class="form-control" name="user_phone" 
                         placeholder="请输入电话" >
                         <span id="spanphone"></span>
@@ -136,7 +139,7 @@
                 <div class="form-group">
                     <label class="col-sm-4 control-label" for="closingTime">单位:</label> 
                     <div class="col-sm-7">
-						<select name="off.office_id">
+						<select name="office_id">
 							<option th:each="off:${offs}" th:value="${off.office_id}">
 								[[${off.office_name}]]
 							<option />

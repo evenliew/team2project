@@ -4,12 +4,38 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
 <title>工作计划</title>
-<script type="text/javascript">
-	function fun(){
-		alert("bbbb");
-		$.post("/post",$("select").val(),function(data){
-			alert(data);
-		});
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" th:inline="none">
+	window.onload=function(){
+		//给删除选中添加单击事件
+		document.getElementById("delect").onclick=function(){
+			//表单提交
+			if(confirm("您确定要删除选中条目吗")){
+				var flag=false;
+				var son=document.getElementsByName("plan_id");
+				for(var i=0;i<son.length;i++){
+					if(son[i].checked){
+						//如果有一个选中了，那么遍历
+						flag=true;
+						break;
+					}
+				}
+				if(flag){//有条目被选中再提交
+				document.getElementById("form").submit();
+				}
+			}
+			
+		}
+		//绑定父多选框的id，设置一个点击事件。
+		document.getElementById("first").onclick=function(){
+			//通过子多选框的name属性获取每个子选框
+			var son=document.getElementsByName("plan_id");
+			//遍历自选框
+			for(var i=0;i<son.length;i++){
+				son[i].checked=this.checked;
+			}
+		}
 	}
 </script>
 </head>
@@ -23,7 +49,7 @@
             </div> -->
 			
 			 <ul class="nav nav-pills">
-			    <li class="active"><a href="#">新增</a></li>
+			    <li ><a th:href="@{/addplan?pageIndex=1}">新增</a></li>
 			    <li><a href="#">修改</a></li>
 			    <li><a href="#">删除</a></li>
 			    <li><a href="#">填报</a></li>
@@ -45,10 +71,10 @@
             <form th:action="@{/like?pageIndex=1}" method="post" id="userForm" role="form" class="form-inline" style="float: right;margin-bottom: 10px;">
                 <div class="form-group" style="margin-right: 20px;">
                 <span style="font-weight:bold">计划编号:</span>
-                <select name="planId" onclick="fun();">
-					<option th:each="pb:${pb.beanList}" th:value="${pb.plan_id}">
-						[[${pb.plan_id}]]
-					<option />
+                <select name="plan_id" >
+					<option th:each="pbs:${pb.beanList}" th:value="${pbs.plan_id}">
+							 [[${pbs.plan_id}]]
+					<option/>
 				</select>
 				
                      <label for="exampleInputEmail1" style="margin-right: 10px;">关键字</label>
@@ -58,36 +84,15 @@
                 <button type="submit" class="btn btn-primary btn" >查询</button>
             </form>
 			
-			<form role="form" style="margin-top: 20px;">
-			  <div class="form-group">
-				 <span style="font-weight:bold">分管领导:</span>
-				<select name="leader" >
-			      <option th:each="pb:${pb.beanList}" th:value="${pb.plan_founder_id.user_id}">
-			      [[${pb.plan_founder_id.user_name}]]
-			      </option>
-			    </select>
-				<span style="font-weight:bold">年度:</span>
-				<select class="" >
-				  <option>1</option>
-				  <option>2</option>
-				  <option>3</option>
-				  <option>4</option>
-				  <option>5</option>
-				</select>
-				<span style="font-weight:bold">月份:</span>
-				<select class="" >
-				  <option>1</option>
-				  <option>2</option>
-				  <option>3</option>
-				  <option>4</option>
-				  <option>5</option>
-				</select>
-			  </div>
-			</form>
 			
+			<a style="margin-top:5px" class="btn btn-primary" href="javascript:void(0);"
+							id="delect">删除选中</a>
+				
+		<form th:action="@{/delect?pageIndex=1}" method="post" id="form">
 			<table class="table table-bordered" >
 			  <thead>
 			    <tr >
+			    	<th><input type="checkbox" id="first"></th>
 			      <th>计划编号</th>
 			      <th>发布时间</th>
 			      <th>内容</th>
@@ -95,11 +100,12 @@
 				  <th>工作事项</th>
 				  <th>计划开始时间</th>
 				  <th>计划结束时间</th>
-				  <th>模块</th>
+				  <th>单位</th>
 			    </tr>
 			  </thead>
 			  <tbody>
 			    <tr th:each="pb:${pb.beanList}">
+			    <td><input type="checkbox" name="plan_id" th:value="${pb.plan_id}"/></td>
 			      <td>[[${pb.plan_id}]]</td>
 			      <td th:text="${#dates.format(pb.plan_time, 'yyyy-MM-dd HH:mm')}"></td>
 			      <td>[[${pb.plan_content}]]</td>
@@ -107,12 +113,12 @@
 				  <td>[[${pb.plan_sx_id.sx_name}]]</td>
 				  <td th:text="${#dates.format(pb.plan_start_time, 'yyyy-MM-dd HH:mm')}"></td>
 				  <td th:text="${#dates.format(pb.plan_end_time, 'yyyy-MM-dd HH:mm')}"></td>
-				  <td>[[${pb.module_id.module_name}]]</td>
+				  <td>[[${pb.plan_office_id.office_name}]]</td>
 			    </tr>
 			    
 			  </tbody>
 			</table>
-			
+		</form>
 			<div align="center" >
 				<ul class="pagination">
    					 <li><a href="#">&laquo;</a></li>
@@ -175,6 +181,5 @@
     </div>
 </div>
 </body>
-<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
-<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+
 </html>

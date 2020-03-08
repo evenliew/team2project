@@ -50,12 +50,17 @@ public class PlanController {
 	///根据条件查询
 	@RequestMapping("/like")
 	public String selectAllPlanBy(Integer 
-			pageIndex,Model model,String realName) {
+			pageIndex,Model model,String realName,Integer planId) {
 		
 		 Integer pageSize=10;
 	
 		Plan plan=new Plan();
-		plan.setPlan_content(realName);
+		if (realName!=null) {
+			plan.setPlan_content(realName);
+			if (planId!=null) {
+				plan.setPlan_id(planId);
+			}
+		}
 		
 		PageBean<Plan> pb = planService.pagebeanList(plan, pageIndex, pageSize);
 		System.out.println(pb);

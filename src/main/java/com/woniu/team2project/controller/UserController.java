@@ -12,6 +12,7 @@ import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mysql.cj.Session;
+import com.woniu.team2project.entity.Office;
 import com.woniu.team2project.entity.Sx;
 import com.woniu.team2project.entity.User;
 import com.woniu.team2project.service.UserService;
@@ -39,25 +40,37 @@ public class UserController {
 	//登录已经请求主页
 	@RequestMapping("/user")
 	public String selectByleadid(Model model,String account,String password,HttpSession session) {
-		User user = userService.getSelectBm_leader_idByUserName(account);
-		String loginname = user.getUser_loginname();//登录账号
-		String username = user.getUser_name();//昵称
-		System.out.println(loginname);
-		System.out.println(username);
+		User user = userService.getSelectBm_leader_idByUserName(account);//通过账号
+		System.out.println(user+"111222");
+		String loginname = null;
+		String username = null;
+		String userid=null;
+		Integer officeid=null;
 		if (user!=null) {
-			String pass = userService.getSelectPassWordByAccount(account);
-			model.addAttribute("ssssss",account);
+			 loginname = user.getUser_loginname();//登录账号
+			 username = user.getUser_name();//昵称
+			 userid=user.getUser_id();
+			 officeid=user.getOffice().getOffice_id();
+			 String pass = userService.getSelectPassWordByAccount(account);
+			 model.addAttribute("ssssss",account);
 			if (pass.equals(password)) {
-				session.setAttribute("loginname",loginname);
-				session.setAttribute("username", username);
-				return "system/index/index";
-			}else {
-				model.addAttribute("msg","您的密码不正确");
-				model.addAttribute("u",account);
-				return "login";
+					session.setAttribute("loginname",loginname);
+					session.setAttribute("username", username);
+					session.setAttribute("userid", userid);
+					session.setAttribute("officeid", officeid);
+					return "system/index/index";
+				}else {
+					model.addAttribute("msg","您的密码有误");
+					model.addAttribute("u",account);
+					return "login";
 			}
+		}else {
+			model.addAttribute("msg","您的账号有误");
+			return "login";
 		}
-		return "system/index/index";
+		
+		
+		
 	}
 	//点击月度计划，进入页面
 	@RequestMapping("/userss")

@@ -16,6 +16,7 @@ public class Plan {
 	private Date plan_end_time;
 	private Modules module_id;
 	private Sx plan_sx_id;
+	private Office plan_office_id;
 	public Integer getPlan_id() {
 		return plan_id;
 	}
@@ -70,15 +71,21 @@ public class Plan {
 	public void setPlan_sx_id(Sx plan_sx_id) {
 		this.plan_sx_id = plan_sx_id;
 	}
+	public Office getPlan_office_id() {
+		return plan_office_id;
+	}
+	public void setPlan_office_id(Office plan_office_id) {
+		this.plan_office_id = plan_office_id;
+	}
 	@Override
 	public String toString() {
 		return "Plan [plan_id=" + plan_id + ", plan_time=" + plan_time + ", plan_content=" + plan_content
 				+ ", plan_founder_id=" + plan_founder_id + ", plan_type_id=" + plan_type_id + ", plan_start_time="
 				+ plan_start_time + ", plan_end_time=" + plan_end_time + ", module_id=" + module_id + ", plan_sx_id="
-				+ plan_sx_id + "]";
+				+ plan_sx_id + ", plan_office_id=" + plan_office_id + "]";
 	}
 	public Plan(Integer plan_id, Date plan_time, String plan_content, User plan_founder_id, Integer plan_type_id,
-			Date plan_start_time, Date plan_end_time, Modules module_id, Sx plan_sx_id) {
+			Date plan_start_time, Date plan_end_time, Modules module_id, Sx plan_sx_id, Office plan_office_id) {
 		super();
 		this.plan_id = plan_id;
 		this.plan_time = plan_time;
@@ -89,11 +96,11 @@ public class Plan {
 		this.plan_end_time = plan_end_time;
 		this.module_id = module_id;
 		this.plan_sx_id = plan_sx_id;
+		this.plan_office_id = plan_office_id;
 	}
 	public Plan() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
 	
 }

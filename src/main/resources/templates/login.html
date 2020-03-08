@@ -59,7 +59,7 @@
 	<div class="myDiv">
 		<form method="post" th:action="@{/user}">
 		<input type="text" class="inputText" name="account" id="account" placeholder="请输入账号" autofocus value="admin" style="margin-top: 30px;"/><br>
-		<span id="spans"></span>
+		<span id="spans">[[${msg}]]</span>
 		<input type="password" class="inputText" name="password" id="pwd" placeholder="请输入密码" value="feicui123" style="margin-top: 60px;"/><br>
 		<span id="spans">[[${msg}]]</span>
 		<a th:href="@{/registered}" class="myregistered">注册</a>

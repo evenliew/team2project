@@ -5,13 +5,13 @@
 <mapper namespace="com.woniu.team2project.mapper.PlanMapper">
 
 	
-	<!-- <select id="seleListplans" resultMap="planMapper">
-	select * from tb_plan t1 JOIN  tb_sx t2 ON
-	 t1.plan_sx_id=t2.sx_id JOIN tb_user t3 ON
-			t1.plan_founder_id=t3.user_id  
- 		 	WHERE plan_founder_id=#{plan_founder_id}
- 		 
-  	</select> -->
+	 <select id="selectAllPlanByoffice" resultMap="planMapper">
+ 		 select  * from tb_plan where plan_office_id=#{plan_office_id}
+  	</select>
+  	
+  	<delete id="delectPlanByid" >
+    	delete from tb_plan where plan_id = #{plan_id}
+  	</delete>
   	
 	<resultMap type="Plan" id="planMapper">
   	<id column="plan_id" property="plan_id"/>
@@ -29,18 +29,30 @@
   		
   	<association property="plan_sx_id" javaType="Sx" 
   		select="selectSx" column="sx_id" />
+  		
+  	<association property="plan_office_id" javaType="Office" 
+  		select="selectOffice" column="office_id" />
   </resultMap>
   	
   	<select id="selectUser" resultType="User">
   	select * from tb_user where user_id=#{user_id}
   </select>
-  <select id="selectMudules" resultType="Modules">
+  <select id="selectMudules" resultMap="ModulesMapper">
   	select * from tb_module where module_id=#{module_id}
   	</select>
   <select id="selectSx" resultType="Sx">
   	select * from tb_sx where sx_id=#{sx_id}
   </select>
+  <select id="selectOffice" resultType="Office">
+  	select * from tb_office where office_id=#{office_id}
+  </select>
   
+  <!-- plan表里查询mod的映射 -->
+   <resultMap type="Modules" id="ModulesMapper">
+  	<id column="module_id" property="module_id"/>
+  	<result column="module_name" property="module_name"/>
+  	<result column="parent_id" property="parent_id"/>
+  </resultMap> 
   
    <!-- 分页查询页数 -->
   <select id="selectAllPlanByPageCount" resultType="Integer">
@@ -53,7 +65,7 @@
   	select * from tb_plan
   	t1 JOIN  tb_sx t2 ON
 	 t1.plan_sx_id=t2.sx_id JOIN tb_user t3 ON
-			t1.plan_founder_id=t3.user_id  
+			t1.plan_founder_id=t3.user_id  JOIN tb_office t4 ON t1.plan_office_id=t4.office_id
  		 	
   	<include refid="count"></include>
   	limit #{pageIndex},#{pageSize}

@@ -5,10 +5,9 @@
 <mapper namespace="com.woniu.team2project.mapper.UserMapper">
 	
  	<select id="selectBm_leader_idByUserName" resultMap="userMapper">
- 		 select * from tb_user t1,tb_office t2 
- 			where t1.office_id=t2.office_id  
- 		and user_loginname=#{user_loginname} 
- 		<!-- select * from tb_user where user_name=#{user_name} -->
+ 		 select * from tb_user  
+ 			where 
+ 		 user_loginname=#{user_loginname} 
   	</select>
   	<select id="SelectPassWordByAccount" resultType="String">
  		 select user_pass from tb_user where user_loginname=#{user_loginname} 
@@ -51,7 +50,7 @@
  	</resultMap>
  	
  	
- 	<select id="selectleaderNameByleander_id" resultType="User">
+ 	<select id="selectleaderNameByleander_id" resultMap="userMapper">
  		 select * from tb_user where user_id=#{user_id} 
   	</select>
  

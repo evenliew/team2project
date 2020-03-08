@@ -40,4 +40,18 @@ public class PlanServiceImpl implements PlanService{
 		pb.setPageSize(pageSize);
 		return pb;
 	}
+
+	@Override
+	public void removePlanByid(String[] plan_id) {
+		for (String string : plan_id) {
+			planMapper.delectPlanByid(string);
+		}
+		
+	}
+	//通过单位查询所有的plan信息
+	@Override
+	public List<Plan> getAllPlanByoffice(Integer office_id) {
+		
+		return planMapper.selectAllPlanByoffice(office_id);
+	}
 }

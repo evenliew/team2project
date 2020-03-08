@@ -36,11 +36,27 @@ public class LoginAndRegisteredColltrollet {
 	}
 	//添加方法
 	@RequestMapping("/addUser")
-	public String addUser(Model model,User user) {
+	public String addUser(Model model,User user,String office_id) {
+		User user1 = res.getAllUser(user.getUser_name());
+		User user2 = res.getAllUserByLoginName(user.getUser_loginname());
+		User user3 = res.getAllUserByPhone(user.getUser_phone());
+		if (!StringUtils.isEmpty(user1)) {
+			model.addAttribute("msg", "此昵称已存在，请更换");
+			return "redirect:/registered";
+		}else if (!StringUtils.isEmpty(user2)) {
+			model.addAttribute("msg", "此用户名已存在，请更换");
+			return "redirect:/registered";
+		}else if(!StringUtils.isEmpty(user3)){
+			model.addAttribute("msg", "此电话号码已存在，请更换");
+			return "redirect:/registered";
+		}
 		Random random=new Random();
 		int num = random.nextInt(100);
 		String userid=num+"";
 		user.setUser_id(userid);
+		Office office=new Office();
+		office.setOffice_id(Integer.parseInt(office_id));
+		user.setOffice(office);
 		res.addUser(user);
 		model.addAttribute("msg","恭喜注册成功，请登录");
 		return "login";
@@ -60,8 +76,8 @@ public class LoginAndRegisteredColltrollet {
 				mapsMap.put("userExsit", true);
 				mapsMap.put("msg", "此昵称太受欢迎，请换一个");
 			}else{
-				mapsMap.put("userExsit", false);
-				mapsMap.put("msg", "此昵称可用");
+				mapsMap.put("userExsit1", true);
+				mapsMap.put("msg1", "此用户名太受欢迎，请换一个");
 			}
 		}
 		

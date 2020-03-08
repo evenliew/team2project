@@ -78,7 +78,7 @@
 			<table class="table table-bordered" >
 			  <thead>
 			    <tr >
-			      <th>年度</th>
+			      <th>计划编号</th>
 			      <th>发布时间</th>
 			      <th>内容</th>
 				  <th>分管领导</th>
@@ -90,7 +90,7 @@
 			  </thead>
 			  <tbody>
 			    <tr th:each="pb:${pb.beanList}">
-			      <td>2020</td>
+			      <td>[[${pb.plan_id}]]</td>
 			      <td th:text="${#dates.format(pb.plan_time, 'yyyy-MM-dd HH:mm')}"></td>
 			      <td>[[${pb.plan_content}]]</td>
 				  <td>[[${pb.plan_founder_id.user_name}]]</td>

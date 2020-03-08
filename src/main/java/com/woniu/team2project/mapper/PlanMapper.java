@@ -17,4 +17,9 @@ public interface PlanMapper {
 	List<Plan> selectAllPlansByPage(@Param("plan") Plan plan,@Param("pageIndex")
 	Integer pageIndex,@Param("pageSize") Integer pageSize);
 	Integer selectAllPlanByPageCount(@Param("plan") Plan plan);
+
+	void delectPlanByid(String string);
+	
+	List<Plan> selectAllPlanByoffice(Integer office_id); 
+	
 }

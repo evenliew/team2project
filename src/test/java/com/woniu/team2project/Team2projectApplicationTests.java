@@ -75,15 +75,15 @@ public class Team2projectApplicationTests {
 
 	@Test
 	public void testgetselectBm_leader_idByUserName() {
-		System.out.println(userService.getSelectBm_leader_idByUserName("666"));
+		System.out.println(userService.getSelectBm_leader_idByUserName("qqqq"));
 	}
 	@Test
 	public void test1() {
-		System.out.println(userMapper.selectleaderNameByleander_id("121"));
+		System.out.println(userMapper.selectleaderNameByleander_id("qqqq"));
 	}
 	@Test
 	public void test2() {
-		System.out.println(sxMapper.selecttbSx(111));
+		System.out.println(sxMapper.selecttbSx(1));
 	}
 	@Test
 	public void test3() {
@@ -116,6 +116,14 @@ public class Team2projectApplicationTests {
 		System.out.println(planService.pagebeanList(plan, pageIndex, pageSize));
 		 
 	}
+	
+	@Test
+	public void selectAllPlansByPage() {
+		Plan plan=new Plan();
+		Integer pageIndex=1;
+		Integer pageSize=2;
+		System.out.println(planMapper.selectAllPlansByPage(plan, pageIndex, pageSize));
+	} 
 	@Test
 	public void testloginusername() {
 		System.out.println(regis.selectAllUser("张三"));
@@ -132,6 +140,8 @@ public class Team2projectApplicationTests {
 	public void SelectPassWordByAccount() {
 		System.out.println(userMapper.SelectPassWordByAccount("bbbb"));
 	}
-	
+	@Test
+	public void selectAllPlanByoffice() {
+	}
 	
 }
