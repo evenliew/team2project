@@ -1,9 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>登录</title>
+<<<<<<< HEAD
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script>
+//页面加载完成后
+$(function(){
+	//给account绑定失去焦点事件
+	$("#account").blur(function(){
+		//获取account文本输入框的值
+		alert("sda"); 
+	});
+});
+
+</script>
+=======
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+>>>>>>> branch 'master' of https://github.com/evenliew/team2project.git
 <style type="text/css">
 .myDiv {
 	width: 336px;
@@ -32,10 +48,10 @@
 </head>
 <body style="background: url('img/login.png') no-repeat;">
 	<div class="myDiv">
-		<form method="post" action="#">
+		<form method="post" th:action="@{/user}">
 		<input type="text" class="inputText" name="account" id="account" placeholder="请输入账号" autofocus value="admin" style="margin-top: 30px;"/><br>
 		<input type="password" class="inputText" name="password" id="pwd" placeholder="请输入密码" value="feicui123" style="margin-top: 60px;"/><br>
-		<input type="button" class="btn btn-success btn-lg btn-block inputBtn" value="登录" onclick="javascript:location.href='system/index/index.html'"/>
+		<input type="button" class="btn btn-success btn-lg btn-block inputBtn" value="登录" /><!-- onclick="javascript:location.href='system/index/index.html'" -->
 		</form>
 	</div>
 </body>

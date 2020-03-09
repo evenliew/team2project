@@ -39,16 +39,16 @@ public class SxController {
 	public String goProjectManagement(HttpSession session) {
 		//模拟一个sessionUser
 		User sessionUser = new User();
-		sessionUser.setUser_id("00001");
+		sessionUser.setUser_id("2000");
 		session.setAttribute("sessionUser", sessionUser);
 		//判断User的角色
 	
 		
 		//跳转不同静态页面
-		//return "../sxBureauLeader.html"; //局里的老板 1000
-		//return "../sxBureauStaff.html"; //局里的员工 121
-		//return "../sxOfficeLeader.html"; //单位的老板 2000
-		return "../sxOfficeStaff.html"; //单位的员工 00001
+		//return "../sxBureauLeader.html"; //局里的老板 id 1000
+		//return "../sxBureauStaff.html"; //局里的员工 id 121
+		return "../sxOfficeLeader.html"; //单位的老板 id 2000
+		//return "../sxOfficeStaff.html"; //单位的员工 id 00001
 	}
 
 	//分页条件查询事项
@@ -315,6 +315,39 @@ public class SxController {
 		return "redirect:/system/projectlist.html";
 	}
 	
+	//局领导审批事项
+	@RequestMapping("/approvesx")
+	@ResponseBody
+	public String approveSx(String sx_id) {
+		//更改事项状态为2“已审核”
+		sxService.modifySxStatus(sx_id, 2);
+		return "success";
+	}
 	
+	//局领导驳回事项
+	@RequestMapping("/unapprovesx")
+	@ResponseBody
+	public String unapproveSx(String sx_id) {
+		//更改事项状态为3“未通过”
+		sxService.modifySxStatus(sx_id, 3);
+		return "success";
+	}
 
+	//单位领导接受事项
+	@RequestMapping("/acceptsx")
+	@ResponseBody
+	public String acceptSx(String sx_id) {
+		//更改事项状态为4“按期进行”
+		sxService.modifySxStatus(sx_id, 4);
+		return "success";
+	}
+
+	//单位领导拒绝接受事项
+	@RequestMapping("/unacceptsx")
+	@ResponseBody
+	public String unacceptSx(String sx_id) {
+		//更改事项状态为7“已销项”
+		sxService.modifySxStatus(sx_id, 7);
+		return "success";
+	}
 }

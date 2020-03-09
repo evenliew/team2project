@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+
+#mybatis:
+  # spring boot集成mybatis的方式打印sql
+ # configuration:
+  #  log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+=======
 pagehelper:
   helper-dialect: mysql
   reasonable: true
@@ -7,12 +14,13 @@ pagehelper:
 mybatis:
   type-aliases-package: com.woniu.team2project.entity
 
+>>>>>>> branch 'master' of https://github.com/evenliew/team2project.git
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql:///team2project?serverTimezone=Asia/Shanghai
     username: root
-    password: 123456
+    password: 941117
     type: com.alibaba.druid.pool.DruidDataSource
 #   数据源
     initialSize: 5
