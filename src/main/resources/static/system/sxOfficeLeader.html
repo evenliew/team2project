@@ -96,11 +96,17 @@ function initTable(pageIndex=1){
 	$.post(
 			url,
 			$("#sxSearchForm").serialize()+"&"+$.param({"pageIndex":pageIndex}),
-			function(data){
+			function(responseInfo){
 				$("#tbSx tr:gt(0)").remove();
-				showTable(data);
-				showPageInfo(data);
-				showPager(data);	
+				if(responseInfo.state == 200){
+					showTable(responseInfo.data);
+					showPageInfo(responseInfo.data);
+					showPager(responseInfo.data);	
+				}
+				else{
+					alert(responseInfo.msg)
+				}
+				
 	});
 }
 

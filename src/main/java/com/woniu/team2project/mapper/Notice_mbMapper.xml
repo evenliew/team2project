@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.Notice_mbMapper">
+	<select id="selectNotice_mbByNotice_mb_id" resultType="Notice_mb">
+		select * from tb_notice_mb where notice_mb_id = #{notice_mb_id}
+	</select>
+	<select id="selectAllNotice_mb" resultType="Notice_mb">
+		select * from tb_notice_mb
+	</select>
+</mapper>
