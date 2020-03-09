@@ -122,7 +122,7 @@ function showTable(data){
 		if($(tabLeft).attr('class')=="active"){
 			html += "<td align='center'><button class='btn btn-primary btn-sm' onclick='manageStatus("+this.sx_id+")'>管理进度</button></td>"
 		}else if($(tabLeft).attr('class')!="active"){
-			html += "<td align='center'><button class='btn btn-primary btn-sm'>批准事项</button> <button class='btn btn-danger btn-sm'>驳回事项</button></td>"
+			html += "<td align='center'><button class='btn btn-primary btn-sm' onclick='doApproveSx("+this.sx_id+")'>批准事项</button> <button class='btn btn-danger btn-sm' onclick='doUnapproveSx("+this.sx_id+")'>驳回事项</button></td>"
 		}
 		html += "</tr>";
 		$(html).appendTo("#tbSxbody");
@@ -185,6 +185,30 @@ function doDeleteSx(){
 function manageStatus(sx_id){
 	window.location.href="/manageproject?sx_id="+sx_id;
 	
+}
+
+//批准事项 
+function doApproveSx(sx_id){
+	$.post(
+			"/approvesx",
+			{"sx_id":sx_id},
+			function(data){
+				if(data="success"){
+					 initTable();
+				}	
+	});
+}
+
+//驳回事项 
+function doUnapproveSx(sx_id){
+	$.post(
+			"/unapprovesx",
+			{"sx_id":sx_id},
+			function(data){
+				if(data="success"){
+					 initTable();
+				}	
+	});
 }
 </script>
 <body>

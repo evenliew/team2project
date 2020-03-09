@@ -121,7 +121,7 @@ function showTable(data){
 		if($(tabLeft).attr('class')=="active"){
 			html += "<td align='center'><button class='btn btn-primary btn-sm' onclick='manageStatus("+this.sx_id+")'>管理进度</button> <button class='btn btn-danger btn-sm'>分派任务</button></td>"
 		}else if($(tabLeft).attr('class')!="active"){
-			html += "<td align='center'><button class='btn btn-primary btn-sm'>接收事项</button> <button class='btn btn-danger btn-sm'>驳回事项</button></td>"
+			html += "<td align='center'><button class='btn btn-primary btn-sm' onclick='doAcceptSx("+this.sx_id+")'>接收事项</button> <button class='btn btn-danger btn-sm' onclick='doUnacceptSx("+this.sx_id+")'>驳回事项</button></td>"
 		}
 		html += "</tr>";
 		$(html).appendTo("#tbSxbody");
@@ -179,6 +179,30 @@ function doDeleteSx(){
          })
      }
    initTable();
+}
+
+//批准事项 
+function doAcceptSx(sx_id){
+	$.post(
+			"/acceptsx",
+			{"sx_id":sx_id},
+			function(data){
+				if(data="success"){
+					 initTable();
+				}	
+	});
+}
+
+//拒收（驳回）事项 
+function doUnacceptSx(sx_id){
+	$.post(
+			"/unacceptsx",
+			{"sx_id":sx_id},
+			function(data){
+				if(data="success"){
+					 initTable();
+				}	
+	});
 }
 //管理进度
 function manageStatus(sx_id){
