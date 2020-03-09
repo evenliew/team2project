@@ -1,0 +1,27 @@
+html, body {
+	width: 100%;
+	height: 100%;
+}
+
+#pa {
+	margin: auto;
+	width: 280px;
+	height: 240px;
+	/* border: solid 1px red; */
+}
+
+#pa_a1 {
+	width: 100%;
+	height: 50px;
+	font-size: xx-large;
+	font-weight: 500;
+	/* border: solid 1px orange; */
+}
+
+#pa_a2 {
+	width: 100%;
+	height: 188px;
+	font-size: large;
+	font-weight: 500;
+	/* border: solid 1px sienna; */
+}
