@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+<script type="text/javascript" th:src="@{/js/jquery-2.2.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<title>个人通报</title>
+<script type="text/javascript">
+	$(function(){
+		$("#remove").click(function(){
+			if($("input[name='notices']:checked").length==0){
+				alert("至少删除一个吧")
+			}else{
+				$("#removeForm").submit();
+			}
+		});
+		$("#checkAll").click(function(){
+			if(this.checked){
+				$("input[name=notices]").prop("checked",true);
+			}else{
+				$("input[name=notices]").prop("checked",false);
+			}
+		});
+	})
+</script>
+</head>
+<body>
+<div class="container" style= "width: 100%;padding: 25px 15px;">
+    <div class="row clearfix">
+        <div class="col-md-12 column" style="padding: 20px;">
+            <div style="float: left;">
+                  <a th:href="@{/add/user_notice}">
+                  	<input type="button" class="btn btn-primary btn" value="新增个人通告" />
+                  </a>
+            </div>
+            <form action="#" method="post" id="userForm" role="form" class="form-inline" style="float: right;margin-bottom: 10px;">
+                <div class="form-group" style="margin-right: 20px;">
+                     <label for="exampleInputEmail1" style="margin-right: 10px;">姓名</label><input type="text" class="form-control" id="realName" name="realName" placeholder="姓名"/>
+                </div>
+                <button type="button" class="btn btn-primary btn"  onclick="operation()">查询</button>
+            </form>
+            <form action="/remove" id="removeForm" method="post">
+            	<input type="hidden" name="_method" value="delete">
+            	<table class="table table-bordered" style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                    	<th>
+                    		<input type="checkbox" id="checkAll" name="selectAll">
+                    	</th>
+                    	<th>序号</th>
+                        <th style="width: 150px;">标题</th>
+                        <th>事项</th>
+                        <th>内容</th>
+                        <th>发布人</th>
+                        <th>接收人</th>
+                        <th>发送时间</th>
+                        <th>通报模板名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="notice:${notices}">
+                    	<td>
+                    		<input type="checkbox" th:value="${notice.user_nt_id}" name="notices" >
+                    	</td>
+						<td th:text="${noticeStat.index+1}"></td>
+                    	<td>[[${notice.user_nt_title}]]</td>
+                    	<td th:text="${notice.user_nt_sx.sx_name}"></td>
+						<!-- 发送此个人通告给领导审核，并把此通告的事项id传递过去 --> 
+						<!--<a th:href="@{/verify/}+${notice.user_nt_sx.sx_id}"/>  -->                   	
+                        <td><a href="#">[[${notice.user_nt_content}]]</a></td>
+                        <td>[[${notice.user_nt_founder.user_name}]]</td>
+                        <td>[[${notice.user_nt_recender.user_name}]]</td>
+                        <td>[[${#dates.format(notice.user_nt_time,"yyyy-MM-dd:hh-mm-ss")}]]</td>
+                     	<td>[[${notice.user_nt_mb.notice_mb_content}]]</td>
+                     </tr>   
+                </tbody>
+            </table>
+            <input type="button" class="delete btn btn-primary btn" id="remove" value="删除选中">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

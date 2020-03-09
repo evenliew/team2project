@@ -2,22 +2,46 @@ package com.woniu.team2project.entity;
 
 import java.util.Date;
 
-//事项实体
+//事项实体 
 public class Sx {
 	private String sx_id;//事项id
 	private String sx_name;//事项名称
 	private Sx_type sx_type;//事项类型
 	private Sx_status sx_status;//事项状态
-	private Date sx_time;
+	private Date sx_time;//事项开始时间
 	private User founder;//发起人
 	private String sx_content;//事项内容
 	private String sx_remark;//事项备注
 	private Urgency urgency;//紧急程度
+	//新加一个地区（地区>区县）
+	private Area area; //所属地区
 	private County county;//所属区县
 	private Industry industry;//所属行业
 	//后面加的
 	private Date sx_end_time;//事项结束时间
 	private Office office;//单位的id
+	//后来加的
+	
+	
+	public Sx(String sx_id, String sx_name, Sx_type sx_type, Sx_status sx_status, Date sx_time, User founder,
+			String sx_content, String sx_remark, Urgency urgency, Area area, County county, Industry industry,
+			Date sx_end_time, Office office) {
+		super();
+		this.sx_id = sx_id;
+		this.sx_name = sx_name;
+		this.sx_type = sx_type;
+		this.sx_status = sx_status;
+		this.sx_time = sx_time;
+		this.founder = founder;
+		this.sx_content = sx_content;
+		this.sx_remark = sx_remark;
+		this.urgency = urgency;
+		this.area = area;
+		this.county = county;
+		this.industry = industry;
+		this.sx_end_time = sx_end_time;
+		this.office = office;
+	}
 	public String getSx_id() {
 		return sx_id;
 	}
@@ -72,6 +96,12 @@ public class Sx {
 	public void setUrgency(Urgency urgency) {
 		this.urgency = urgency;
 	}
+	public Area getArea() {
+		return area;
+	}
+	public void setArea(Area area) {
+		this.area = area;
+	}
 	public County getCounty() {
 		return county;
 	}
@@ -102,6 +132,7 @@ public class Sx {
 				+ ", sx_time=" + sx_time + ", founder=" + founder + ", sx_content=" + sx_content + ", sx_remark="
 				+ sx_remark + ", urgency=" + urgency + ", county=" + county + ", industry=" + industry
 				+ ", sx_end_time=" + sx_end_time + ", office=" + office + "]";
+
 	}
 	public Sx(String sx_id, String sx_name, Sx_type sx_type, Sx_status sx_status, Date sx_time, User founder,
 			String sx_content, String sx_remark, Urgency urgency, County county, Industry industry, Date sx_end_time,
@@ -127,4 +158,7 @@ public class Sx {
 	}
 	
 	
+	
+	
 }
+ 

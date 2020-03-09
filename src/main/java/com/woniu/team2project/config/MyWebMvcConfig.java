@@ -22,12 +22,13 @@ public class MyWebMvcConfig{
 
 			}
 
-//			@Override
-//			public void addInterceptors(InterceptorRegistry registry) { //不拦截
-//				registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/*",
-//						"/system/index/index.html", "/user/login", "/css/**");
-//
-//			}
+
+			@Override
+			public void addInterceptors(InterceptorRegistry registry) { //不拦截
+				registry.addInterceptor(new LoginHandlerInterceptor()).addPathPatterns("/**").excludePathPatterns("/*",
+						"/system/index/index.html", "/user/login", "/css/**");
+
+			} 
 		};
 	}
 }

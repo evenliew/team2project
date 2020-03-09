@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<title>事项状态</title>
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="../css/menu.css" />
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+<style type="text/css">
+</style>
+
+<script type="text/javascript">
+	$(function() {
+		//进度类型下拉
+		$.post(
+				"/allstatus",
+				null,
+				function(data){
+					$.each(data,function(){
+						var html = "<option value='" + this.sx_status_id + "'>" + this.sx_status_name + "</option>";
+						$(html).appendTo($("#statuses"));
+					})
+		});
+		//ajax刷 紧急程度
+		$.post("/allurgency", null, function(d) {//回调函数
+			$(d).each(
+					function() {
+						var html = "<option value='"+this.urgency_id+"'>"
+								+ this.urgency_name + "</option>";
+						$(html).appendTo($("#urgency"));
+					});
+		});
+	});
+</script>
+</head>
+<body>
+	<div id="box">
+		<form action="/changestatus" method="post">
+			<input type="hidden" name="sx_id" th:value="${sx.sx_id}">
+			事项名称:<br/>
+			<input  name="sx_name" class="form-control" type="text" th:value="${sx.sx_name}">
+			<p></p>
+			事项进度：<br/>
+			<select id="statuses" name="sx_status_id" class="form-control">
+				<option th:value="${sx.sx_status.sx_status_id}">[[${sx.sx_status.sx_status_name}]]</option>
+			</select>	
+			<p></p>
+			紧急程度：<br/>
+			 <select id="urgency" name="urgency_id">
+				<option th:value="${sx.urgency.urgency_id}">[[${sx.urgency.urgency_name}]]</option>
+			</select>
+			<button type="submit">提交</button>
+		</form>
+	</div>
+</body>
+</html>

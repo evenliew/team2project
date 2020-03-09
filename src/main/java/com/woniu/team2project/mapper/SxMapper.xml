@@ -3,16 +3,222 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.woniu.team2project.mapper.SxMapper">
+
+	<!-- 新增事项 -->
 	<insert id="insertSx">
 		insert into tb_sx values
+<<<<<<< HEAD
 		(#{sx_id},#{sx_name},#{sx_type.sx_type_id},#{sx_status.sx_status_id},
 		#{sx_time},#{founder.user_id},#{sx_content},#{sx_remark},#{urgency.urgency_id},
 		#{county.county_id},#{industry.industry_id},#{sx_end_time},#{office.office_id});
+=======
+			(#{sx_id},#{sx_name},#{sx_type.sx_type_id},#{sx_status.sx_status_id},
+			#{sx_time},#{founder.user_id},#{sx_content},#{sx_remark},#{urgency.urgency_id},
+			#{county.county_id},#{industry.industry_id},#{sx_end_time},#{office.office_id});
+>>>>>>> branch 'master' of https://github.com/evenliew/team2project.git
 	</insert>
+<<<<<<< HEAD
 
 	<select id="selecttbSx" resultType="Sx">
 		select * from tb_sx where office_id=#{office_id}
 	</select>
 
+=======
+	
+	<!-- 根据主键删除事项 -->
+	<delete id="deleteSx">
+		update tb_sx set sx_status_id=8 where sx_id=#{sx_id}
+	</delete>
+
+	<!-- 更改事项 -->
+	<update id="updateSx">
+		update tb_sx set 
+			sx_name= #{sx_name},sx_type_id= #{sx_type.sx_type_id},sx_status_id=#{sx_status.sx_status_id},sx_time=#{sx_time},
+			sx_founder_id=#{founder.user_id},sx_content=#{sx_content},sx_remark=#{sx_remark},sx_urgency_id=#{urgency.urgency_id},
+			county_id=#{county.county_id},industry_id=#{industry.industry_id},sx_end_time=#{sx_end_time},office_id=#{office.office_id}
+		where sx_id= #{sx_id}
+	</update>
+	<!-- 更改事项状态 -->
+	<update id="updateSxStatus">
+		update tb_sx set sx_status_id=#{sx_status_id} where sx_id= #{sx_id}
+	</update>
+	<!-- 更改紧急程度 -->
+	<update id="updateSxUrgency">
+		update tb_sx set sx_urgency_id=#{urgency_id} where sx_id= #{sx_id}
+	</update>
+	
+	<!-- 条件查某局领导审批的事项 -->
+	<select id="selectApprovedSxByLeader_id" resultMap="SxMapper">
+		select * from tb_sx where 
+		sx_status_id != 1 and sx_status_id != 8
+		and sx_founder_id in (select user_id from tb_user where office_id in (
+		select office_id from tb_office where office_leader_id = #{leader_id}
+		))
+		<include refid="sqlcondition_simple"/>
+	</select>
+	
+	<!-- 条件查某局领导待审批的事项 -->
+	<select id="selectUnapprovedSxByLeader_id" resultMap="SxMapper">
+		select * from tb_sx where
+		sx_status_id = 1 
+		and sx_founder_id in (
+		select user_id from tb_user where office_id in (
+		select office_id from tb_office where office_leader_id = #{leader_id}
+		))
+		<include refid="sqlcondition_simple"/>
+	</select>
+	
+	<!-- 查某局员工创造的事项 -->
+	<select id="selectSxByFounder_id" resultMap="SxMapper">
+		select * from tb_sx where sx_status_id != 8 
+		and sx_founder_id = #{founder_id}
+		<include refid="sqlcondition_simple"/>
+		
+
+	</select>
+	
+	<!-- 某单位领导已接受的事项 -->
+	<select id="selectAcceptedSxByLeader_id" resultMap="SxMapper">
+		select * from tb_sx where sx_status_id not in (8,9,1,2,3)
+		and office_id in (select office_id from tb_user where user_id = #{leader_id})
+		<include refid="sqlcondition_simple"/>
+	</select>
+	
+	<!-- 某单位领导还未接受的事项 -->
+	<select id="selectUnacceptedSxByLeader_id" resultMap="SxMapper">
+		select * from tb_sx where sx_status_id = 9
+		and office_id in (select office_id from tb_user where user_id = #{leader_id})
+		<include refid="sqlcondition_simple"/>
+	</select>
+	
+	<!-- 查某单位员工相关的事项（其子任务的事项） -->
+	<select id="selectSxByWorker_id" resultMap="SxMapper">
+		select * from tb_sx where sx_status_id != 8
+		and sx_id in (
+		select sx_id from tb_sx_task where sx_task_worker_id = #{worker_id})
+		<include refid="sqlcondition_simple"/>
+	</select>
+	
+	<!-- 分页条件查询“事项”1.查询 2.装配 3.SQL条件-->
+	<select id="selectSxByConditionPage" resultMap="SxMapper">
+		select * from tb_sx where 
+		sx_status_id != 8
+		<include refid="sqlcondition"/>
+	</select>
+	
+	<!-- 2. 装配事项 -->
+	<resultMap type="Sx" id="SxMapper">
+		<id column="sx_id" property="sx_id"/>
+		<result column="sx_name" property="sx_name"/>
+		<result column="sx_time" property="sx_time"/>
+		<result column="sx_content" property="sx_content"/>
+		<result column="sx_remark" property="sx_remark"/>
+		<result column="sx_end_time" property="sx_end_time"/>
+		<association property="sx_type" javaType="Sx_type" select="selectSx_typeBySx_type_id" column="sx_type_id"/>
+		<association property="sx_status" javaType="Sx_status" select="selectSx_statusBySx_status_id" column="sx_status_id"/>
+		<association property="founder" javaType="User" select="selectUserByUser_id" column="sx_founder_id"/>
+		<association property="urgency" javaType="Urgency" select="selectUrgencyByUrgency_id" column="sx_urgency_id"/>
+		<association property="area" javaType="Area" select="selectAreaByArea_id" column="area_id"/>
+		<association property="county" javaType="County" select="selectCountyByCounty_id" column="county_id"/>
+		<association property="industry" javaType="Industry" select="selectIndustryByIndustry_id" column="industry_id"/>
+		<association property="office" javaType="Office" select="selectOfficeByOffice_id" column="office_id"/>
+	</resultMap>
+	<select id="selectSx_typeBySx_type_id" resultType="Sx_type">
+		select * from tb_sx_type where sx_type_id=#{sx_type_id}
+	</select>
+	<select id="selectSx_statusBySx_status_id" resultType="Sx_status">
+		select * from tb_sx_status where sx_status_id=#{sx_status_id}
+	</select>
+	<select id="selectUserByUser_id" resultMap="UserMapper">
+		select * from tb_user where user_id=#{sx_founder_id}
+	</select>
+		<resultMap type="User" id="UserMapper">
+			<id column="user_id" property="user_id"/>
+			<result column="user_name" property="user_name"/>
+			<result column="user_pass" property="user_pass"/>
+			<result column="user_loginname" property="user_loginname"/>
+			<result column="user_phone" property="user_phone"/>
+			<!-- user_status先不管 -->
+			<association property="area" javaType="Area" select="selectAreaByArea_id" column="area_id"/>
+			<association property="office" javaType="Office" select="selectOfficeByOffice_id" column="office_id"/>
+		</resultMap>
+	<select id="selectUrgencyByUrgency_id" resultType="Urgency">
+		select * from tb_urgency where urgency_id=#{sx_urgency_id}
+	</select>
+	<select id="selectAreaByArea_id" resultType="Area">
+		select * from tb_area where area_id=#{area_id}
+	</select>
+	<select id="selectCountyByCounty_id" resultMap="CountyMapper">
+		select * from tb_county where county_id=#{county_id}
+	</select>
+		<resultMap type="County" id="CountyMapper">
+			<id column="county_id" property="county_id"/>
+			<result column="county_name" property="county_name"/>
+			<association property="area" javaType="Area" select="selectAreaByArea_id" column="area_id"/>
+		</resultMap>
+	<select id="selectIndustryByIndustry_id" resultType="Industry">
+		select * from tb_industry where industry_id=#{industry_id}
+	</select>
+	<select id="selectOfficeByOffice_id" resultMap="OfficeMapper">
+		select * from tb_office where office_id=#{office_id}
+	</select>
+		<resultMap type="Office" id="OfficeMapper">
+			<id column="office_id" property="office_id"/>
+			<result column="office_name" property="office_name"/>
+			<association property="office_leader" javaType="User" select="selectUserByUser_id_simple" column="office_leader_id"/>
+		</resultMap>
+		<select id="selectUserByUser_id_simple" resultType="User">
+			select * from tb_user where user_id=#{office_leader_id}
+		</select>
+	<!-- 3. SQL条件 -->
+	<sql id="sqlcondition">
+			<if test="sx_id != null and sx_id !=''">
+				and sx_id = #{sx_id}
+			</if>
+			<if test="sx_name != null and sx_name !=''">
+				and sx_name like '%' #{sx_name} '%'
+			</if>
+			<if test="sx_type != null and sx_type.sx_type_id != null and sx_type.sx_type_id != ''">
+				and sx_type_id = #{sx_type.sx_type_id}
+			</if>
+			<if test="sx_status != null and sx_status.sx_status_id != null">
+				and sx_status_id = #{sx_status.sx_status_id}
+			</if>
+			<!-- 时间区间查询:就用前端的事项开始和结束时间来当做：事项开始时间的查询区间-->
+			<if test="sx_time != null">
+				and sx_time &gt;= #{sx_time}
+			</if> 
+			<if test="sx_end_time != null">
+				and sx_time &lt;= #{sx_end_time}
+			</if>
+			<if test="urgency != null and urgency.urgency_id != null">
+				and sx_urgency_id = #{urgency.urgency_id}
+			</if>
+			<if test="area != null and area.area_id != null">
+				and area_id = #{area.area_id}
+			</if>
+			<if test="county != null and county.county_id != null">
+				and county_id = #{county.county_id}
+			</if>
+			<if test="industry != null and industry.industry_id != null">
+				and industry_id = #{industry.industry_id}
+			</if>
+			<if test="office != null and office.office_id != null">
+				and office_id = #{office.office_id}
+			</if>
+	</sql> 
+	
+	<sql id="sqlcondition_simple">
+			<if test="sx != null and sx.sx_name != null and sx.sx_name !=''">
+				and sx_name like '%' #{sx.sx_name} '%'
+			</if>
+			<if test="sx != null and sx.sx_status != null and sx.sx_status.sx_status_id != null and sx.sx_status.sx_status_id != ''">
+				and sx_status_id = #{sx.sx_status.sx_status_id}
+			</if>
+			<if test="sx != null and sx.office != null and sx.office.office_id != null and sx.office.office_id != ''">
+				and office_id = #{sx.office.office_id}
+			</if>
+	</sql> 
+>>>>>>> branch 'master' of https://github.com/evenliew/team2project.git
 	
 </mapper>

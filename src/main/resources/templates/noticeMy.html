@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+<style type="text/css">
+	table td{text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+</style>
+<title>我的个人通告</title>
+</head>
+<body>
+	<div class="container" style="width: 100%;padding: 25px 15px;">
+		<div class="row clearfix">
+			<div class="col-md-12 column" style="padding: 20px;padding-top: 0px;">
+				<ul id="noticeTab" class="nav nav-tabs">
+						<li class="active"><a href="#publishNotice" data-toggle="tab">发布的个人通告</a></li>
+						<li><a href="#receivePublish" data-toggle="tab">接收的个人通报</a></li>
+				</ul>
+				<!-- 发布的个人通报 -->
+				<div id="noticeTabContent" class="tab-content">
+						<div class="tab-pane fade in active" id="publishNotice">
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<thead>
+									<tr>
+										<th>序号</th>
+										<th>标题</th>
+										<th>内容</th>
+										<th>状态</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+								<tbody id="publishTable">
+									<tr th:each="notice:${userFb}">
+										<!-- 这个方法用来自增长，会1，2，3...的涨下去 -->
+										<td th:text="${noticeStat.index+1}"></td>
+										<td th:text="${notice.user_nt_title}"></td>
+										<td th:text="${notice.user_nt_content}"></td>
+										<td th:text="${notice.user_nt_mb.notice_mb_content}"></td>
+									</tr>
+									
+								</tbody>
+							</table>
+							<div id="publishPage"></div>
+						</div>
+						<!-- 接收到的个人通报 -->
+						<div class="tab-pane fade" id="receivePublish">
+							<table class="table table-bordered" style="margin-top: 20px;">
+								<thead>
+									<tr>
+										<th>序号</th>
+										<th>标题</th>
+										<th>内容</th>
+										<th>发布人</th>
+									</tr>
+								</thead>
+								<tbody id="receiveTable">
+									<tr th:each="notice:${userRe}">
+										<td th:text="${noticeStat.index+1}"></td>
+										<td th:text="${notice.user_nt_title}"></td>
+										<td th:text="${notice.user_nt_content}"></td>
+										<td th:text="${notice.user_nt_founder.user_name}"></td>
+									</tr>
+								</tbody>
+							</table>
+							<div id="receivePage"></div>
+						</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/notice.js"></script>
+</html>

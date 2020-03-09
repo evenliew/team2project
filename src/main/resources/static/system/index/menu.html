@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>菜单</title>
+<link rel="stylesheet" href="../../../bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="../../../css/menu.css" />
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="../js/attendance.js"></script>
+<script type="text/javascript" src="../../../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../../../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../js/menu.js"></script>
+
+</head>
+<script type="text/javascript" src="../../js/jquery-2.2.3.js"></script>
+<script type="text/javascript">
+
+$(function(){
+
+	sessionStorage.setItem('user','2');
+	isLeader();
+	
+	//去controller判断角色，决定要去的超链接
+	$.post(
+			"/manageProject",
+			null,
+			function(path){
+				//alert(path);
+				$('#sxManagement').attr('href',path);
+	});
+	
+	
+})
+
+function isLeader(){
+		var user=sessionStorage.getItem('user');
+		if(user==1){//隐藏本单位子任务  和  所有子任务   (单位员工登录)
+			document.getElementById("mytask").style.display="none";
+			document.getElementById("alltask").style.display="none";
+		}
+		if(user==2){//隐藏我的子任务  和  所有子任务   (单位领导登录)
+			document.getElementById("mytask").style.display="none";
+			document.getElementById("alltask").style.display="none";
+		}
+		if(user==3){//隐藏我的子任务  和  本单位子任务   (局员工或领导登录)
+			document.getElementById("mytask").style.display="none";
+			document.getElementById("officetask").style.display="none";
+		}
+}
+
+
+</script>
+<body>
+	<div class="container-fluid" style="padding: 0;">
+		<div class="row-fluid">
+			<div class="col-md-12" style="padding: 0;">
+				<ul id="main-nav" class="nav nav-tabs nav-stacked">
+					<li>
+						<a href="/#systemSetting0" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+							<i class="glyphicon glyphicon-sort-by-attributes"></i>
+							<span style="display: inline-block;margin-left: 20px;">督查事项</span>
+							<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul id="systemSetting0" class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li>
+								<a href="#systemSetting10" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+									<i class="glyphicon glyphicon-sort-by-attributes"></i>
+									<span style="display: inline-block;margin-left: 20px;">督办项目</span>
+									<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+								</a>
+								<ul id="systemSetting10" class="nav nav-list collapse secondmenu" style="height: 0px;">
+									<li>
+										<a href="../projectlist.html?sx_type_id=1" onclick="menuCss(this)" target="content" style="padding-left:25px;">自治区督办项目</a>
+									</li>
+									<li>
+										<a href="../projectlist.html?sx_type_id=2" onclick="menuCss(this)" target="content" style="padding-left:25px;">市委政府督办项目</a>
+									</li>
+									<li>
+										<a href="../projectlist.html?sx_type_id=3" onclick="menuCss(this)" target="content" style="padding-left:25px;">重点项目</a>
+									</li>
+									<li>
+										<a href="../projectlist.html?sx_type_id=4" onclick="menuCss(this)" target="content" style="padding-left:25px;">一般项目</a>
+									</li>
+									<li>
+										<a href="../projectlist.html?sx_type_id=5" onclick="menuCss(this)" target="content" style="padding-left:25px;">一带一路项目</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<a id="sxManagement" href="#" onclick="menuCss(this)" target="content" style="padding-left:25px;">项目管理</a>
+							</li>
+							<li>
+								<a href="#systemSetting11" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+									<i class="glyphicon glyphicon-sort-by-attributes"></i>
+									<span style="display: inline-block;margin-left: 20px;">子任务</span>
+									<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+								</a>
+								<ul id="systemSetting11" class="nav nav-list collapse secondmenu" style="height: 0px;">
+									<li>
+										<a id="mytask" href="/tomytask" onclick="menuCss(this)" target="content" style="padding-left:25px;">我的子任务</a>
+									</li>
+									<li>
+										<a id="officetask" href="/officetask" onclick="menuCss(this)" target="content" style="padding-left:25px;">本单位的子任务</a>
+									</li>
+									<li>
+										<a id="alltask" href="/alltask" onclick="menuCss(this)" target="content" style="padding-left:25px;">所有子任务子任务</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#systemSetting1" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+							<i class="glyphicon glyphicon-plane"></i>
+							<span style="display: inline-block;margin-left: 20px;">督查通报</span>
+							<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul id="systemSetting1" class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li>
+								<a href="/getall/tb" onclick="menuCss(this)" target="content" style="padding-left:25px;">查看所有通报</a>
+								<a href="/getall/notice" onclick="menuCss(this)" target="content" style="padding-left:25px;">查看所有个人通告</a>
+								<a href="/my/notice" onclick="menuCss(this)" target="content" style="padding-left:25px;">我的消息</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#systemSetting2" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+							<i class="glyphicon glyphicon-cutlery"></i>
+							<span style="display: inline-block;margin-left: 20px;">督查通知</span>
+							<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul id="systemSetting2" class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li>
+								<a href="/zball" onclick="menuCss(this)" target="content" style="padding-left:25px;">专报管理</a>
+							</li>
+							
+							<li>
+								<a href="/noticeall" onclick="menuCss(this)" target="content" style="padding-left:25px;">公告管理</a>
+							</li>
+							
+						</ul>
+					</li>
+					<li>
+						<a href="#systemSetting3" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+							<i class="glyphicon glyphicon-yen"></i>
+							<span style="display: inline-block;margin-left: 20px;">工作计划</span>
+							<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul id="systemSetting3" class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li>
+								<a href="../apply.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">报销管理</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#systemSetting4" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+							<i class="glyphicon glyphicon-time"></i>
+							<span style="display: inline-block;margin-left: 20px;">系统消息</span>
+							<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul id="systemSetting4" class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li>
+								<a href="../work.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">工作计划</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#systemSetting5" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+							<i class="glyphicon glyphicon-calendar"></i>
+							<span style="display: inline-block;margin-left: 20px;">文件和管理</span>
+							<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul id="systemSetting5" class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li>
+								<a href="../schedule.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">日程安排</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#systemSetting6" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+							<i class="glyphicon glyphicon-briefcase"></i>
+							<span style="display: inline-block;margin-left: 20px;">统计查询</span>
+							<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul id="systemSetting6" class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li>
+								<a href="../officeApply.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">申领管理</a>
+							</li>
+							<li>
+								<a href="../officeSubscribe.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">申购管理</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#systemSetting7" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+							<i class="glyphicon glyphicon-envelope"></i>
+							<span style="display: inline-block;margin-left: 20px;">人员权限</span>
+							<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul id="systemSetting7" class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li>
+								<a href="../noticeAdd.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">发布公告</a>
+							</li>
+							<li>
+								<a href="../noticeExamin.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">公告审批</a>
+							</li>
+							<li>
+								<a href="../noticeMy.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">我的公告</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#systemSetting8" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+							<i class="glyphicon glyphicon-book"></i>
+							<span style="display: inline-block;margin-left: 20px;">系统设置</span>
+							<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul id="systemSetting8" class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li>
+								<a href="../addressList.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">通讯录</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a href="#systemSetting9" onclick="menuCss(this)" class="nav-header collapsed" data-toggle="collapse">
+							<i class="glyphicon glyphicon-cog"></i>
+							<span style="display: inline-block;margin-left: 20px;">数据库</span>
+							<span class="pull-right glyphicon glyphicon-chevron-down"></span>
+						</a>
+						<ul id="systemSetting9" class="nav nav-list collapse secondmenu" style="height: 0px;">
+							<li>
+								<a href="../userList.html" onclick="menuCss(this)" target="content" style="padding-left:25px;">用户管理</a>
+							</li>
+							<li>
+								<a href="../../img/workflow.png" onclick="menuCss(this)" target="content" style="padding-left:25px;">工作流程</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.SxDataMapper">
+	<!-- 查事项类型 -->
+	<select id="selectSx_type" resultType="Sx_type">
+		select * from tb_sx_type 
+	</select>
+	<!-- 查区 -->
+	<select id="selectArea" resultType="Area">
+		select * from tb_area
+	</select>
+	<!-- 查县 -->
+	<select id="selectCountyByArea_id" resultType="County">
+		select * from tb_county where area_id=#{area_id}
+	</select>
+	<!-- 查行业 -->
+	<select id="selectIndustry" resultType="Industry">
+		select * from tb_industry
+	</select>
+	<!-- 查单位 -->
+	<select id="selectOffice" resultType="Office">
+		select * from tb_office
+	</select>
+	<!-- 查紧急程度 -->
+	<select id="selectUrgency" resultType="Urgency">
+		select * from tb_urgency
+	</select> 
+	<!-- 查进度 -->
+	<select id="selectSx_status" resultType="Sx_status">
+		select * from tb_sx_status
+	</select>
+
+	<!-- 查领导(根据单位id) -->
+	<select id="selectLeaderByOffice_id" resultType="User">
+		select * from tb_user where user_id=(select office_leader_id from tb_office where office_id=#{office_id})
+	</select>
+
+</mapper>

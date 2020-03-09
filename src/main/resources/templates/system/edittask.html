@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>本单位所有子任务</title>
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../js/attendance.js"></script>
+<script type="text/javascript" src="../../js/jquery-2.2.3.js"></script>
+<style>
+	#edittextarea{
+		resize: none;
+		width: 600px;
+	}
+	#worker{
+		width: 200px;
+	}
+	#taskname{
+		width: 200px;
+	}
+</style>
+</head>
+<script type="text/javascript">
+	$(function(){
+		var user=sessionStorage.setItem('user','2');
+		//var office_id=user.office_id;
+		var office_id=1;
+		$.post(
+				"/allUserByOffice_id",
+				{office_id:office_id},
+				function(data){
+					$.each(data,function(){
+						var html = "<option value='" + this.user_id + "'>" + this.user_name + "</option>";
+						$(html).appendTo($("#worker"));
+					})
+		});
+	});
+</script>
+<body>
+	<form action="/changetask" method="post">
+			<input type="hidden" name="sx_task_id" th:value="${task.sx_task_id}">
+			子任务名称:<br/>
+			<fieldset disabled>
+				<input id="taskname" name="sx_task_name" class="form-control" type="text" th:value="${task.sx_task_name}">
+			</fieldset>
+			<p></p>
+			子任务内容:<br/>
+			<div class="form-group">
+			     <textarea name="sx_task_content" id="edittextarea" class="form-control" rows="3" th:text="${task.sx_task_content}"></textarea>
+			</div>
+			<p></p>
+			指派人：<br/>
+			<select id="worker" name="sx_task_worker_id" class="form-control">
+				<option th:value="${task.worker.user_id}">[[${task.worker.user_name}]]</option>
+			</select>	
+			<button type="submit" class='btn btn-primary btn-sm'>提交</button>
+		</form>
+</body>
+</html>
