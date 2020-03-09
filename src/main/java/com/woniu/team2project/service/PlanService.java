@@ -14,4 +14,5 @@ public interface PlanService {
 	PageBean<Plan> pagebeanList(Plan plan,Integer pageIndex,Integer pageSize);
 	void removePlanByid(String[] plan_id);
 	List<Plan> getAllPlanByoffice(Integer office_id);
+	void planAdd(Plan plan);
 }

@@ -24,6 +24,7 @@ import com.woniu.team2project.entity.Area;
 import com.woniu.team2project.entity.Office;
 import com.woniu.team2project.entity.PageBean;
 import com.woniu.team2project.entity.Plan;
+import com.woniu.team2project.entity.Sx;
 import com.woniu.team2project.entity.User;
 import com.woniu.team2project.entity.User_status;
 import com.woniu.team2project.service.LoginAndRegisteredService;
@@ -64,13 +65,26 @@ public class PlanDelAndAddAndUpdaColltrollet {
 
 	@RequestMapping("/planadds")
 	public String addPlan(Model model, Plan plan,
-			String plan_founder_id,String plan_sx_id,HttpServletRequest req) {
+			HttpServletRequest req) {
 		HttpSession session = req.getSession();
-		System.out.println(session.getAttribute("loginname"));
-		System.out.println(session.getAttribute("username"));
-		
-		System.out.println(plan);
-		return "login";
+		String office_id = req.getParameter("pb.plan_office_id");
+		String founder = req.getParameter("pb.plan_founder_id");
+		String sx = req.getParameter("pb.plan_sx_id");
+		User user=new User();
+		user.setUser_id(founder);
+		plan.setPlan_founder_id(user);
+		Sx sx2=new Sx();
+		sx2.setSx_id(sx);
+		plan.setPlan_sx_id(sx2);
+		Office office=new Office();
+		office.setOffice_id(Integer.parseInt(office_id));
+		plan.setPlan_office_id(office);
+		planService.planAdd(plan);
+		Integer pageSize=3;
+		Integer pageIndex=1;
+		PageBean<Plan> pb = planService.pagebeanList(plan, pageIndex, pageSize);
+		model.addAttribute("pb", pb);
+		return "index";
 	}
 
 }

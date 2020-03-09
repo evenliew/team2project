@@ -54,4 +54,10 @@ public class PlanServiceImpl implements PlanService{
 		
 		return planMapper.selectAllPlanByoffice(office_id);
 	}
+
+	@Override
+	public void planAdd(Plan plan) {
+
+		planMapper.insertIntoPlan(plan);
+	}
 }

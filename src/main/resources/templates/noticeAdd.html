@@ -44,7 +44,7 @@
 						</label>
 						<div class="col-sm-10">
 							<select name="pb.plan_founder_id" class="form-control">
-								<option th:each="pb:${pb.beanList}" th:value="${pb.plan_founder_id}">
+								<option th:each="pb:${pb.beanList}" th:value="${pb.plan_founder_id.user_id}">
 									[[${pb.plan_founder_id.user_name}]]
 								<option />
 							</select>
@@ -54,7 +54,7 @@
 						<label for="inputPassword" class="col-sm-2 control-label">工作事项</label>
 						<div class="col-sm-10">
 							<select name="pb.plan_sx_id" class="form-control">
-								<option th:each="pb:${pb.beanList}" th:value="${pb.plan_sx_id}">
+								<option th:each="pb:${pb.beanList}" th:value="${pb.plan_sx_id.sx_id}">
 									[[${pb.plan_sx_id.sx_name}]]
 								<option />
 							</select>
@@ -64,9 +64,9 @@
 						<label for="disabledTextInput" class="col-sm-2 control-label">单位
 						</label>
 						<div class="col-sm-10">
-							<select name="office_id" class="form-control">
-								<option th:each="off:${offs}" th:value="${office_id}">
-									[[${off.office_name}]]
+							<select name="pb.plan_office_id" class="form-control">
+								<option th:each="pb:${pb.beanList}" th:value="${pb.plan_office_id.office_id}">
+									[[${pb.plan_office_id.office_name}]]
 								<option />
 							</select>
 						</div>

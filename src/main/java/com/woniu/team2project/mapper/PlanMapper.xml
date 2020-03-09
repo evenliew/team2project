@@ -4,6 +4,15 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.woniu.team2project.mapper.PlanMapper">
 
+	<insert id="insertIntoPlan">
+		insert into tb_plan 
+		(plan_time,plan_content,plan_founder_id,plan_type_id,plan_start_time,plan_end_time,
+			module_id,plan_sx_id,plan_office_id) 
+  			values
+		(#{plan_time},#{plan_content},#{plan_founder_id.user_id},
+		#{plan_type_id.sx_type_id},#{plan_start_time},#{plan_end_time},#{module_id.module_id},
+		#{plan_sx_id.sx_id},#{plan_office_id.office_id});
+	</insert>
 	
 	 <select id="selectAllPlanByoffice" resultMap="planMapper">
  		 select  * from tb_plan where plan_office_id=#{plan_office_id}

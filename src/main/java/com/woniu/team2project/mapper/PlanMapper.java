@@ -20,6 +20,8 @@ public interface PlanMapper {
 
 	void delectPlanByid(String string);
 	
-	List<Plan> selectAllPlanByoffice(Integer office_id); 
+	List<Plan> selectAllPlanByoffice(Integer office_id);
+
+	void insertIntoPlan(Plan plan); 
 	
 }

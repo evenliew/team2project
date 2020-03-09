@@ -141,7 +141,10 @@ public class Team2projectApplicationTests {
 		System.out.println(userMapper.SelectPassWordByAccount("bbbb"));
 	}
 	@Test
-	public void selectAllPlanByoffice() {
+	public void insertIntoPlan() {
+		planMapper.insertIntoPlan(new Plan());
 	}
+	
+	
 	
 }
