@@ -16,13 +16,17 @@ import com.woniu.team2project.entity.Area;
 import com.woniu.team2project.entity.County;
 import com.woniu.team2project.entity.Industry;
 import com.woniu.team2project.entity.Office;
+import com.woniu.team2project.entity.ResponseInfo;
 import com.woniu.team2project.entity.Sx;
 import com.woniu.team2project.entity.Sx_status;
 import com.woniu.team2project.entity.Sx_type;
 import com.woniu.team2project.entity.Urgency;
 import com.woniu.team2project.entity.User;
+import com.woniu.team2project.entity.User_role;
+import com.woniu.team2project.exception.SxException;
 import com.woniu.team2project.service.SxDataService;
 import com.woniu.team2project.service.SxService;
+import com.woniu.team2project.service.UserService;
 
 @Controller
 public class SxController {
@@ -33,179 +37,221 @@ public class SxController {
 	@Autowired
 	SxDataService sxDataService;
 	
-	//根据角色取去不同页面
+	@Autowired
+	UserService userService;
+	
+	//根据角色去不同页面
 	@RequestMapping("/manageProject")
 	@ResponseBody
 	public String goProjectManagement(HttpSession session) {
-		//模拟一个sessionUser
-		User sessionUser = new User();
-		sessionUser.setUser_id("123");
-		session.setAttribute("sessionUser", sessionUser);
-		//判断User的角色
-	
 		
-		//跳转不同静态页面
-		//return "../sxBureauLeader.html"; //局里的老板 1000
-		//return "../sxBureauStaff.html"; //局里的员工 121
-		return "../sxOfficeLeader.html"; //单位的老板 2000
-		//return "../sxOfficeStaff.html"; //单位的员工 00001
+		User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+		System.out.println(user_in_session);
+		//拿User角色
+		User_role user_role = userService.getUser_roleByUser_id(user_in_session.getUser_id());
+		//判断角色,写入不同的页面链接
+		if(user_role.getRole_id()==1) {
+			return "../sxBureauLeader.html"; //局里的老板 1000
+		}else if(user_role.getRole_id()==2) {
+			return "../sxBureauStaff.html"; //局里的员工 121
+		}else if(user_role.getRole_id()==3){
+			return "../sxOfficeLeader.html"; //单位的老板 2000
+		}else {
+			return "../sxOfficeStaff.html"; //单位的员工 00001
+		}
 	}
 
 	//分页条件查询事项
 	@RequestMapping("/sxbyconditionpage*")
 	@ResponseBody
-	public PageInfo<Sx> getSxByConditionPage(Sx sx, Integer sx_type_id, Integer pageIndex) {
-		//左侧导航栏若传了事项类型，把事项类型赋给传过来的事项,判断非空
-		if(sx_type_id != null) {
-			Sx_type sx_type = new Sx_type(); 
-			sx_type.setSx_type_id(sx_type_id);
-			sx.setSx_type(sx_type);
+	public ResponseInfo getSxByConditionPage(Sx sx, Integer sx_type_id, Integer pageIndex) {
+		PageInfo<Sx> sxsPage;
+		try {
+			//左侧导航栏若传了事项类型，把事项类型赋给传过来的事项,判断非空
+			if(sx_type_id != null) {
+				Sx_type sx_type = new Sx_type(); 
+				sx_type.setSx_type_id(sx_type_id);
+				sx.setSx_type(sx_type);
+			}
+			System.out.println("页码"+pageIndex);
+			//判断页码
+			if(pageIndex == null || pageIndex < 1) {
+				pageIndex = 1;
+			}
+			PageHelper.startPage(pageIndex, 2);
+			List<Sx> sxs = sxService.getSxByConditionPage(sx);
+			sxsPage = new PageInfo<>(sxs);
+			for(Sx mysx: sxsPage.getList()) {
+				System.out.println(mysx);
+			}
+			//成功打回200和数据
+			return new ResponseInfo(200, sxsPage);
+		} catch (SxException e) {
+			//不成功打回500和错误信息
+			return new ResponseInfo(500,e.getMessage().toString());
 		}
-		System.out.println("页码"+pageIndex);
-		//判断页码
-		if(pageIndex == null || pageIndex < 1) {
-			pageIndex = 1;
-		}
-		PageHelper.startPage(pageIndex, 2);
-		List<Sx> sxs = sxService.getSxByConditionPage(sx);
-		PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
-		for(Sx mysx: sxsPage.getList()) {
-			System.out.println(mysx);
-		}
-		return sxsPage;
 	}
 		
 	//分页查局领导审批了的事项
 	@RequestMapping("/leaderapprovedsx*")
 	@ResponseBody
-	public PageInfo<Sx> getApprovedSxByLeader(Sx sx, Integer pageIndex, HttpSession session) {
-		System.out.println("filter传过来的事项："+sx);
-		//判断页码,若为空默认为1，调pagehelper
-		if(pageIndex == null || pageIndex < 1) {
-			pageIndex = 1;
+	public ResponseInfo getApprovedSxByLeader(Sx sx, Integer pageIndex, HttpSession session) {
+		try {
+			System.out.println("filter传过来的事项："+sx);
+			//判断页码,若为空默认为1，调pagehelper
+			if(pageIndex == null || pageIndex < 1) {
+				pageIndex = 1;
+			}
+			PageHelper.startPage(pageIndex, 2);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getApprovedSxByLeader_id(user_in_session.getUser_id(), sx);
+			//把事项装配成pageInfo
+			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
+			for(Sx mysx: sxsPage.getList()) {
+				System.out.println(mysx);
+			}
+			//成功打回200和数据
+			return new ResponseInfo(200, sxsPage);
+		} catch (SxException e) {
+			//不成功打回500和错误信息
+			return new ResponseInfo(500, e.getMessage().toString());
 		}
-		PageHelper.startPage(pageIndex, 2);
-		//从Session里面拿出sessionUser的ID，查出他审批了的事项
-		User sessionUser = (User) session.getAttribute("sessionUser");
-		List<Sx> sxs = sxService.getApprovedSxByLeader_id(sessionUser.getUser_id(), sx);
-		//把事项装配成pageInfo
-		PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
-		for(Sx mysx: sxsPage.getList()) {
-			System.out.println(mysx);
-		}
-		//返回事项json对象
-		return sxsPage;
 	}	
 
 	//分页查局领导未审批的事项
 	@RequestMapping("/leaderunapprovedsx*")
 	@ResponseBody
-	public PageInfo<Sx> getUnapprovedSxByLeader(Sx sx, Integer pageIndex, HttpSession session) {
+	public ResponseInfo getUnapprovedSxByLeader(Sx sx, Integer pageIndex, HttpSession session) {
 		
-		//判断页码,若为空默认为1，调pagehelper
-		if(pageIndex == null || pageIndex < 1) {
-			pageIndex = 1;
+		try {
+			//判断页码,若为空默认为1，调pagehelper
+			if(pageIndex == null || pageIndex < 1) {
+				pageIndex = 1;
+			}
+			PageHelper.startPage(pageIndex, 2);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getUnapprovedSxByLeader_id(user_in_session.getUser_id(), sx);
+			//把事项装配成pageInfo
+			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
+			for(Sx mysx: sxsPage.getList()) {
+				System.out.println(mysx);
+			}
+			//成功打回200和数据
+			return new ResponseInfo(200, sxsPage);
+		} catch (SxException e) {
+			//不成功打回500和错误信息
+			return new ResponseInfo(500, e.getMessage().toString());
 		}
-		PageHelper.startPage(pageIndex, 2);
-		//从Session里面拿出sessionUser的ID，查出他审批了的事项
-		User sessionUser = (User) session.getAttribute("sessionUser");
-		List<Sx> sxs = sxService.getUnapprovedSxByLeader_id(sessionUser.getUser_id(), sx);
-		//把事项装配成pageInfo
-		PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
-		for(Sx mysx: sxsPage.getList()) {
-			System.out.println(mysx);
-		}
-		//返回事项json对象
-		return sxsPage;
 	}	
 	
 	//分页某局员工创造的事项
 	@RequestMapping("/sxbyfounder*")
 	@ResponseBody
-	public PageInfo<Sx> getSxByFounder(Sx sx, Integer pageIndex, HttpSession session) {
+	public ResponseInfo getSxByFounder(Sx sx, Integer pageIndex, HttpSession session) {
 			
-		//判断页码,若为空默认为1，调pagehelper
-		if(pageIndex == null || pageIndex < 1) {
-			pageIndex = 1;
+		try {
+			//判断页码,若为空默认为1，调pagehelper
+			if(pageIndex == null || pageIndex < 1) {
+				pageIndex = 1;
+			}
+			System.out.println(sx);
+			PageHelper.startPage(pageIndex, 2);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getSxByFounder_id(user_in_session.getUser_id(), sx);
+			//把事项装配成pageInfo
+			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
+			for(Sx mysx: sxsPage.getList()) {
+				System.out.println(mysx);
+			}
+			//成功打回200和数据
+			return new ResponseInfo(200, sxsPage);
+		} catch (SxException e) {
+			//不成功打回500和错误信息
+			return new ResponseInfo(500, e.getMessage().toString());
 		}
-		System.out.println(sx);
-		PageHelper.startPage(pageIndex, 2);
-		//从Session里面拿出sessionUser的ID，查出他审批了的事项
-		User sessionUser = (User) session.getAttribute("sessionUser");
-		List<Sx> sxs = sxService.getSxByFounder_id(sessionUser.getUser_id(), sx);
-		//把事项装配成pageInfo
-		PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
-		for(Sx mysx: sxsPage.getList()) {
-			System.out.println(mysx);
-		}
-		//返回事项json对象
-		return sxsPage;
 	}	
 	
 	//分页查单位领导已接受的事项
 	@RequestMapping("/leaderacceptedsx*")
 	@ResponseBody
-	public PageInfo<Sx> getAcceptedSxByLeader(Sx sx, Integer pageIndex, HttpSession session) {
+	public ResponseInfo getAcceptedSxByLeader(Sx sx, Integer pageIndex, HttpSession session) {
 		
-		//判断页码,若为空默认为1，调pagehelper
-		if(pageIndex == null || pageIndex < 1) {
-			pageIndex = 1;
+		try {
+			//判断页码,若为空默认为1，调pagehelper
+			if(pageIndex == null || pageIndex < 1) {
+				pageIndex = 1;
+			}
+			PageHelper.startPage(pageIndex, 2);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getAcceptedSxByLeader_id(user_in_session.getUser_id(), sx);
+			//把事项装配成pageInfo
+			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
+			for(Sx mysx: sxsPage.getList()) {
+				System.out.println(mysx);
+			}
+			//成功打回200和数据
+			return new ResponseInfo(200, sxsPage);
+		} catch (SxException e) {
+			//不成功打回500和错误信息
+			return new ResponseInfo(500, e.getMessage().toString());
 		}
-		PageHelper.startPage(pageIndex, 2);
-		//从Session里面拿出sessionUser的ID，查出他审批了的事项
-		User sessionUser = (User) session.getAttribute("sessionUser");
-		List<Sx> sxs = sxService.getAcceptedSxByLeader_id(sessionUser.getUser_id(), sx);
-		//把事项装配成pageInfo
-		PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
-		for(Sx mysx: sxsPage.getList()) {
-			System.out.println(mysx);
-		}
-		//返回事项json对象
-		return sxsPage;
 	}	
 	
 	//分页查单位领导还未接收的事项
 	@RequestMapping("/leaderunacceptedsx*")
 	@ResponseBody
-	public PageInfo<Sx> getUnacceptedSxByLeader(Sx sx, Integer pageIndex, HttpSession session) {
+	public ResponseInfo getUnacceptedSxByLeader(Sx sx, Integer pageIndex, HttpSession session) {
 		
-		//判断页码,若为空默认为1，调pagehelper
-		if(pageIndex == null || pageIndex < 1) {
-			pageIndex = 1;
+		try {
+			//判断页码,若为空默认为1，调pagehelper
+			if(pageIndex == null || pageIndex < 1) {
+				pageIndex = 1;
+			}
+			PageHelper.startPage(pageIndex, 2);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getUnacceptedSxByLeader_id(user_in_session.getUser_id(), sx);
+			//把事项装配成pageInfo
+			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
+			for(Sx mysx: sxsPage.getList()) {
+				System.out.println(mysx);
+			}
+			//成功打回200和数据
+			return new ResponseInfo(200, sxsPage);
+		} catch (SxException e) {
+			//不成功打回500和错误信息
+			return new ResponseInfo(500, e.getMessage().toString());
 		}
-		PageHelper.startPage(pageIndex, 2);
-		//从Session里面拿出sessionUser的ID，查出他审批了的事项
-		User sessionUser = (User) session.getAttribute("sessionUser");
-		List<Sx> sxs = sxService.getUnacceptedSxByLeader_id(sessionUser.getUser_id(), sx);
-		//把事项装配成pageInfo
-		PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
-		for(Sx mysx: sxsPage.getList()) {
-			System.out.println(mysx);
-		}
-		//返回事项json对象
-		return sxsPage;
 	}	
 	
 	//分页某单位员工相关的事项
 	@RequestMapping("/sxbyworker*")
 	@ResponseBody
-	public PageInfo<Sx> getSxByWorker(Sx sx, Integer pageIndex, HttpSession session) {
-			
-		//判断页码,若为空默认为1，调pagehelper
-		if(pageIndex == null || pageIndex < 1) {
-			pageIndex = 1;
+	public ResponseInfo getSxByWorker(Sx sx, Integer pageIndex, HttpSession session) {
+		try {
+			//判断页码,若为空默认为1，调pagehelper
+			if(pageIndex == null || pageIndex < 1) {
+				pageIndex = 1;
+			}
+			PageHelper.startPage(pageIndex, 2);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getSxByWorker_id(user_in_session.getUser_id(), sx);
+			//把事项装配成pageInfo
+			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
+			for(Sx mysx: sxsPage.getList()) {
+				System.out.println(mysx);
+			}
+			//成功打回200和数据
+			return new ResponseInfo(200, sxsPage);
+		} catch (SxException e) {
+			//不成功打回500和错误信息
+			return new ResponseInfo(500, e.getMessage().toString());
 		}
-		PageHelper.startPage(pageIndex, 2);
-		//从Session里面拿出sessionUser的ID，查出他审批了的事项
-		User sessionUser = (User) session.getAttribute("sessionUser");
-		List<Sx> sxs = sxService.getSxByWorker_id(sessionUser.getUser_id(), sx);
-		//把事项装配成pageInfo
-		PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
-		for(Sx mysx: sxsPage.getList()) {
-			System.out.println(mysx);
-		}
-		//返回事项json对象
-		return sxsPage;
 	}		
 		
 		
@@ -219,8 +265,10 @@ public class SxController {
 			for(String sx_id : sx_ids) {
 				sxService.removeSx(sx_id);
 			}
+			//成功return 1
 			return 1;
 		}else {
+			//不成功return 2
 			return 2;
 		}
 	}
@@ -350,4 +398,4 @@ public class SxController {
 		sxService.modifySxStatus(sx_id, 7);
 		return "success";
 	}
-}
+} 

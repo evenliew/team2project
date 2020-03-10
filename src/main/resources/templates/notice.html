@@ -56,14 +56,14 @@ table td {
 									<td>[[${#dates.format(notice.notice_time,"yyyy-MM-dd")} ]]</td>
 									<td th:text="${notice.notice_founder.user_name}"></td>
 									<td
-										th:if="${notice.notice_founder.user_id} eq ${session.user.user_id}">
+										th:if="${notice.notice_founder.user_id} eq ${session.USER_IN_SESSION.user_id}">
 										<a th:href="@{/noticeadd/}+${notice.notice_id}"
 										class="btn btn-primary">修改</a> <a href="#"
 										th:attr="deleteuri=@{/deletenotice/}+${notice.notice_id}"
 										class="btn btn-primary  deletebtn">删除</a>
 									</td>
 									<td
-										th:if="${notice.notice_founder.user_id} ne ${session.user.user_id}">
+										th:if="${notice.notice_founder.user_id} ne ${session.USER_IN_SESSION.user_id}">
 										不可操作</td>
 								</tr>
 							</tbody>

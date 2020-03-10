@@ -52,12 +52,8 @@ public class NoticeController {
 
 		// 装入模型
 		model.addAttribute("noticePage", noticePage);
-
-		// 模拟存入user来进行判断能否增删改查
-		User user = new User();
-		user.setUser_id("aaaa");
-		session.setAttribute("user", user);
-
+		
+		
 		// 返回页面
 		return "notice";
 
@@ -131,7 +127,7 @@ public class NoticeController {
 		}
 
 		// User应该从域中取，这里取不到 进行模拟
-		User notice_founder=(User) session.getAttribute("user");
+		User notice_founder=(User) session.getAttribute("USER_IN_SESSION");
 //		User notice_founder = new User();
 //		notice_founder.setUser_id("aaaa");
 		notice.setNotice_founder(notice_founder);

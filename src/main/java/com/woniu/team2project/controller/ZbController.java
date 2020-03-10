@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import com.github.pagehelper.PageInfo;
 import com.woniu.team2project.entity.Sx;
+import com.woniu.team2project.entity.Sx_status;
 import com.woniu.team2project.entity.User;
 import com.woniu.team2project.entity.Zb;
 import com.woniu.team2project.entity.Zb_state;
@@ -64,13 +65,16 @@ public class ZbController {
 	@GetMapping(value="/zbadd")
 	public String getUserAndSx(HttpSession session,Model model) {
 		//得到用户信息
-		User user = (User) session.getAttribute("user");
+		User user = (User) session.getAttribute("USER_IN_SESSION");
+		
+		System.out.println(user);
 		//需要得到可以传输的对象user
 		List<User> users = 
 				userService.getUsersByOffice_id(user.getOffice().getOffice_id());
 		
 		//需要得到事项sx
-		List<Sx> sxs = sxService.getSxByWorker_id(user.getUser_id(),null);
+		Sx sx=new Sx();
+		List<Sx> sxs = sxService.getSxByConditionPage(sx);
 		
 		model.addAttribute("users", users);
 		model.addAttribute("sxs", sxs);
@@ -81,7 +85,7 @@ public class ZbController {
 	@PostMapping(value="/addonezb")
 	public String addOneZb(Zb zb,HttpSession session,Model model) {
 		//这里是从域中获取到用户信息，然后赋值
-		User user = (User) session.getAttribute("user");
+		User user = (User) session.getAttribute("USER_IN_SESSION");
 		zb.setZb_founder(user);
 		
 		if(zb.getZb_content()==null ||zb.getZb_content()=="") {
@@ -100,20 +104,13 @@ public class ZbController {
 		//这里进行模拟
 		/* User user=new User();user.setUser_id("aaaa");zb.setZb_founder(user); */
 		
-		//正常使用
+		//正常使用---申报的时间
 		zb.setZb_sb_time(new Date());
 		
-		//模拟
+		//赋予默认状态： 0
 		zb.setZb_state(new Zb_state(0, null));
 		
-		//模拟
-		User zb_recender=new User();zb_recender.setUser_id("bbbb");
-		zb.setZb_recender(zb_recender);
-		
-		
-		//事项id：模拟
-		Sx zb_sx=new Sx();zb_sx.setSx_id("aaaa");
-		zb.setZb_sx(zb_sx);
+		//添加方法
 		zbService.addZb(zb);
 		return "redirect:/zbmine";
 	}
@@ -134,7 +131,7 @@ public class ZbController {
 		
 		//获取用户--暂时没有，进行模拟
 		/* User user=new User();user.setUser_id("bbbb"); */
-		User user=(User) request.getSession().getAttribute("user");
+		User user=(User) request.getSession().getAttribute("USER_IN_SESSION");
 		//条件查询
 		Zb zb1=new Zb();
 		zb1.setZb_founder(user);

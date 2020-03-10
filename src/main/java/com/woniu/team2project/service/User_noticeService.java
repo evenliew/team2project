@@ -3,6 +3,7 @@ package com.woniu.team2project.service;
 import java.util.List;
 
 import com.woniu.team2project.entity.Sx;
+import com.woniu.team2project.entity.User;
 import com.woniu.team2project.entity.User_notice;
 /**
  * 个人通告业务层：
@@ -12,6 +13,12 @@ import com.woniu.team2project.entity.User_notice;
  *
  */
 public interface User_noticeService {
+	/**
+	 * 事项立项或者事项审批通过之后发送消息
+	 * 参数待定
+	 */
+	void sendUser_notice(User sender,User receiver,Sx sx,Integer mb_id);
+	
 	/**
 	 * 事项立项或者事项审批通过之后发送消息
 	 */
@@ -52,4 +59,7 @@ public interface User_noticeService {
 	 * 根据条件查询通报
 	 */
 	List<User_notice> getUser_noticeByCondition(User_notice user_notice);
+	
+	
+
 }

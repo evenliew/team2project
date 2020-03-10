@@ -15,6 +15,7 @@ import com.woniu.team2project.entity.Sx_status;
 import com.woniu.team2project.entity.Sx_type;
 import com.woniu.team2project.entity.Urgency;
 import com.woniu.team2project.entity.User;
+import com.woniu.team2project.exception.SxDataException;
 import com.woniu.team2project.service.SxDataService;
 
 @Controller
@@ -29,7 +30,9 @@ public class SxDataController {
 	public List<Sx_type> getAllSxType() {
 		List<Sx_type> allSx_type = sxService.getAllSx_type();
 		return allSx_type;
+		
 	}
+	
 	//ajax刷 区 下拉框
 	@ResponseBody
 	@RequestMapping("/allarea")

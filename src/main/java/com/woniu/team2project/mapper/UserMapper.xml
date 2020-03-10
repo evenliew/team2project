@@ -3,61 +3,100 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.woniu.team2project.mapper.UserMapper">
+
+<!-- 	<select id="selectBm_leader_idByUserName" resultMap="userMapper">
+		select *
+		from tb_user
+		where
+		user_loginname=#{user_loginname}
+	</select>
+	<select id="SelectPassWordByAccount" resultType="String">
+		select user_pass
+		from tb_user where user_loginname=#{user_loginname}
+	</select> -->
 	
- 	<select id="selectBm_leader_idByUserName" resultMap="userMapper">
- 		 select * from tb_user  
- 			where 
- 		 user_loginname=#{user_loginname} 
-  	</select>
-  	<select id="SelectPassWordByAccount" resultType="String">
- 		 select user_pass from tb_user where user_loginname=#{user_loginname} 
-  	</select>
-  
-   <resultMap type="User" id="userMapper">
-  	<id column="user_id" property="user_id"/>
-  	<result column="user_name" property="user_name"/>
-  	<result column="user_pass" property="user_pass"/>
-  	<result column="user_loginname" property="user_loginname"/>
-  	<result column="user_phone" property="user_phone"/>
-  	<association property="user_status" javaType="User_status"
-  		 select="selectStatus" column="user_status_id"/>
-  		 
-  	<association property="area" javaType="Area"
-  		select="selectArea" column="area_id"/>
-  		
-  	<association property="office" javaType="Office" 
-  		select="selectofficeByofficeId" column="office_id" />
-  </resultMap>
-  
-   <select id="selectStatus" resultType="User_status">
-  	select * from tb_user_status where user_status_id=#{user_status_id}
-  </select>
-  <select id="selectArea" resultType="Area">
-  	select * from tb_area where area_id=#{area_id}
-  	</select>
-  <select id="selectofficeByofficeId" resultMap="officeMapper">
-  	select * from tb_office where office_id=#{office_id}
-  </select>
- 
- 	<resultMap type="Office" id="officeMapper">
- 		<id column="office_id" property="office_id"/>
-  		<result column="office_name" property="office_name"/>
-  		<result column="office_leader_id" property="office_leader_id"/>
-  		  <!-- <collection property="user" ofType="User" >
- 			<id column="user_id" property="user_id"/>
-  			<result column="user_name" property="user_name"/> 	
-  		</collection> -->
- 	</resultMap>
- 	
- 	
- 	<select id="selectleaderNameByleander_id" resultMap="userMapper">
- 		 select * from tb_user where user_id=#{user_id} 
-  	</select>
- 
- 	<!-- 查询统一部门下面的所有员工 -->
+	<!-- 找出sessionUser的角色 -->
+	<select id="selectUser_roleByUser_id" resultType="User_role">
+		select * from tb_user_role where user_id=#{user_id}
+	</select>
+	
+	<select id="selectUsernamePassword" resultMap="userMapper">
+		select * from
+		tb_user where user_loginname=#{user_loginname} and
+		user_pass=#{user_pass}
+	</select>
+
+	<resultMap type="User" id="userMapper">
+		<id column="user_id" property="user_id" />
+		<result column="user_name" property="user_name" />
+		<result column="user_pass" property="user_pass" />
+		<result column="user_loginname" property="user_loginname" />
+		<result column="user_phone" property="user_phone" />
+		<association property="user_status" javaType="User_status"
+			select="selectStatus" column="user_status_id" />
+
+		<association property="area" javaType="Area"
+			select="selectArea" column="area_id" />
+
+		<association property="office" javaType="Office"
+			select="selectOfficeByOffice_id" column="office_id" />
+	</resultMap>
+	<select id="selectOfficeByOffice_id" resultMap="OfficeMapper">
+		select * from
+		tb_office where office_id=#{office_id}
+	</select>
+	<resultMap type="Office" id="OfficeMapper">
+		<id column="office_id" property="office_id" />
+		<result column="office_name" property="office_name" />
+		<association property="office_leader" javaType="User"
+			select="selectUserByUser_id_simple" column="office_leader_id" />
+	</resultMap>
+	<select id="selectUserByUser_id_simple" resultType="User">
+		select * from tb_user where user_id=#{office_leader_id}
+	</select>
+
+	<select id="selectStatus" resultType="User_status">
+		select * from
+		tb_user_status where user_status_id=#{user_status_id}
+	</select>
+
+	<select id="selectArea" resultType="Area">
+		select * from tb_area where
+		area_id=#{area_id}
+	</select>
+	
+	 	<!-- 查询统一部门下面的所有员工 -->
  	<select id="selectUserByOffice_Id" resultMap="userMapper">
  		 select * from tb_user  
  			where  office_id=#{office_id}
  		
   	</select>
+	<!-- 主键查询Id -->
+	<select id="selectUserByUser_id" resultMap="userMapper">
+		select *
+		from tb_user where user_id=#{user_id}
+	</select>
+	<!-- 
+	
+	<select id="selectofficeByofficeId" resultMap="officeMapper">
+		select * from
+		tb_office where office_id=#{office_id}
+	</select>
+
+	<resultMap type="Office" id="officeMapper">
+		<id column="office_id" property="office_id" />
+		<result column="office_name" property="office_name" />
+		<result column="office_leader_id" property="office_leader_id" />
+		<collection property="user" ofType="User" > <id column="user_id" property="user_id"/> 
+			<result column="user_name" property="user_name"/> </collection>
+	</resultMap>
+
+
+	<select id="selectleaderNameByleander_id" resultMap="userMapper">
+		select *
+		from tb_user where user_id=#{user_id}
+	</select> -->
+
 </mapper>
+ 
+

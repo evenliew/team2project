@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class Office {
 	private Integer office_id;
 	private String office_name;
-	private User office_leader;//单位领导编号
+	private User office_leader;//单位领导
 	public Office() {
 		super();
 		// TODO Auto-generated constructor stub
