@@ -14,15 +14,15 @@ table td {
 <script type="text/javascript">
 	$(function() {
 		//点击超链接提交表单
-		$(".changebtn").click(function() {
-			$("#changenotice").attr("action", $(this).attr("puturi")).submit();
-		});
-		$(".deletebtn").click(function() {
-			$("#deletenotice").attr("action", $(this).attr("deleteuri")).submit();
-		});
+
+		$(".deletebtn").click(
+				function() {
+					if (confirm("是否确认要删除")) {
+						$("#deletenotice").attr("action",
+								$(this).attr("deleteuri")).submit();
+					}
+				});
 	});
-	
-	
 </script>
 <title>公告栏</title>
 </head>
@@ -41,11 +41,11 @@ table td {
 							<thead>
 								<tr>
 									<th>序号</th>
-									<th >标题</th>
+									<th>标题</th>
 									<th style="width: 500px;">内容</th>
-									<th >发布时间</th>
-									<th >发布者</th>
-									<th>操作/状态 </th>
+									<th>发布时间</th>
+									<th>发布者</th>
+									<th>操作/状态</th>
 								</tr>
 							</thead>
 							<tbody id="publishTable">
@@ -53,29 +53,51 @@ table td {
 									<td th:text="${noticeStat.index+1}"></td>
 									<td th:text="${notice.notice_title}"></td>
 									<td th:text="${notice.notice_content}"></td>
-									<td>[[${#dates.format(notice.notice_time,"yyyy-MM-dd")}
-										]]</td>
+									<td>[[${#dates.format(notice.notice_time,"yyyy-MM-dd")} ]]</td>
 									<td th:text="${notice.notice_founder.user_name}"></td>
-									<td th:if="${notice.notice_founder.user_id} eq ${session.user.user_id}">
-										<a th:href="@{/noticeadd/}+${notice.notice_id}"  class="btn btn-primary  ">修改</a>
-										<a href="#" th:attr="deleteuri=@{/deletenotice/}+${notice.notice_id}"  class="btn btn-primary  deletebtn">删除</a> 
+									<td
+										th:if="${notice.notice_founder.user_id} eq ${session.user.user_id}">
+										<a th:href="@{/noticeadd/}+${notice.notice_id}"
+										class="btn btn-primary">修改</a> <a href="#"
+										th:attr="deleteuri=@{/deletenotice/}+${notice.notice_id}"
+										class="btn btn-primary  deletebtn">删除</a>
 									</td>
-									<td th:if="${notice.notice_founder.user_id} ne ${session.user.user_id}">
-											不可操作
-									</td> 
+									<td
+										th:if="${notice.notice_founder.user_id} ne ${session.user.user_id}">
+										不可操作</td>
 								</tr>
 							</tbody>
 						</table>
+						<!-- 分页 -->
+						<div class="pages" style="text-align: center">
+							<ul class="pagination" style="padding: 0px; margin: 0px">
+
+								<li th:if="${noticePage.hasPreviousPage} "><a
+									th:href="@{/noticeall(pageNum=${noticePage.pageNum}-1)}"><span>&laquo;</span><span
+										class="sr-only">上一页</span></a></li>
+
+
+								<li th:each="pageNo:${noticePage.navigatepageNums}"><a
+									th:if="${pageNum eq pageNo}" th:href="#">[[${pageNo}]]</a> <a
+									th:if="${pageNum ne pageNo}"
+									th:href="@{/noticeall(pageNum=${pageNo})}">[[${pageNo}]]</a></li>
+
+
+								<li th:if="${noticePage.hasNextPage} "><a
+									th:href="@{/noticeall(pageNum=${noticePage.pageNum}+1)}"><span>&raquo;</span><span
+										class="sr-only">下一页</span></a></li>
+							</ul>
+						</div>
+						<!-- 添加按鈕 -->
 						<div style="float: left;">
-			                 <a th:href="@{/noticeadd}+'/-1'"><input type="button" class="btn btn-primary "   value="添加" /></a> 
-			                 
-			            </div>
-						<form id="changenotice" method="post">
-							<input type="hidden" name="_method" value="put" />
-						</form> 
+							<a th:href="@{/noticeadd}+'/-1'"><input type="button"
+								class="btn btn-primary " value="添加" /></a>
+
+						</div>
+
 						<form id="deletenotice" method="post">
 							<input type="hidden" name="_method" value="delete" />
-						</form> 
+						</form>
 					</div>
 				</div>
 			</div>
