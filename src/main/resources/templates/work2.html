@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+<title>工作计划</title>
+<script type="text/javascript">
+	function operation(){
+	    alert("亲,该功能正在开发中");
+	    }
+</script>
+</head>
+<body>
+<div class="container" style="width: 100%;padding: 25px 15px;">
+    <div class="row clearfix">
+        <div class="col-md-12 column" style="padding: 20px;">
+			
+           <!-- <div style="float: left;">
+                  <input type="button" class="btn btn-primary btn"  onclick="operation()" value="新增" />
+            </div> -->
+			
+			 <ul class="nav nav-pills">
+			    <li class="active"><a href="#">新增</a></li>
+			    <li><a href="#">修改</a></li>
+			    <li><a href="#">删除</a></li>
+			    <li><a href="#">填报</a></li>
+			    <li class="dropdown">
+			      <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+			        导出 <span class="caret"></span>
+			      </a>
+			      <ul class="dropdown-menu">
+			        <li><a href="#">导出到word</a></li>
+			        <li><a href="#">导出到pdf</a></li>
+			        <li><a href="#">导出到QQ(默认word格式)</a></li>
+			        <li class="divider"></li>
+			        <li><a href="#">导出到桌面</a></li>
+			      </ul>
+			    </li>
+			    <li><a href="#">浏览记录</a></li>
+			  </ul>
+			  
+            <form th:action="@{/like?pageIndex=1}" method="post" id="userForm" role="form" class="form-inline" style="float: right;margin-bottom: 10px;">
+                <div class="form-group" style="margin-right: 20px;">
+                     <label for="exampleInputEmail1" style="margin-right: 10px;">关键字</label>
+                     <input type="text" class="form-control" 
+                     	id="realName" name="realName" placeholder="请输入内容关键字"/>
+                </div>
+                <button type="submit" class="btn btn-primary btn" >查询</button>
+            </form>
+			
+			<form role="form" style="margin-top: 20px;">
+			  <div class="form-group">
+				 <span style="font-weight:bold">分管领导:</span>
+				<select name="leader" >
+			      <option th:each="pb:${pb.beanList}" th:value="${pb.plan_founder_id.user_id}">
+			      [[${pb.plan_founder_id.user_name}]]
+			      </option>
+			    </select>
+				<span style="font-weight:bold">年度:</span>
+				<select class="" >
+				  <option>1</option>
+				  <option>2</option>
+				  <option>3</option>
+				  <option>4</option>
+				  <option>5</option>
+				</select>
+				<span style="font-weight:bold">月份:</span>
+				<select class="" >
+				  <option>1</option>
+				  <option>2</option>
+				  <option>3</option>
+				  <option>4</option>
+				  <option>5</option>
+				</select>
+			  </div>
+			</form>
+			
+			<table class="table table-bordered" >
+			  <thead>
+			    <tr >
+			      <th>计划编号</th>
+			      <th>发布时间</th>
+			      <th>内容</th>
+				  <th>分管领导</th>
+				  <th>工作事项</th>
+				  <th>计划开始时间</th>
+				  <th>计划结束时间</th>
+				  <th>模块</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr th:each="pb:${pb.beanList}">
+			      <td>[[${pb.plan_id}]]</td>
+			      <td th:text="${#dates.format(pb.plan_time, 'yyyy-MM-dd HH:mm')}"></td>
+			      <td>[[${pb.plan_content}]]</td>
+				  <td>[[${pb.plan_founder_id.user_name}]]</td>
+				  <td>[[${pb.plan_sx_id.sx_name}]]</td>
+				  <td th:text="${#dates.format(pb.plan_start_time, 'yyyy-MM-dd HH:mm')}"></td>
+				  <td th:text="${#dates.format(pb.plan_end_time, 'yyyy-MM-dd HH:mm')}"></td>
+				  <td>[[${pb.module_id.module_name}]]</td>
+			    </tr>
+			    
+			  </tbody>
+			</table>
+			
+			<!-- <div align="center" >
+			<ul class="pagination">
+   					 <li><a href="#">&laquo;</a></li>
+   					 <li><a th:href="@{/like?pageIndex=1}">1</a></li>
+    				 <li><a th:href="@{/like?pageIndex=2}">2</a></li>
+    				 <li><a th:href="@{/like?pageIndex=3}">3</a></li>
+    				 <li><a th:href="@{/like?pageIndex=4}">4</a></li>
+    				 <li><a th:href="@{/like?pageIndex=5}">5</a></li>
+   					 <li><a th:href="@{/like?pageIndex=6}">&raquo;</a></li>
+   					 	<span>
+			    			<h3>共[[${pb.totalPage}]]页，当前第[[${pb.pageIndex}]]页</h3>
+			    		</span>
+				</ul>
+				
+			</div> -->
+			<form th:action="@{/users?pageIndex=1}" method="post">
+				<button type="submit" class="btn btn-primary btn" >返回</button>
+			</form>
+            <!-- <table class="table table-bordered" style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th style="width: 150px;">姓名</th>
+                        <th>本周工作总结</th>
+                        <th>本周遇到的问题</th>
+                        <th>下周工作计划</th>
+                        <th style="width: 150px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="success">
+                        <td>猎鹰</td>
+                        <td>完成页面修复</td>
+                        <td>页面不够美观</td>
+                        <td>商城任务书的编写</td>
+                        <td>
+                           <a href="#" class="btn btn-primary btn"  onclick="operation()">修改</a>
+                           <a href="#" class="btn btn-primary btn"  onclick="operation()">删除</a>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td>飞虎</td>
+                        <td>开发订单系统功能</td>
+                        <td>下订单后,付款不成功</td>
+                        <td>进一步完善订单系统</td>
+                        <td>
+                           <a href="#" class="btn btn-primary btn"  onclick="operation()">修改</a>
+                           <a href="#" class="btn btn-primary btn"  onclick="operation()">删除</a>
+                        </td>
+                    </tr>
+                    <tr class="success">
+                        <td>雄狮</td>
+                        <td>开发用户管理统</td>
+                        <td>权限设置不够完善</td>
+                        <td>开发考勤管理系统</td>
+                        <td>
+                           <a href="#" class="btn btn-primary btn"  onclick="operation()">修改</a>
+                           <a href="#" class="btn btn-primary btn"  onclick="operation()">删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table> -->
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+</html>

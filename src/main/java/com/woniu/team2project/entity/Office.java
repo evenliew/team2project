@@ -1,9 +1,13 @@
 package com.woniu.team2project.entity;
+
+import org.springframework.stereotype.Component;
+
 //单位
+@Component
 public class Office {
 	private Integer office_id;
 	private String office_name;
-	private User office_leader;//单位领导
+	private User office_leader;//单位领导编号
 	public Office() {
 		super();
 		// TODO Auto-generated constructor stub

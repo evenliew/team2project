@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.PapersTypeMapper">
+	
+	<!-- 新增文件类型 -->
+	<insert id="insertPagepersType">
+		insert into tb_file_type values(papersType.file_type_id,papersType.type_name)
+	</insert>
+	
+	<insert id="deletePapersType">
+		update tb_file_type set type_name=#{type_name} where file_type_id =#{file_type_id}
+	</insert>
+	
+	<!-- 根据名称查询所有信息 -->
+	<select id="selectPapersTypeName" resultType="papersType">
+		select * from tb_file_type where type_name=#{type_name}
+	</select>
+	
+	<!-- 查询所有信息 -->
+	<select id="selectPapersType" resultType="papersType">
+		select * from tb_file_type
+	</select>
+	
+	<!-- 模糊查询 -->
+	<select id="selectPapersTypeVague" resultType="papersType">
+		select * from tb_file_type
+			<where>
+				<if test="papersType != null">
+					where 1=1
+				</if>
+				<if test="papersType.type_name != null">
+					and type_name like concat(concat('%' #{papersType.type_name} '%'))
+				</if>
+			</where>
+	</select>
+	
+</mapper>

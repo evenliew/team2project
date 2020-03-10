@@ -315,6 +315,39 @@ public class SxController {
 		return "redirect:/system/projectlist.html";
 	}
 	
+	//局领导审批事项
+	@RequestMapping("/approvesx")
+	@ResponseBody
+	public String approveSx(String sx_id) {
+		//更改事项状态为2“已审核”
+		sxService.modifySxStatus(sx_id, 2);
+		return "success";
+	}
 	
+	//局领导驳回事项
+	@RequestMapping("/unapprovesx")
+	@ResponseBody
+	public String unapproveSx(String sx_id) {
+		//更改事项状态为3“未通过”
+		sxService.modifySxStatus(sx_id, 3);
+		return "success";
+	}
 
+	//单位领导接受事项
+	@RequestMapping("/acceptsx")
+	@ResponseBody
+	public String acceptSx(String sx_id) {
+		//更改事项状态为4“按期进行”
+		sxService.modifySxStatus(sx_id, 4);
+		return "success";
+	}
+
+	//单位领导拒绝接受事项
+	@RequestMapping("/unacceptsx")
+	@ResponseBody
+	public String unacceptSx(String sx_id) {
+		//更改事项状态为7“已销项”
+		sxService.modifySxStatus(sx_id, 7);
+		return "success";
+	}
 }

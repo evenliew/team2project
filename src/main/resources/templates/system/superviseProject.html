@@ -1,0 +1,62 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../bootstrap/css/bootstrap.min.css" />
+<title>事项列表</title>
+</head>
+<body>
+<div class="container" style="width: 100%;padding: 25px 15px;">
+	<div class="row clearfix">
+		<div class="col-md-12 column" style="padding: 20px;">
+			<h3>事项进度</h3>
+			<a href="newProject.html">新建事项</a><!-- 去newProject.html界面-->
+			<table class="table table-bordered" style="margin-top: 20px;">
+				<thead>
+					<tr>
+						<th style="width: 150px;">项目名</th>
+						<th>时间</th>
+						<th>状态</th>
+						<th>类型</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="success">
+						<td>项目1</td>
+						<td>2017-06-16 08:54:05</td>
+						<td>进度1</td>
+						<td>事项类型1</td>
+						<td><button class="btn btn-primary btn-sm">管理</button>
+							<button class="btn btn-danger btn-sm">删除</button>
+						</td>
+					</tr>
+					<tr>
+						<td>项目2</td>
+						<td>2017-06-16 08:54:05</td>
+						<td>进度2</td>
+						<td>事项类型2</td>
+						<td><button class="btn btn-primary btn-sm">管理</button>
+							<button class="btn btn-danger btn-sm">删除</button>
+						</td>
+					</tr>
+					<tr class="success">
+						<td>项目3</td>
+						<td>2017-06-16 08:54:05</td>
+						<td>进度3</td>
+						<td>事项类型3</td>
+						<td><button class="btn btn-primary btn-sm">管理</button>
+							<button class="btn btn-danger btn-sm">删除</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<span>共1条记录 共1页 当前第1页</span>
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript" src="../../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../../bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/attendance.js"></script>
+</html>
