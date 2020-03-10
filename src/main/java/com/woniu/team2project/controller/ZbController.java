@@ -19,6 +19,8 @@ import com.woniu.team2project.entity.Sx;
 import com.woniu.team2project.entity.User;
 import com.woniu.team2project.entity.Zb;
 import com.woniu.team2project.entity.Zb_state;
+import com.woniu.team2project.service.SxService;
+import com.woniu.team2project.service.UserService;
 import com.woniu.team2project.service.ZbService;
 
 
@@ -33,7 +35,11 @@ public class ZbController {
 	@Autowired
 	ZbService zbService;
 	
+	@Autowired
+	UserService userService;
 	
+	@Autowired
+	SxService sxService;
 	
 	//与页面交互--查询所有
 	@GetMapping(value="/zball" )
@@ -46,27 +52,28 @@ public class ZbController {
 		//从数据库查询得到
 		List<Zb> zbs = zbService.getAllZb(pageNum,null);
 		
-		
-		
 		//转成pageinfo类型
 		PageInfo<Zb> zbPage = new PageInfo<Zb>(zbs);
 		
-		
-		
-		
 		//装入模型
 		model.addAttribute("zbPage",zbPage);
-		
-		
 		
 		return "zb";
 	}
 	//前往新增一个专报的页面--需要查询用户和事项
 	@GetMapping(value="/zbadd")
-	public String getUserAndSx() {
-		//需要得到user---目前尚未书写
-		//需要得到事项sx
+	public String getUserAndSx(HttpSession session,Model model) {
+		//得到用户信息
+		User user = (User) session.getAttribute("user");
+		//需要得到可以传输的对象user
+		List<User> users = 
+				userService.getUsersByOffice_id(user.getOffice().getOffice_id());
 		
+		//需要得到事项sx
+		List<Sx> sxs = sxService.getSxByWorker_id(user.getUser_id(),null);
+		
+		model.addAttribute("users", users);
+		model.addAttribute("sxs", sxs);
 		return "zbAdd";
 	}
 	
@@ -74,23 +81,24 @@ public class ZbController {
 	@PostMapping(value="/addonezb")
 	public String addOneZb(Zb zb,HttpSession session,Model model) {
 		//这里是从域中获取到用户信息，然后赋值
-	//	User user = (User) session.getAttribute("user");
-	//	zb.setZb_founder(user);
+		User user = (User) session.getAttribute("user");
+		zb.setZb_founder(user);
+		
 		if(zb.getZb_content()==null ||zb.getZb_content()=="") {
 			 model.addAttribute("msg","内容不能为空");
 			 return "redirect:/zbadd";
 		}
-		/*这里判断接收者的信息是否是空，但目前无法选择接收者，所以不进行判断
-		 * if(zb.getZb_recender()==null || zb.getZb_recender().getUser_id()==null
-		 * ||zb.getZb_recender().getUser_id()=="" ) {
-		 * model.addAttribute("msg","接收者不能为空"); return "redirect:/zbadd"; }
-		 */
+		/*这里判断接收者的信息是否是空，但目前无法选择接收者，所以不进行判断*/
+		  if(zb.getZb_recender()==null || zb.getZb_recender().getUser_id()==null
+		  ||zb.getZb_recender().getUser_id()=="" ) {
+		  model.addAttribute("msg","接收者不能为空"); return "redirect:/zbadd"; }
+		 
 		if(zb.getZb_remark()==null ||zb.getZb_remark()=="") {
 			model.addAttribute("msg","备注不能为空");
 			 return "redirect:/zbadd";
 		}
 		//这里进行模拟
-		User user=new User();user.setUser_id("aaaa");zb.setZb_founder(user);
+		/* User user=new User();user.setUser_id("aaaa");zb.setZb_founder(user); */
 		
 		//正常使用
 		zb.setZb_sb_time(new Date());
@@ -125,8 +133,8 @@ public class ZbController {
 	public String getMyZbs(Model model,HttpServletRequest request) {
 		
 		//获取用户--暂时没有，进行模拟
-		User user=new User();user.setUser_id("bbbb");
-//		User user=(User) request.getSession().getAttribute("user");
+		/* User user=new User();user.setUser_id("bbbb"); */
+		User user=(User) request.getSession().getAttribute("user");
 		//条件查询
 		Zb zb1=new Zb();
 		zb1.setZb_founder(user);
@@ -156,9 +164,5 @@ public class ZbController {
 		zbService.changeZb_state(zb_id, resultid);
 		return "redirect:/zball";
 	}	
-	@GetMapping("/error")
-	public String test(Model model){
-		model.addAttribute("msg","睡觉睡觉睡觉");
-		return "error";
-	}
+	
 }

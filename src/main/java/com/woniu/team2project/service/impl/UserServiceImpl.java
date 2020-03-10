@@ -62,6 +62,11 @@ public class UserServiceImpl implements UserService{
 
 		return  userMapper.SelectPassWordByAccount(account);
 	}
+	//查询部门下的员工
+	@Override
+	public List<User> getUsersByOffice_id(Integer office_id) {
+		return userMapper.selectUserByOffice_Id(office_id);
+	}
 
 	
 

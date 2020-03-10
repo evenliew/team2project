@@ -136,10 +136,12 @@ public class Team2projectApplicationTests {
 	@Test
 	public void test1() {
 		System.out.println(userMapper.selectleaderNameByleander_id("qqqq"));
+		System.out.println(userMapper.selectUserByOffice_Id(1));
 	}
 	@Test
 	public void test2() {
 		System.out.println(sxMapper.selecttbSx(1));
+		
 	}
 	@Test
 	public void test3() {

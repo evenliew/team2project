@@ -54,5 +54,10 @@
  		 select * from tb_user where user_id=#{user_id} 
   	</select>
  
- 	
+ 	<!-- 查询统一部门下面的所有员工 -->
+ 	<select id="selectUserByOffice_Id" resultMap="userMapper">
+ 		 select * from tb_user  
+ 			where  office_id=#{office_id}
+ 		
+  	</select>
 </mapper>

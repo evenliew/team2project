@@ -131,9 +131,9 @@ public class NoticeController {
 		}
 
 		// User应该从域中取，这里取不到 进行模拟
-		// User notice_founder=(User) session.getAttribute("user");
-		User notice_founder = new User();
-		notice_founder.setUser_id("aaaa");
+		User notice_founder=(User) session.getAttribute("user");
+//		User notice_founder = new User();
+//		notice_founder.setUser_id("aaaa");
 		notice.setNotice_founder(notice_founder);
 		notice.setNotice_time(new Date());
 		noticeService.addNotice(notice);
