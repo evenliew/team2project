@@ -1,34 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>登录</title>
 <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
-<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
-<script>
-//页面加载完成后
- $(function(){
-	//给account绑定失去焦点事件
-	$("#account").blur(function(){
-		//获取account文本输入框的值
-		var account=$(this).val();
-		$.post("/loginname",{account:account},function(data){
-			//判断
-			var span=$("#spans");
-			if(data.userExsit){
-				//用户名存在
-				span.css("color","red");
-				span.html(data.msg);
-			}else{
-				span.css("color","green");
-				span.html(data.msg);
-			}
-		});
-	});
- });
- </script>
 <style type="text/css">
-
 .myDiv {
 	width: 336px;
 	height: 290px;
@@ -55,15 +31,11 @@
 </style>
 </head>
 <body style="background: url('img/login.png') no-repeat;">
-	
 	<div class="myDiv">
-		<form method="post" th:action="@{/user}">
-		<input type="text" class="inputText" name="account" id="account" placeholder="请输入账号" autofocus value="admin" style="margin-top: 30px;"/><br>
-		<span id="spans">[[${msg}]]</span>
-		<input type="password" class="inputText" name="password" id="pwd" placeholder="请输入密码" value="feicui123" style="margin-top: 60px;"/><br>
-		<span id="spans">[[${msg}]]</span>
-		<a th:href="@{/registered}" class="myregistered">注册</a>
-		<input type="submit" class="btn btn-success btn-lg btn-block inputBtn" value="登录" /><!-- onclick="javascript:location.href='system/index/index.html'" -->
+		<form method="post" action="/newlogin">
+			<input type="text" class="inputText" name="user_loginname" id="account" placeholder="请输入账号" autofocus value="admin" style="margin-top: 30px;"/><br>
+			<input type="password" class="inputText" name="user_pass" id="pwd" placeholder="请输入密码" value="feicui123" style="margin-top: 60px;"/><br>
+			<input type="submit" class="btn btn-success btn-lg btn-block inputBtn" value="登录" onclick="javascript:location.href='system/index/index.html'"/>
 		</form>
 	</div>
 </body>
