@@ -40,6 +40,8 @@ public class SxController {
 	@Autowired
 	UserService userService;
 	
+	String pmPath;
+	
 	//根据角色去不同页面
 	@RequestMapping("/manageProject")
 	@ResponseBody
@@ -50,15 +52,16 @@ public class SxController {
 		//拿User角色
 		User_role user_role = userService.getUser_roleByUser_id(user_in_session.getUser_id());
 		//判断角色,写入不同的页面链接
-		if(user_role.getRole_id()==1) {
-			return "../sxBureauLeader.html"; //局里的老板 1000
-		}else if(user_role.getRole_id()==2) {
-			return "../sxBureauStaff.html"; //局里的员工 121
-		}else if(user_role.getRole_id()==3){
-			return "../sxOfficeLeader.html"; //单位的老板 2000
-		}else {
-			return "../sxOfficeStaff.html"; //单位的员工 00001
+		if(user_role.getRole_id()==1) {		//局里的老板 1000
+			pmPath = "../sxBureauLeader.html";
+		}else if(user_role.getRole_id()==2) {//局里的员工 121
+			pmPath = "../sxBureauStaff.html";
+		}else if(user_role.getRole_id()==3){//单位的老板 2000
+			pmPath = "../sxOfficeLeader.html"; 
+		}else {								//单位的员工 00001
+			pmPath = "../sxOfficeStaff.html"; 
 		}
+		return pmPath;
 	}
 
 	//分页条件查询事项
@@ -336,8 +339,9 @@ public class SxController {
 		sxService.modifySxStatus(sx_id, sx_status_id);
 		//修改紧急程度
 		sxService.modifySxUrgency(sx_id, urgency_id);
-		return "redirect:/system/projectlist.html";
+		return "redirect:/system/"+pmPath.substring(3);
 	}
+	
 	//提交编辑的事项
 	@RequestMapping("/submitproject")
 	public String submitproject(String sx_id,Sx_status sx_status,Sx_type sx_type,Area area,
@@ -360,7 +364,7 @@ public class SxController {
 		
 		
 		
-		return "redirect:/system/projectlist.html";
+		return "redirect:/system/"+pmPath.substring(3);
 	}
 	
 	//局领导审批事项
