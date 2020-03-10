@@ -7,11 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.woniu.team2project.entity.Sx;
+import com.woniu.team2project.entity.User;
 import com.woniu.team2project.exception.SxException;
 import com.woniu.team2project.mapper.SxMapper;
 import com.woniu.team2project.service.SxService;
+import com.woniu.team2project.service.User_noticeService;
 
 @Service
 public class SxServiceImpl implements SxService{
@@ -19,12 +23,15 @@ public class SxServiceImpl implements SxService{
 	@Autowired
 	SxMapper sxMapper;
 	
+	@Autowired
+	User_noticeService user_noticeService;
+	
 	//新建事项+发送通知提示上级审批（事务）
-	@Override
 	@Transactional
+	@Override
 	public void addSx(Sx sx) {
-		// TODO Auto-generated method stub
-		
+		// 新建事项
+		// 发送通知
 	}
 
 	//分页条件查询事项
@@ -63,7 +70,7 @@ public class SxServiceImpl implements SxService{
 		}
 	}
 	
-	@Transactional
+	@Override
 	//修改事项状态
 	public void modifySxStatus(String sx_id, Integer sx_status_id) {
 		try {
@@ -91,6 +98,7 @@ public class SxServiceImpl implements SxService{
 	}
 	
 	//修改紧急程度
+	@Override
 	public void modifySxUrgency(String sx_id, Integer urgency_id) {
 		try {
 			sxMapper.updateSxUrgency(sx_id, urgency_id);
@@ -165,5 +173,49 @@ public class SxServiceImpl implements SxService{
 			throw new SxException("系统维护中");
 		}
 	}
+	
+	//局领导审批事项 + 发送审批通过通知
+	@Transactional
+	@Override
+	public void approveSx(String sx_id) {
+		//更改事项状态为2“已审核”
+		modifySxStatus(sx_id, 2);
+		//查出对应事项
+		Sx sx = getSxBySx_id(sx_id);
+		//调用通知模板2：局领导-->事项创建人（审批通过）
+		user_noticeService.sendUser_notice(sx.getFounder().getOffice().getOffice_leader(), sx.getFounder(), sx, 2);
+		//调用通知模板4：局领导-->接收单位领导（请接收）
+		user_noticeService.sendUser_notice(sx.getFounder().getOffice().getOffice_leader(), sx.getOffice().getOffice_leader(), sx, 4);
+	}
+		
+	//局领导驳回事项 + 发送审批未通过通知
+	@Transactional
+	@Override
+	public void unapproveSx(String sx_id) {
+		//更改事项状态为3“未通过”
+		modifySxStatus(sx_id, 3);
+		//查出对应事项
+		Sx sx = getSxBySx_id(sx_id);
+		//调用通知模板3：局领导-->事项创建人（驳回）
+		user_noticeService.sendUser_notice(sx.getFounder().getOffice().getOffice_leader(), sx.getFounder(), sx, 3);
+	}
+
+	//单位领导接受事项
+	@Transactional
+	@Override
+	public void acceptSx(String sx_id) {
+		//更改事项状态为4“按期进行”
+		modifySxStatus(sx_id, 4);
+		//调用通知模板XXX
+	}
+
+	//单位领导拒绝接受事项
+	@Transactional
+	@Override
+	public void unacceptSx(String sx_id) {
+		//更改事项状态为7“已销项”
+		modifySxStatus(sx_id, 7);
+		//调用通知模板XXX
+	}	
 	
 }

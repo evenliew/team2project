@@ -361,9 +361,6 @@ public class SxController {
 		sxService.modifySx(sx);
 		System.out.println("之后事项:"+sx);
 		//该单位后给相应领导发通知
-		
-		
-		
 		return "redirect:/system/"+pmPath.substring(3);
 	}
 	
@@ -371,8 +368,7 @@ public class SxController {
 	@RequestMapping("/approvesx")
 	@ResponseBody
 	public String approveSx(String sx_id) {
-		//更改事项状态为2“已审核”
-		sxService.modifySxStatus(sx_id, 2);
+		sxService.approveSx(sx_id);
 		return "success";
 	}
 	
@@ -380,8 +376,7 @@ public class SxController {
 	@RequestMapping("/unapprovesx")
 	@ResponseBody
 	public String unapproveSx(String sx_id) {
-		//更改事项状态为3“未通过”
-		sxService.modifySxStatus(sx_id, 3);
+		sxService.unapproveSx(sx_id);
 		return "success";
 	}
 
@@ -389,17 +384,15 @@ public class SxController {
 	@RequestMapping("/acceptsx")
 	@ResponseBody
 	public String acceptSx(String sx_id) {
-		//更改事项状态为4“按期进行”
-		sxService.modifySxStatus(sx_id, 4);
+		sxService.acceptSx(sx_id);
 		return "success";
 	}
 
-	//单位领导拒绝接受事项
+	//单位领导拒绝接受事项（销项）
 	@RequestMapping("/unacceptsx")
 	@ResponseBody
 	public String unacceptSx(String sx_id) {
-		//更改事项状态为7“已销项”
-		sxService.modifySxStatus(sx_id, 7);
+		sxService.unacceptSx(sx_id);
 		return "success";
 	}
 } 

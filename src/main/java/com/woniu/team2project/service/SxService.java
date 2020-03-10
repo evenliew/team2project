@@ -2,6 +2,8 @@ package com.woniu.team2project.service;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.woniu.team2project.entity.Sx;
 
 public interface SxService {
@@ -45,4 +47,17 @@ public interface SxService {
 	
 	//查某单位员工相关的事项（其子任务的事项）
 	List<Sx> getSxByWorker_id(String worker_id, Sx sx);
+	
+	//局领导审批事项 + 发送审批通过通知
+	void approveSx(String sx_id);
+			
+	//局领导驳回事项
+	public void unapproveSx(String sx_id);
+
+	//单位领导接受事项
+	public void acceptSx(String sx_id);
+
+	//单位领导拒绝接受事项
+	public void unacceptSx(String sx_id);
+	
 }
