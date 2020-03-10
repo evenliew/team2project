@@ -2,7 +2,6 @@ package com.woniu.team2project;
 
 
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -16,17 +15,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.woniu.team2project.entity.Area;
-import com.woniu.team2project.entity.County;
-import com.woniu.team2project.entity.Industry;
-import com.woniu.team2project.entity.Office;
 import com.woniu.team2project.entity.Plan;
 import com.woniu.team2project.entity.Sx;
-import com.woniu.team2project.entity.Sx_status;
-import com.woniu.team2project.entity.Sx_type;
-import com.woniu.team2project.entity.Urgency;
 import com.woniu.team2project.entity.User;
-import com.woniu.team2project.entity.User_status;
 import com.woniu.team2project.mapper.LoginAndRegisteredMapper;
 import com.woniu.team2project.mapper.PlanMapper;
 import com.woniu.team2project.mapper.SxMapper;
@@ -63,6 +54,13 @@ public class Team2projectApplicationTests {
 	@Test
 	public void testDruid() {
 		System.out.println(dataSource.getClass().getName());
+	}
+	
+	//测试登录
+	@Test
+	public void login() {
+		User user = userMapper.selectUsernamePassword("666", "666");
+		System.out.println(user);
 	}
 	
 	//测试添加事项Dao
@@ -129,14 +127,13 @@ public class Team2projectApplicationTests {
 	
 
 
-	@Test
-	public void testgetselectBm_leader_idByUserName() {
-		System.out.println(userService.getSelectBm_leader_idByUserName("qqqq"));
-	}
-	@Test
-	public void test1() {
-		System.out.println(userMapper.selectleaderNameByleander_id("qqqq"));
-	}
+	/*
+	 * @Test public void testgetselectBm_leader_idByUserName() {
+	 * System.out.println(userService.getSelectBm_leader_idByUserName("qqqq")); }
+	 * 
+	 * @Test public void test1() {
+	 * System.out.println(userMapper.selectleaderNameByleander_id("qqqq")); }
+	 */
 	@Test
 	public void test2() {
 		System.out.println(sxMapper.selecttbSx(1));
@@ -192,10 +189,11 @@ public class Team2projectApplicationTests {
 	public void selectAllOffice() {
 		System.out.println(regis.selectAllOffice());
 	}
-	@Test
-	public void SelectPassWordByAccount() {
-		System.out.println(userMapper.SelectPassWordByAccount("bbbb"));
-	}
+
+	/*
+	 * @Test public void SelectPassWordByAccount() {
+	 * System.out.println(userMapper.SelectPassWordByAccount("bbbb")); }
+	 */
 	@Test
 	public void insertIntoPlan() {
 		planMapper.insertIntoPlan(new Plan());

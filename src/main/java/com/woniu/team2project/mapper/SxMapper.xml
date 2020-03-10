@@ -71,14 +71,14 @@
 	
 	<!-- 某单位领导已接受的事项 -->
 	<select id="selectAcceptedSxByLeader_id" resultMap="SxMapper">
-		select * from tb_sx where sx_status_id not in (8,9,1,2,3)
+		select * from tb_sx where sx_status_id not in (8,1,2,3)
 		and office_id in (select office_id from tb_user where user_id = #{leader_id})
 		<include refid="sqlcondition_simple"/>
 	</select>
 	
 	<!-- 某单位领导还未接受的事项 -->
 	<select id="selectUnacceptedSxByLeader_id" resultMap="SxMapper">
-		select * from tb_sx where sx_status_id = 9
+		select * from tb_sx where sx_status_id = 2
 		and office_id in (select office_id from tb_user where user_id = #{leader_id})
 		<include refid="sqlcondition_simple"/>
 	</select>

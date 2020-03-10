@@ -45,7 +45,7 @@ public class ZbServiceImp implements ZbService {
 	@Override
 	public List<Zb> getAllZb(Integer pageNum,Integer pageSize) {
 		if(pageNum==null ||pageNum==0) {
-			pageNum=1;
+			pageNum=2;
 		}
 		if(pageSize==null ||pageSize==0) {
 			pageSize=5;

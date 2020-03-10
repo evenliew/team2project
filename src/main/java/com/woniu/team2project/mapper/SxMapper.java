@@ -8,8 +8,9 @@ import org.apache.ibatis.annotations.Param;
 import com.woniu.team2project.entity.Sx;
 
 public interface SxMapper {
-
+	//郑老师的方法？
 	Sx selecttbSx(Integer officeId);
+	
 	//新建事项
 	void insertSx(Sx sx);
 	
