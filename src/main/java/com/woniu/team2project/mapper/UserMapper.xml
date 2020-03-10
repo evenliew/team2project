@@ -15,6 +15,10 @@
 		from tb_user where user_loginname=#{user_loginname}
 	</select> -->
 	
+	<!-- 找出sessionUser的角色 -->
+	<select id="selectUser_roleByUser_id" resultType="User_role">
+		select * from tb_user_role where user_id=#{user_id}
+	</select>
 	
 	<select id="selectUsernamePassword" resultMap="userMapper">
 		select * from

@@ -22,9 +22,11 @@ import com.woniu.team2project.entity.Sx_status;
 import com.woniu.team2project.entity.Sx_type;
 import com.woniu.team2project.entity.Urgency;
 import com.woniu.team2project.entity.User;
+import com.woniu.team2project.entity.User_role;
 import com.woniu.team2project.exception.SxException;
 import com.woniu.team2project.service.SxDataService;
 import com.woniu.team2project.service.SxService;
+import com.woniu.team2project.service.UserService;
 
 @Controller
 public class SxController {
@@ -35,22 +37,28 @@ public class SxController {
 	@Autowired
 	SxDataService sxDataService;
 	
+	@Autowired
+	UserService userService;
+	
 	//根据角色去不同页面
 	@RequestMapping("/manageProject")
 	@ResponseBody
 	public String goProjectManagement(HttpSession session) {
-		//模拟一个sessionUser
-		User sessionUser = new User();
-		sessionUser.setUser_id("789");
-		session.setAttribute("sessionUser", sessionUser);
-		//判断User的角色
-	
 		
-		//跳转不同静态页面
-		//return "../sxBureauLeader.html"; //局里的老板 1000
-		return "../sxBureauStaff.html"; //局里的员工 121
-		//return "../sxOfficeLeader.html"; //单位的老板 2000
-		//return "../sxOfficeStaff.html"; //单位的员工 00001
+		User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+		System.out.println(user_in_session);
+		//拿User角色
+		User_role user_role = userService.getUser_roleByUser_id(user_in_session.getUser_id());
+		//判断角色,写入不同的页面链接
+		if(user_role.getRole_id()==1) {
+			return "../sxBureauLeader.html"; //局里的老板 1000
+		}else if(user_role.getRole_id()==2) {
+			return "../sxBureauStaff.html"; //局里的员工 121
+		}else if(user_role.getRole_id()==3){
+			return "../sxOfficeLeader.html"; //单位的老板 2000
+		}else {
+			return "../sxOfficeStaff.html"; //单位的员工 00001
+		}
 	}
 
 	//分页条件查询事项
@@ -95,9 +103,9 @@ public class SxController {
 				pageIndex = 1;
 			}
 			PageHelper.startPage(pageIndex, 2);
-			//从Session里面拿出sessionUser的ID，查出他审批了的事项
-			User sessionUser = (User) session.getAttribute("sessionUser");
-			List<Sx> sxs = sxService.getApprovedSxByLeader_id(sessionUser.getUser_id(), sx);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getApprovedSxByLeader_id(user_in_session.getUser_id(), sx);
 			//把事项装配成pageInfo
 			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
 			for(Sx mysx: sxsPage.getList()) {
@@ -122,9 +130,9 @@ public class SxController {
 				pageIndex = 1;
 			}
 			PageHelper.startPage(pageIndex, 2);
-			//从Session里面拿出sessionUser的ID，查出他审批了的事项
-			User sessionUser = (User) session.getAttribute("sessionUser");
-			List<Sx> sxs = sxService.getUnapprovedSxByLeader_id(sessionUser.getUser_id(), sx);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getUnapprovedSxByLeader_id(user_in_session.getUser_id(), sx);
 			//把事项装配成pageInfo
 			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
 			for(Sx mysx: sxsPage.getList()) {
@@ -150,9 +158,9 @@ public class SxController {
 			}
 			System.out.println(sx);
 			PageHelper.startPage(pageIndex, 2);
-			//从Session里面拿出sessionUser的ID，查出他审批了的事项
-			User sessionUser = (User) session.getAttribute("sessionUser");
-			List<Sx> sxs = sxService.getSxByFounder_id(sessionUser.getUser_id(), sx);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getSxByFounder_id(user_in_session.getUser_id(), sx);
 			//把事项装配成pageInfo
 			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
 			for(Sx mysx: sxsPage.getList()) {
@@ -177,9 +185,9 @@ public class SxController {
 				pageIndex = 1;
 			}
 			PageHelper.startPage(pageIndex, 2);
-			//从Session里面拿出sessionUser的ID，查出他审批了的事项
-			User sessionUser = (User) session.getAttribute("sessionUser");
-			List<Sx> sxs = sxService.getAcceptedSxByLeader_id(sessionUser.getUser_id(), sx);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getAcceptedSxByLeader_id(user_in_session.getUser_id(), sx);
 			//把事项装配成pageInfo
 			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
 			for(Sx mysx: sxsPage.getList()) {
@@ -204,9 +212,9 @@ public class SxController {
 				pageIndex = 1;
 			}
 			PageHelper.startPage(pageIndex, 2);
-			//从Session里面拿出sessionUser的ID，查出他审批了的事项
-			User sessionUser = (User) session.getAttribute("sessionUser");
-			List<Sx> sxs = sxService.getUnacceptedSxByLeader_id(sessionUser.getUser_id(), sx);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getUnacceptedSxByLeader_id(user_in_session.getUser_id(), sx);
 			//把事项装配成pageInfo
 			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
 			for(Sx mysx: sxsPage.getList()) {
@@ -230,9 +238,9 @@ public class SxController {
 				pageIndex = 1;
 			}
 			PageHelper.startPage(pageIndex, 2);
-			//从Session里面拿出sessionUser的ID，查出他审批了的事项
-			User sessionUser = (User) session.getAttribute("sessionUser");
-			List<Sx> sxs = sxService.getSxByWorker_id(sessionUser.getUser_id(), sx);
+			//从Session里面拿出user_in_session的ID，查出他审批了的事项
+			User user_in_session = (User) session.getAttribute("USER_IN_SESSION");
+			List<Sx> sxs = sxService.getSxByWorker_id(user_in_session.getUser_id(), sx);
 			//把事项装配成pageInfo
 			PageInfo<Sx> sxsPage = new PageInfo<>(sxs);
 			for(Sx mysx: sxsPage.getList()) {

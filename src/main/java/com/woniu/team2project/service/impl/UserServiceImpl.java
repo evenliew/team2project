@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.woniu.team2project.entity.User;
+import com.woniu.team2project.entity.User_role;
 import com.woniu.team2project.mapper.UserMapper;
 import com.woniu.team2project.service.UserService;
 
@@ -31,6 +32,13 @@ public class UserServiceImpl implements UserService{
 		User user = userMapper.selectUsernamePassword(user_loginname, user_pass);
 		return user;
 	}
+	
+	//拿用户角色
+	@Override
+	public User_role getUser_roleByUser_id(String user_id) {
+		return userMapper.selectUser_roleByUser_id(user_id);
+	}
+		
 	//根据登录以后域属性里面的用户名，查询出所有的用户信息
 	/*
 	 * @Override public User getSelectBm_leader_idByUserName(String name) { user =
@@ -54,6 +62,7 @@ public class UserServiceImpl implements UserService{
 	 * return userMapper.SelectPassWordByAccount(account); }
 	 * 
 	 */
+
 	
 
 	
