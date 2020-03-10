@@ -39,15 +39,15 @@ public class SxController {
 	public String goProjectManagement(HttpSession session) {
 		//模拟一个sessionUser
 		User sessionUser = new User();
-		sessionUser.setUser_id("123");
+		sessionUser.setUser_id("789");
 		session.setAttribute("sessionUser", sessionUser);
 		//判断User的角色
 	
 		
 		//跳转不同静态页面
 		//return "../sxBureauLeader.html"; //局里的老板 1000
-		//return "../sxBureauStaff.html"; //局里的员工 121
-		return "../sxOfficeLeader.html"; //单位的老板 2000
+		return "../sxBureauStaff.html"; //局里的员工 121
+		//return "../sxOfficeLeader.html"; //单位的老板 2000
 		//return "../sxOfficeStaff.html"; //单位的员工 00001
 	}
 
