@@ -1,6 +1,8 @@
 package com.woniu.team2project.service.impl;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,14 @@ public class UserServiceImpl implements UserService{
 	 * public void setUserMapper(UserMapper userMapper) { this.userMapper =
 	 * userMapper; }
 	 */
+	 
+	 //查询同一部门下的员工
+	@Override
+	public List<User> getUsersByOffice_id(Integer office_id) {
+		return userMapper.selectUserByOffice_Id(office_id);
+	}
+	 
+	 
 	//新写的登录************************************************
 	public User login(String user_loginname, String user_pass) {
 		User user = userMapper.selectUsernamePassword(user_loginname, user_pass);
@@ -37,6 +47,12 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User_role getUser_roleByUser_id(String user_id) {
 		return userMapper.selectUser_roleByUser_id(user_id);
+	}
+
+	//主键查询用户
+	@Override
+	public User getUserByUser_id(String user_id) {
+		return userMapper.selectUserByUser_id(user_id);
 	}
 		
 	//根据登录以后域属性里面的用户名，查询出所有的用户信息
@@ -73,3 +89,12 @@ public class UserServiceImpl implements UserService{
 
 
 }
+	
+
+	
+
+	
+
+
+
+

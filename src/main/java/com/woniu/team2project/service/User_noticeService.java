@@ -20,11 +20,6 @@ public interface User_noticeService {
 	void sendUser_notice(User sender,User receiver,Sx sx,Integer mb_id);
 	
 	/**
-	 * 事项立项或者事项审批通过之后发送消息
-	 */
-	void sendUser_notice(Sx sx,Integer mb_id);
-	
-	/**
 	 * 添加个人通知
 	 * @param user_notice
 	 */
@@ -59,7 +54,4 @@ public interface User_noticeService {
 	 * 根据条件查询通报
 	 */
 	List<User_notice> getUser_noticeByCondition(User_notice user_notice);
-	
-	
-
 }

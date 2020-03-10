@@ -64,7 +64,18 @@
 		select * from tb_area where
 		area_id=#{area_id}
 	</select>
-
+	
+	 	<!-- 查询统一部门下面的所有员工 -->
+ 	<select id="selectUserByOffice_Id" resultMap="userMapper">
+ 		 select * from tb_user  
+ 			where  office_id=#{office_id}
+ 		
+  	</select>
+	<!-- 主键查询Id -->
+	<select id="selectUserByUser_id" resultMap="userMapper">
+		select *
+		from tb_user where user_id=#{user_id}
+	</select>
 	<!-- 
 	
 	<select id="selectofficeByofficeId" resultMap="officeMapper">
@@ -87,3 +98,5 @@
 	</select> -->
 
 </mapper>
+ 
+
