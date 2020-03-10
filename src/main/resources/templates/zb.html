@@ -1,74 +1,101 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}" />
 <script type="text/javascript" th:src="@{/js/jquery-2.2.3.js}"></script>
 <title>日程安排</title>
 <script type="text/javascript">
-	
-	$(function(){
+	$(function() {
 		//点击超链接提交表单
-		$(".change").click(function(){
-			$("#changezb").attr("action",$(this).attr("puturi")).submit();
+		$(".change").click(function() {
+			if (confirm("是否确认要删除")) {
+				$("#changezb").attr("action", $(this).attr("puturi")).submit();
+			}
 		});
-	}); 
-	
+	});
 </script>
 </head>
 <body>
-<div class="container" style= "width: 100%;padding: 25px 15px;" >
-    <div class="row clearfix">
-        <div class="col-md-12 column" style="padding: 20px; padding-top: 0px;">
-        	<ul id="noticeTab" class="nav nav-tabs">
-				<li class="active"><h2>专报信息</h2></li>
-			</ul>
-            
-  			
-            <table class="table table-bordered" style="margin-top: 20px;">
-                <thead>
-                    <tr>
-                    	<th>序号</th>
-                        <th style="width: 150px;">专报内容</th>
-                        <th>专报备注</th>
-                        <th>申请时间</th>
-                        <th>审批时间</th>
-                        <th>状态</th>
-                        <th>创建者</th>
-                        <th>接收者</th>
-                        <th>事项</th>
-                        <th style="width: 150px;">操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="zb:${zbPage.list}">
-                    	<td th:text="${zbStat.index+1}"></td>
-                        <td th:text="${zb.zb_content}"></td>
-						<td th:text="${zb.zb_remark}"></td>
-						<td >[[${#dates.format(zb.zb_sb_time,"yyyy-MM-dd")} ]]</td>
-						<td >[[${#dates.format(zb.zb_ps_time,"yyyy-MM-dd")} ]]</td>
-								
-						<td th:text="${zb.zb_state.zb_state_name}"></td>
-						<td th:text="${zb.zb_founder.user_name}"></td>
-						<td th:text="${zb.zb_recender.user_name}"></td>
-						<td th:text="${zb.zb_sx.sx_name}"></td>
-                        <td>
-                        	 <a href="#" th:attr="puturi=@{/zbdelete/}+${zb.zb_id}" class="btn btn-primary btn change">删除</a><br/> 
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div style="float: left;">
-                 <a th:href="@{/zbadd}"><input type="button" class="btn btn-primary btn"   value="添加" /></a> 
-                 <a th:href="@{/zbmine}"><input type="button" class="btn btn-primary btn"   value="查询我的专报" /></a> 
-            </div>
-            <form id="changezb" method="post">
-				<input type="hidden" name="_method" value="put" />
-			</form> 
-        </div>
-    </div>
-</div>
+	<div class="container" style="width: 100%; padding: 25px 15px;">
+		<div class="row clearfix">
+			<div class="col-md-12 column"
+				style="padding: 20px; padding-top: 0px;">
+				<div id="noticeTab" class="nav nav-tabs">
+					<h2>专报信息</h2>
+				</div>
+
+
+				<table class="table table-bordered" style="margin-top: 20px">
+					<thead>
+						<tr>
+							<th>序号</th>
+							<th style="width: 150px;">专报内容</th>
+							<th>专报备注</th>
+							<th>申请时间</th>
+							<th>审批时间</th>
+							<th>状态</th>
+							<th>创建者</th>
+							<th>接收者</th>
+							<th>事项</th>
+							<th style="width: 150px;">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="zb:${zbPage.list}">
+							<td th:text="${zbStat.index+1}"></td>
+							<td th:text="${zb.zb_content}"></td>
+							<td th:text="${zb.zb_remark}"></td>
+							<td>[[${#dates.format(zb.zb_sb_time,"yyyy-MM-dd")} ]]</td>
+							<td>[[${#dates.format(zb.zb_ps_time,"yyyy-MM-dd")} ]]</td>
+
+							<td th:text="${zb.zb_state.zb_state_name}"></td>
+							<td th:text="${zb.zb_founder.user_name}"></td>
+							<td th:text="${zb.zb_recender.user_name}"></td>
+							<td th:text="${zb.zb_sx.sx_name}"></td>
+							<td><a href="#" th:attr="puturi=@{/zbdelete/}+${zb.zb_id}"
+								class="btn btn-primary btn change">删除</a><br /></td>
+						</tr>
+						
+					</tbody>
+				</table>
+
+
+				<!-- 分页 -->
+ 				<div class="pages" style="text-align:center">
+					 <ul class="pagination"
+						style="padding: 0px; margin: 0px" >
+						
+						 <li th:if="${zbPage.hasPreviousPage} "><a th:href="@{/zball(pageNum=${zbPage.pageNum}-1)}"><span >&laquo;</span><span
+								class="sr-only">上一页</span></a></li> 
+
+						
+						<li th:each="pageNo:${zbPage.navigatepageNums}">
+							<a th:if="${pageNum eq pageNo}" th:href="#">[[${pageNo}]]</a>
+							<a th:if="${pageNum ne pageNo}" th:href="@{/zball(pageNum=${pageNo})}">[[${pageNo}]]</a></li>
+						
+
+						 <li th:if="${zbPage.hasNextPage} "><a th:href="@{/zball(pageNum=${zbPage.pageNum}+1)}"><span >&raquo;</span><span
+								class="sr-only">下一页</span></a></li> 
+					</ul>
+				</div> 
+
+
+				<!-- 添加 -->
+				<div style="float: left;">
+					<a th:href="@{/zbadd}"><input type="button"
+						class="btn btn-primary btn" value="添加" /></a> <a th:href="@{/zbmine}"><input
+						type="button" class="btn btn-primary btn" value="查询我的专报" /></a>
+				</div>
+				<!-- 提交的表单 -->
+				<form id="changezb" method="post">
+					<input type="hidden" name="_method" value="put" />
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
 <script type="text/javascript" th:src="@{/js/jquery-2.2.3.min.js}"></script>
-<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 </html>

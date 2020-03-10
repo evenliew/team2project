@@ -4,6 +4,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}"
 	type="text/css"  />
+<script type="text/javascript" th:src="@{/js/jquery-2.2.3.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/notice.js}"></script>
 <title>添加通知公告</title>
 <style type="text/css">
 .inputText {
@@ -19,6 +23,24 @@
 	text-align: right;
 }
 </style>
+<script type="text/javascript">
+$(function(){
+	$("#commit").click(function(){
+		if(confirm("是否提交")){
+			if($("#title").val()!=null &&$("#title").val()!=""){
+				if($("#content").val()!=null &&$("#content").val()!=""){
+					$("#noticeForm").submit();
+				}else{
+					alert("内容不能为空");
+				}
+			}else{
+				alert("标题不能为空");
+			}
+		}
+	});
+});
+
+</script>
 </head>
 <body>
 	<div class="container" style="width: 100%; padding: 25px 15px;">
@@ -33,10 +55,10 @@
 						<div class="row rowDiv">
 							<div class="col-sm-12">
 								<div class="form-group">
-									<label class="col-sm-1 control-label" for="content"
+									<label class="col-sm-1 control-label" for="title"
 										style="padding-top: 0px;">公告标题：<span style="color: red;">*</span></label>
 									<div class="col-sm-11">
-										<textarea class="form-control" id="content" name="notice_title"
+										<textarea class="form-control" id="title" name="notice_title"
 											rows="1" style="resize: none;">[[${notice.notice_title}]]</textarea>
 									</div>
 								</div>
@@ -73,7 +95,7 @@
 							<div class="row">
 								<div class="col-sm-12">
 									<div class="form-group" style="padding-left: 30px;">
-										<input type="submit" class="btn btn-primary btn" value="发布" />
+										<input type="button" class="btn btn-primary " id="commit" value="发布" />
 									</div>
 								</div>
 							</div>
@@ -84,8 +106,5 @@
 		</div>
 	</div> 	
 </body>
-<script type="text/javascript" th:src="@{/js/jquery-2.2.3.min.js}"></script>
-<script type="text/javascript"
-	th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
-<script type="text/javascript" th:src="@{/js/notice.js}"></script>
+
 </html>

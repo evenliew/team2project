@@ -1,5 +1,7 @@
 package com.woniu.team2project;
 
+
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import com.woniu.team2project.entity.Area;
 import com.woniu.team2project.entity.County;
 import com.woniu.team2project.entity.Industry;
 import com.woniu.team2project.entity.Office;
+import com.woniu.team2project.entity.Plan;
 import com.woniu.team2project.entity.Sx;
 import com.woniu.team2project.entity.Sx_status;
 import com.woniu.team2project.entity.Sx_type;
@@ -33,8 +36,15 @@ public class Team2projectApplicationTests {
 	SxMapper sxMapper;
 
 	
+	
 	@Autowired
 	DataSource dataSource;
+	
+	
+	
+	
+	
+
 	
 	//测试连接池
 	@Test
@@ -45,6 +55,9 @@ public class Team2projectApplicationTests {
 	//测试添加事项Dao
 	@Test
 	public void testInsertSxDao() {
+		Sx sx=new Sx("1006", "我的事项", new Sx_type(1, "类型一"),new Sx_status(1, "状态一") , new Date(), new User("121", "1","1", "1", "1", new User_status(1,
+				"1"), new Area(1, "1"), new Office(1,"1",new User("222", null, null, null, null, null, null, null) )), "我的内容", "我的备注", new Urgency(1, "1"), new County(1, "1", new Area(1,"1")), new Industry(1,"1")
+				,new Date(),new Office(1,"s",new User("111", null, null, null, null, null, null, null)));
 //		Sx sx=new Sx("2233", "测试事项", new Sx_type(1, "类型一"),new Sx_status(1, "状态一") ,
 //				new Date(), new User("1122", "1","1", "1", "1", new User_status(1,
 //				"1"), new Area(1, "1"), new Office(1,"1", new User())), "我的内容", "我的备注", 
@@ -86,15 +99,14 @@ public class Team2projectApplicationTests {
 	}
 	
 	//测试更新事项
-	@Test
-	public void testUpdateSxDao() {
-		Sx sx=new Sx("1122", "测试更改事项", new Sx_type(1, "类型一"),new Sx_status(1, "状态一") , 
-				new Date(), new User("1122", "1","1", "1", "1", new User_status(1,"1"),
-				new Area(1, "1"), new Office(1,"1", new User())), "我的内容", "我的备注", 
-				new Urgency(1, "1"), new Area(1, "1"), new County(1, "1", new Area(1,"1")), new Industry(1,"1"), 
-				new Date(), new Office(1, "1", new User()));
-		sxMapper.updateSx(sx);
-	}
+	/*
+	 * @Test public void testUpdateSxDao() { Sx sx=new Sx("1122", "测试更改事项", new
+	 * Sx_type(1, "类型一"),new Sx_status(1, "状态一") , new Date(), new User("1122",
+	 * "1","1", "1", "1", new User_status(1,"1"), new Area(1, "1"), new
+	 * Office(1,"1", new User())), "我的内容", "我的备注", new Urgency(1, "1"), new Area(1,
+	 * "1"), new County(1, "1", new Area(1,"1")), new Industry(1,"1"), new Date(),
+	 * new Office(1, "1", new User())); sxMapper.updateSx(sx); }
+	 */
 	
 	//测试更改事项状态
 	@Test
@@ -103,4 +115,30 @@ public class Team2projectApplicationTests {
 	}
 	
 
+
+	
+	
+	@Test
+	public void test2() {
+		System.out.println(sxMapper.selecttbSx(1));
+	}
+	
+	
+
+	
+	
+	@Test
+	public void selectAllStudentByPageCount() {
+		Plan plan=new Plan();
+		User user=new User();
+	
+		 
+	}
+	
+	
+	
+
+	
+	
+	
 }
