@@ -56,7 +56,7 @@
 								<tbody id="receiveTable">
 									<tr th:each="notice:${userRe}">
 										<td th:text="${noticeStat.index+1}"></td>
-										<td th:text="${notice.user_nt_title}"></td>
+										<td><a th:href="@{/leaderunapprovedsx/to}">[[${notice.user_nt_title}]]</a></td>
 										<td th:text="${notice.user_nt_content}"></td>
 										<td th:text="${notice.user_nt_founder.user_name}"></td>
 									</tr>
