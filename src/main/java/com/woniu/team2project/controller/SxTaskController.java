@@ -1,6 +1,8 @@
 package com.woniu.team2project.controller;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.woniu.team2project.entity.Sx;
 import com.woniu.team2project.entity.Sx_task;
 import com.woniu.team2project.entity.User;
 import com.woniu.team2project.service.SxTaskService;
@@ -109,5 +112,32 @@ public class SxTaskController {
 		sxTaskService.removeTask(sx_task_id);
 		return "redirect:/officetask";
 	}
+	
+	//去新建子任务页面
+	@RequestMapping("/tonewtask")
+	public ModelAndView tonewtask(String sx_id) {
+		ModelAndView mv=new ModelAndView();
+		mv.addObject("sx_id", sx_id);
+		mv.setViewName("/system/newtask.html");
+		return mv;
+	}
+	
+	//新建子任务
+	@RequestMapping("/newtask")
+	public String newtask(Sx_task sx_task,String sx_task_worker_id,String sx_id) {
+		User worker = new User();
+		worker.setUser_id(sx_task_worker_id);
+		sx_task.setWorker(worker);
+		Sx sx = new Sx();
+		sx.setSx_id(sx_id);
+		sx_task.setSx(sx);
+		sx_task.setSx_task_id(UUID.randomUUID().toString().substring(32));
+		sx_task.setSx_task_status_id(1);
+		sx_task.setSx_task_time(new Date());
+		sxTaskService.addTask(sx_task);
+		return "redirect:/officetask";
+	}
+	
+	
 	
 }
