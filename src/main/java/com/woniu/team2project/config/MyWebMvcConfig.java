@@ -16,13 +16,12 @@ public class MyWebMvcConfig{
 			@Override
 			public void addViewControllers(ViewControllerRegistry registry) {
 				// 自定义映射路径
-				/*
-				 * registry.addViewController("/").setViewName("login");
-				 * registry.addViewController("/login.html").setViewName("login");
-				 * registry.addViewController("/user").setViewName("index");
-				 */
+				registry.addViewController("/").setViewName("login");
+				registry.addViewController("/login.html").setViewName("login");
+				registry.addViewController("/user").setViewName("index");
 
 			}
+
 
 			@Override
 			public void addInterceptors(InterceptorRegistry registry) { //不拦截

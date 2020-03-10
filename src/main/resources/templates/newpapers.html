@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http:www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link href="../css/newpapers.css" rel="stylesheet" type="text/css" media="all"/>
+		<script src="../js/jquery-2.2.3.min.js"></script>
+		<script src="../js/jquery-2.2.3.js"></script>
+		
+	</head>
+	<body>
+		<div id="pa">
+			<div id="pa_a1">
+			新建文件
+			</div>
+			<div id="pa_a2">
+				<form th:action="@{/newpapers}" method="post" enctype="multipart/form-data">
+					上传人：<input type="text" name="username"/><br />
+					文件名：<input type="text" name="file_name"/><br />
+					文件：<input type="file" name="fileUpload"/><br />
+					模块名：<input type="text" name="modulename" /><br />
+					事项名：<input type="text" name="sxname"/><br />
+					文件类型：<input type="text" name="type_name"/><br />
+					提交：<input type="submit" value="确认" />
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
