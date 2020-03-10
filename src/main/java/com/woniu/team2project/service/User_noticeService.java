@@ -19,6 +19,7 @@ public interface User_noticeService {
 	 */
 	void sendUser_notice(User sender,User receiver,Sx sx,Integer mb_id);
 	
+	
 	/**
 	 * 添加个人通知
 	 * @param user_notice

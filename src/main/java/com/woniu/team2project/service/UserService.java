@@ -29,7 +29,7 @@ public interface UserService {
 
 	//新写的登录
 	User login(String user_loginname, String user_pass);
-	
+		
 	//拿User的角色
 	User_role getUser_roleByUser_id(String user_id);
 }
