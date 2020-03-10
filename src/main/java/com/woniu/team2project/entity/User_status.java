@@ -1,6 +1,9 @@
 package com.woniu.team2project.entity;
 
+import org.springframework.stereotype.Component;
+
 //用户身份
+@Component
 public class User_status {
 	private Integer user_status_id;
 	private String user_status_name;

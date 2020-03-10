@@ -29,4 +29,7 @@ public interface SxTaskService {
 	
 	//删除子任务
 	void removeTask(String sx_task_id);
+
+	//新建子任务
+	void addTask(Sx_task sx_task);
 }

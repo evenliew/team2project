@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.PlanMapper">
+
+	<insert id="insertIntoPlan">
+		insert into tb_plan 
+		(plan_time,plan_content,plan_founder_id,plan_type_id,plan_start_time,plan_end_time,
+			module_id,plan_sx_id,plan_office_id) 
+  			values
+		(#{plan_time},#{plan_content},#{plan_founder_id.user_id},
+		#{plan_type_id.sx_type_id},#{plan_start_time},#{plan_end_time},#{module_id.module_id},
+		#{plan_sx_id.sx_id},#{plan_office_id.office_id});
+	</insert>
+	
+	 <select id="selectAllPlanByoffice" resultMap="planMapper">
+ 		 select  * from tb_plan where plan_office_id=#{plan_office_id}
+  	</select>
+  	
+  	<delete id="delectPlanByid" >
+    	delete from tb_plan where plan_id = #{plan_id}
+  	</delete>
+  	
+	<resultMap type="Plan" id="planMapper">
+  	<id column="plan_id" property="plan_id"/>
+  	<result column="plan_time" property="plan_time"/>
+  	<result column="plan_content" property="plan_content"/>
+  	<result column="plan_type_id" property="plan_type_id"/>
+  	<result column="plan_start_time" property="plan_start_time"/>
+  	<result column="plan_end_time" property="plan_end_time"/>
+  	
+  	<association property="plan_founder_id" javaType="User"
+  		 select="selectUser" column="user_id"/>
+  		 
+  	<association property="module_id" javaType="Modules"
+  		select="selectMudules" column="module_id"/>
+  		
+  	<association property="plan_sx_id" javaType="Sx" 
+  		select="selectSx" column="sx_id" />
+  		
+  	<association property="plan_office_id" javaType="Office" 
+  		select="selectOffice" column="office_id" />
+  </resultMap>
+  	
+  	<select id="selectUser" resultType="User">
+  	select * from tb_user where user_id=#{user_id}
+  </select>
+  <select id="selectMudules" resultMap="ModulesMapper">
+  	select * from tb_module where module_id=#{module_id}
+  	</select>
+  <select id="selectSx" resultType="Sx">
+  	select * from tb_sx where sx_id=#{sx_id}
+  </select>
+  <select id="selectOffice" resultType="Office">
+  	select * from tb_office where office_id=#{office_id}
+  </select>
+  
+  <!-- plan表里查询mod的映射 -->
+   <resultMap type="Modules" id="ModulesMapper">
+  	<id column="module_id" property="module_id"/>
+  	<result column="module_name" property="module_name"/>
+  	<result column="parent_id" property="parent_id"/>
+  </resultMap> 
+  
+   <!-- 分页查询页数 -->
+  <select id="selectAllPlanByPageCount" resultType="Integer">
+  	select count(*) from tb_plan
+  	<include refid="count"></include>
+  </select>
+  
+  <!--  -->
+   <select id="selectAllPlansByPage" resultMap="planMapper">
+  	select * from tb_plan
+  	t1 JOIN  tb_sx t2 ON
+	 t1.plan_sx_id=t2.sx_id JOIN tb_user t3 ON
+			t1.plan_founder_id=t3.user_id  JOIN tb_office t4 ON t1.plan_office_id=t4.office_id
+ 		 	
+  	<include refid="count"></include>
+  	limit #{pageIndex},#{pageSize}
+  </select>  
+  
+  <sql id="count">
+		<where>
+  		<if test="plan.plan_id!=null and plan.plan_id!=''">
+  			and plan_id = #{plan.plan_id}
+  		</if>
+  		<if test="plan.plan_time!=null and plan.plan_time!=''">
+  			and plan_time like '%' #{plan.plan_time} '%'
+  		</if>
+  		<if test="plan.plan_content!=null and plan.plan_content!=''">
+  			and plan_content like '%' #{plan.plan_content} '%'
+  		</if>
+  		<if test="plan.plan_type_id!=null and plan.plan_type_id!=''">
+  			and plan_type_id = #{plan.plan_type_id}
+  		</if>
+  		<if test="plan.plan_start_time!=null and plan.plan_start_time!=''">
+  			and plan_start_time = #{plan.plan_start_time}
+  		</if>
+  		<if test="plan.plan_end_time!=null and plan.plan_end_time!=''">
+  			and plan_end_time = #{plan.plan_end_time}
+  		</if>
+  		<if test="plan.plan_founder_id!=null and plan.plan_founder_id!=''">
+  			and plan_founder_id = #{plan.plan_founder_id}
+  		</if>
+  		<if test="plan.module_id!=null and plan.module_id!=''">
+  			and module_id = #{plan.module_id}
+  		</if>
+  		<if test="plan.plan_sx_id!=null and plan.plan_sx_id!=''">
+  			and plan_sx_id = #{plan.plan_sx_id}
+  		</if>
+  	</where>  
+  </sql>
+</mapper>

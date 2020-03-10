@@ -390,4 +390,4 @@ public class SxController {
 		sxService.modifySxStatus(sx_id, 7);
 		return "success";
 	}
-}
+} 

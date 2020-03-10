@@ -1,0 +1,162 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>修改考勤设置</title>
+<link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css" />
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script>
+//页面加载完成后
+ $(function(){
+	//给account绑定失去焦点事件
+	$("#account").blur(function(){
+		//获取account文本输入框的值
+		var account=$(this).val();
+		$.post("/username",{account:account},function(data){
+			//判断
+			var span=$("#spans");
+			if(data.userExsit){
+				//用户名存在
+				span.css("color","red");
+				span.html(data.msg);
+			}else{
+				span.css("color","green");
+				span.html(data.msg);
+			}
+		});
+	});
+	
+	$("#loginname").blur(function(){
+		//获取account文本输入框的值
+		
+		var login_name=$(this).val();
+		$.post("/loginnames",{login_name:login_name},function(data){
+			//判断
+			var span=$("#loname");
+			if(data.userExsit1){
+				//用户名存在
+				span.css("color","red");
+				span.html(data.msg1);
+			}else{
+				span.css("color","green");
+				span.html(data.msg1);
+			}
+		});
+	});
+	
+	$("#password").blur(function(){
+		//获取account文本输入框的值
+		
+		var user_pass=$(this).val();
+		$.post("/password",{user_pass:user_pass},function(data){
+			//判断
+			var span=$("#spanpassword");
+			if(data.userExsit2){
+				//用户名存在
+				span.css("color","red");
+				span.html(data.msg2);
+			}else{
+				span.css("color","green");
+				span.html(data.msg2);
+			}
+		});
+	});
+	
+	$("#phone").blur(function(){
+		var user_phone=$(this).val();
+		$.post("/phones",{user_phone:user_phone},function(data){
+			//判断
+			var span=$("#spanphone");
+			if(data.userExsit3){
+				//用户名存在
+				span.css("color","red");
+				span.html(data.msg3);
+			}else{
+				span.css("color","green");
+				span.html(data.msg3);
+			}
+		});
+	});
+	
+	
+}); 
+
+
+</script>
+<style type="text/css">
+.myDiv {
+    width: 800px;
+    height: 450px;
+    border: 1px solid #5e5e5e;
+    top: 20%;
+    left: 30%;
+    margin-top: -100px;
+    margin-left: -150px;
+    position: absolute;
+    border-radius: 5px;
+}
+</style>
+</head>
+<body>
+     <div class="myDiv">
+        <div class="row-fluid">
+            <form class="form-horizontal" method="post"  th:action="@{/addUser}" style="padding: 15px;">
+                <input type="hidden" name="id" value="" /> <h3>欢迎注册：</h3>
+                <div class="form-group">
+                  <label class="col-sm-4 control-label" for="officeHours">昵称:</label>
+                    <div class="col-sm-7">
+                    	<span>[[${msg}]]</span>
+                        <input type="text" id="account" class="form-control" name="user_name" 
+                        placeholder="请输入注册昵称">
+                        <span id="spans"></span>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="col-sm-4 control-label" for="startTime">账号:</label> 
+                    <div class="col-sm-7">
+                    <span>[[${msg}]]</span>
+                        <input type="text" id="loginname" class="form-control" name="user_loginname" 
+                        	 placeholder="请输入注册账号">
+                        	<span id="loname"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" for="overTime">密码:</label> 
+                    <div class="col-sm-7">
+                        <input type="text" id="password" class="form-control" name="user_pass" 
+                        placeholder="请输入注册密码">
+                        <span id="spanpassword"></span>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="col-sm-4 control-label" for="closingTime">电话:</label> 
+                    <div class="col-sm-7">
+                    <span>[[${msg}]]</span>
+                        <input type="text" id="phone" class="form-control" name="user_phone" 
+                        placeholder="请输入电话" >
+                        <span id="spanphone"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-4 control-label" for="closingTime">单位:</label> 
+                    <div class="col-sm-7">
+						<select name="office_id">
+							<option th:each="off:${offs}" th:value="${off.office_id}">
+								[[${off.office_name}]]
+							<option />
+						</select>
+                    </div>
+                </div>
+              <div class="row" style="float:right;">
+                    <div class="col-sm-12">
+                       	<input type="submit" class="btn btn-primary btn" name="addUser"  />
+                    </div>
+                </div> 
+            </form>
+            <p style="color: red;text-align: center;"></p>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

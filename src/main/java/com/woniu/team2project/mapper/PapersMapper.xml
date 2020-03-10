@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.woniu.team2project.mapper.PapersMapper">
+
+	<!-- 新增文件操作 -->
+	<insert id="insertPapers">
+		insert into tb_file(file_id,file_time,file_name,file_loader_id,module_id,file_sx_id,file_url,file_type_id)
+		values(#{file_id},#{file_time},#{file_name},#{user.user_id},
+		#{module.module_id},#{sx.sx_id},#{file_url},#{papersType.file_type_id});
+	</insert>
+
+	<!-- 删除文件 -->
+	<insert id="deletePapers">
+		update tb_file set file_state=0 where file_id=#{file_id}
+	</insert>
+
+	<!-- 修改文件 -->
+	<insert id="upadtePagers">
+		update tb_file set file_name=#{file_name} where file_id=#{file_id}
+	</insert>
+
+	<!-- 查询所有信息 -->
+	<select id="selectPapers" resultType="papers">
+		select * from tb_file where file_state=1
+	</select>
+
+	<!-- 模糊查询所有信息 -->
+	<select id="selectPapersVague" resultType="papers">
+		select * from tb_file where file_state=1
+		<where>
+			<!-- 根据时间 -->
+			<if test="file_time != null">
+				and file_time like concat(concat('%' #{papers.file_time} '%'))
+			</if>
+			<!-- 根据名称 -->
+			<if test="file_name != null">
+				and file_name like concat(concat('%' #{papers.file_name} '%'))
+			</if>
+			<!-- 根据上传人 -->
+			<if test="user != null">
+				and file_loader_id = #{papers.user.user_id}
+			</if>
+			<!-- 根据模块 -->
+			<if test="module != null">
+				and module_id = #{papers.module_id}
+			</if>
+			<!-- 根据对应事项 -->
+			<if test="sx != null">
+				and file_sx_id = #{papers.file_sx_id}
+			</if>
+			<!-- 根据类型 -->
+			<if test="papersType != null">
+				and file_type_id = #{papers.file_type_id}
+			</if>
+
+		</where>
+	</select>
+</mapper>
