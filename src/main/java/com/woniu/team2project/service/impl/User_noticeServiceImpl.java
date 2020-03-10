@@ -124,6 +124,51 @@ public class User_noticeServiceImpl implements User_noticeService{
 			notice.setUser_nt_time(new Date());//时间
 			notice.setUser_nt_sx(sx);
 			break;
+		case 5:
+			notice.setUser_nt_founder(sender);//发送人
+			notice.setUser_nt_recender(receiver);//接收人
+			notice.setUser_nt_title("事项已被接收");//主题
+			notice.setUser_nt_content("您好，事项已被单位接收");//内容
+			notice.setUser_nt_mb(mb);//模板
+			notice.setUser_nt_time(new Date());//时间
+			notice.setUser_nt_sx(sx);
+			break;
+		case 6:
+			notice.setUser_nt_founder(sender);//发送人
+			notice.setUser_nt_recender(receiver);//接收人
+			notice.setUser_nt_title("事项被单位退回");//主题
+			notice.setUser_nt_content("您好，事项已被单位退回");//内容
+			notice.setUser_nt_mb(mb);//模板
+			notice.setUser_nt_time(new Date());//时间
+			notice.setUser_nt_sx(sx);
+			break;
+		case 7:
+			notice.setUser_nt_founder(sender);//发送人
+			notice.setUser_nt_recender(receiver);//接收人
+			notice.setUser_nt_title("事项状态更新");//主题
+			notice.setUser_nt_content("您好，事项状态有更新，请查看");//内容
+			notice.setUser_nt_mb(mb);//模板
+			notice.setUser_nt_time(new Date());//时间
+			notice.setUser_nt_sx(sx);
+			break;
+		case 8:
+			notice.setUser_nt_founder(sender);//发送人
+			notice.setUser_nt_recender(receiver);//接收人
+			notice.setUser_nt_title("新任务");//主题
+			notice.setUser_nt_content("您好，请查看你的新任务");//内容
+			notice.setUser_nt_mb(mb);//模板
+			notice.setUser_nt_time(new Date());//时间
+			notice.setUser_nt_sx(sx);
+			break;
+		case 9:
+			notice.setUser_nt_founder(sender);//发送人
+			notice.setUser_nt_recender(receiver);//接收人
+			notice.setUser_nt_title("事项内容更新");//主题
+			notice.setUser_nt_content("您好，事项详情有变更，请查看");//内容
+			notice.setUser_nt_mb(mb);//模板
+			notice.setUser_nt_time(new Date());//时间
+			notice.setUser_nt_sx(sx);
+			break;
 		}
 		user_noticeMapper.insertUser_notice(notice);
 	}

@@ -10,11 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.woniu.team2project.entity.Area;
+import com.woniu.team2project.entity.Office;
 import com.woniu.team2project.entity.Sx;
 import com.woniu.team2project.entity.User;
+import com.woniu.team2project.entity.User_status;
 import com.woniu.team2project.exception.SxException;
 import com.woniu.team2project.mapper.SxMapper;
 import com.woniu.team2project.service.SxService;
+import com.woniu.team2project.service.UserService;
 import com.woniu.team2project.service.User_noticeService;
 
 @Service
@@ -25,6 +29,10 @@ public class SxServiceImpl implements SxService{
 	
 	@Autowired
 	User_noticeService user_noticeService;
+	
+	@Autowired
+	UserService userService;
+
 	
 	//新建事项+发送通知提示上级审批（事务）
 	@Transactional
@@ -63,6 +71,13 @@ public class SxServiceImpl implements SxService{
 	public void modifySx(Sx sx) {
 		try {
 			sxMapper.updateSx(sx);
+			//查出对应事项
+			sx = getSxBySx_id(sx.getSx_id());
+			//调用通知模板9：事项内容更新（admin发给事项相关的人）
+			User admin = userService.getUserByUser_id("admin");
+			user_noticeService.sendUser_notice(admin, sx.getFounder(), sx, 9);
+			user_noticeService.sendUser_notice(admin, sx.getFounder().getOffice().getOffice_leader(), sx, 9);
+			user_noticeService.sendUser_notice(admin, sx.getOffice().getOffice_leader(), sx, 9);
 		//捕获Dao层的异常
 		} catch (DataAccessException e) {
 			e.printStackTrace();
@@ -206,7 +221,11 @@ public class SxServiceImpl implements SxService{
 	public void acceptSx(String sx_id) {
 		//更改事项状态为4“按期进行”
 		modifySxStatus(sx_id, 4);
-		//调用通知模板XXX
+		//查出对应事项
+		Sx sx = getSxBySx_id(sx_id);
+		//调用通知模板5:接收事项
+		user_noticeService.sendUser_notice(sx.getOffice().getOffice_leader(), sx.getFounder(), sx, 5);
+		user_noticeService.sendUser_notice(sx.getOffice().getOffice_leader(), sx.getFounder().getOffice().getOffice_leader(), sx, 5);
 	}
 
 	//单位领导拒绝接受事项
@@ -215,7 +234,11 @@ public class SxServiceImpl implements SxService{
 	public void unacceptSx(String sx_id) {
 		//更改事项状态为7“已销项”
 		modifySxStatus(sx_id, 7);
-		//调用通知模板XXX
+		//查出对应事项
+		Sx sx = getSxBySx_id(sx_id);
+		//调用通知模板6:不接收
+		user_noticeService.sendUser_notice(sx.getOffice().getOffice_leader(), sx.getFounder(), sx, 6);
+		user_noticeService.sendUser_notice(sx.getOffice().getOffice_leader(), sx.getFounder().getOffice().getOffice_leader(), sx, 6);
 	}	
 	
 }

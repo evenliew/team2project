@@ -27,6 +27,7 @@ import com.woniu.team2project.exception.SxException;
 import com.woniu.team2project.service.SxDataService;
 import com.woniu.team2project.service.SxService;
 import com.woniu.team2project.service.UserService;
+import com.woniu.team2project.service.User_noticeService;
 
 @Controller
 public class SxController {
@@ -39,6 +40,9 @@ public class SxController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	User_noticeService user_noticeService;
 	
 	String pmPath;
 	
@@ -322,6 +326,7 @@ public class SxController {
 		mv.setViewName("/system/editproject.html");
 		return mv;
 	}
+	
 	//管理事项进度 
 	@RequestMapping("/manageproject*")
 	public ModelAndView manageSx(String sx_id) {
@@ -332,6 +337,7 @@ public class SxController {
 		mv.setViewName("/system/projectstatus.html");
 		return mv;
 	}
+	
 	//提交更改事项进度
 	@RequestMapping("/changestatus")
 	public String changeSxStatus(Integer urgency_id,Integer sx_status_id,String sx_id) {
@@ -339,6 +345,12 @@ public class SxController {
 		sxService.modifySxStatus(sx_id, sx_status_id);
 		//修改紧急程度
 		sxService.modifySxUrgency(sx_id, urgency_id);
+		//调通知:模板7状态改变
+		Sx sx = sxService.getSxBySx_id(sx_id);
+		User admin = userService.getUserByUser_id("admin");
+		user_noticeService.sendUser_notice(admin, sx.getFounder(), sx, 7);
+		user_noticeService.sendUser_notice(admin, sx.getFounder().getOffice().getOffice_leader(), sx, 7);
+		user_noticeService.sendUser_notice(admin, sx.getOffice().getOffice_leader(), sx, 7);
 		return "redirect:/system/"+pmPath.substring(3);
 	}
 	
